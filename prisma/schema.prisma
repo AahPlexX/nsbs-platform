@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  STUDENT
+}
+
+enum PaymentStatus {
+  INITIATED
+  COMPLETED
+  FAILED
+}
+
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  password          String
+  name              String
+  role              Role     @default(STUDENT)
+  testVouchers      Int      @default(2)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now())
+  certificates      Certificate[]
+  auditLogs         AuditLog[]
+  progress          Progress[]
+  bookmarks         Bookmark[]
+  enrollments       Enrollment[]
+}
+
+model Course {
+  id          String     @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  pdfUrl      String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now())
+  topics      Topic[]
+  enrollments Enrollment[]
+  auditLogs   AuditLog[]
+}
+
+model Topic {
+  id        String   @id @default(cuid())
+  name      String
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id])
+  modules   Module[]
+}
+
+model Module {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  pdfUrl    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  topicId   String
+  topic     Topic    @relation(fields: [topicId], references: [id])
+}
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+}
+
+model Certificate {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  url       String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String
+  moduleId  String
+  user      User     @relation(fields: [userId], references: [id])
+  module    Module   @relation(fields: [moduleId], references: [id])
+
+  @@unique([userId, moduleId])
+}
+
+model Progress {
+  id        String   @id @default(cuid())
+  userId    String
+  moduleId  String
+  completed Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+  module    Module   @relation(fields: [moduleId], references: [id])
+
+  @@unique([userId, moduleId])
+}
+
+model PaymentLog {
+  id        String        @id @default(cuid())
+  userId    String
+  courseId  String
+  sessionId String
+  status    PaymentStatus
+  createdAt DateTime       @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  details   String
+  timestamp DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  courseId  String?
+  course    Course?  @relation(fields: [courseId], references: [id])
+}
