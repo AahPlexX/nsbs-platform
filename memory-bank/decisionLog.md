@@ -1,0 +1,159 @@
+# Decision Log
+
+## NSBS Platform Technical Decisions
+
+### **August 25, 2025 - Code Quality & Performance Optimization**
+
+#### **Decision #015: Prettier Configuration Optimization**
+
+**Status**: ✅ Implemented  
+**Impact**: High - Standardizes code formatting across entire codebase
+
+**Decision**: Optimized Prettier configuration tailored to our codebase patterns
+
+- **Changed**: `printWidth: 80 → 100` (modern monitors, fewer line breaks)
+- **Changed**: `singleQuote: true → false` (matches TypeScript/JSX convention)
+- **Changed**: `semi: true → false` (consistent with codebase pattern)
+- **Added**: File-specific overrides for Markdown (80), JSON (120), YAML (120)
+- **Added**: Prose wrapping for documentation files
+
+**Rationale**: Analysis showed codebase consistently uses double quotes, no
+semicolons, and longer lines would improve readability while maintaining git
+diff quality.
+
+**Files Modified**: `.prettierrc`
+
+---
+
+#### **Decision #014: Duplicate File Cleanup Complete**
+
+**Status**: ✅ Implemented  
+**Impact**: High - Eliminates confusion and maintains clean repository
+
+**Decision**: Removed all duplicate files with suffixes like "enhanced", "v4",
+"new"
+
+- **Removed**: `lib/supabase-enhanced.ts` (functionality merged into original)
+- **Removed**: `lib/validation-v4.ts` (functionality merged into original)
+- **Removed**: `components/ui/tooltip-new.tsx` (duplicate functionality)
+- **Removed**: All backup and versioned files
+
+**Rationale**: Using Git for version control eliminates need for duplicate
+files. Clean repository structure improves maintainability and reduces
+confusion.
+
+---
+
+#### **Decision #013: Production-Grade Performance Optimization**
+
+**Status**: ✅ Implemented  
+**Impact**: High - Enables scale and improves user experience
+
+**Decision**: Implemented comprehensive performance optimization framework
+
+- **Added**: ISR (Incremental Static Regeneration) for course pages
+- **Added**: Multi-tier caching system with Redis preparation
+- **Added**: Bundle optimization with code splitting
+- **Added**: Dynamic imports for large components
+- **Modified**: Next.js configuration for production optimization
+
+**Rationale**: Performance is critical for professional platform credibility.
+ISR reduces server load while maintaining fresh content. Caching improves
+response times.
+
+**Files Created**: `lib/cache.ts`, `lib/isr-utils.ts`,
+`lib/bundle-optimization.tsx` **Files Modified**: `next.config.mjs`
+
+## Component Implementation
+
+### CI-001: React-Tooltip Implementation
+
+**Date:** 2025-08-21  
+**Context:** Replace non-existent @radix-ui/react-tooltip with working
+solution  
+**Issue:** Tooltip component was importing from @radix-ui/react-tooltip which
+doesn't exist in Radix UI library  
+**Solution:** Implemented react-tooltip library (react-tooltip.com)  
+**Technical Details:**
+
+1. Installed react-tooltip package
+2. Created new Tooltip component using data attributes pattern
+3. Added SidebarTooltipWrapper for legacy compatibility with existing sidebar
+   usage
+4. Maintained backwards compatibility with TooltipProvider, TooltipTrigger,
+   TooltipContent exports
+5. Added styling variants (dark, light) with TailwindCSS classes **Benefits:**
+   Working tooltips, proper TypeScript support, lighter bundle (no unnecessary
+   Radix dependency)  
+   **Architecture Impact:** Switched from Radix compound component pattern to
+   data-attribute pattern
+
+## Build System Resolution
+
+### BS-001: Systematic Build Error Resolution
+
+**Date:** 2025-01-20  
+**Context:** "Parsing ecmascript source code failed" targeting
+tailwind.config.ts line 138  
+**Root Cause:** Missing Radix UI dependencies + server/client component
+conflicts  
+**Resolution:** Multi-phase systematic approach through Opus Mode analysis  
+**Actions Taken:**
+
+1. Added 7 missing Radix UI packages (@radix-ui/react-alert-dialog, react-label,
+   react-progress, react-radio-group, react-select, react-separator, react-tabs)
+2. Created lib/supabase-client.ts for client-side components
+3. Modernized Next.js configuration (typedRoutes: experimental→stable)
+4. Enhanced type safety (removed Record<string, any>)
+5. Fixed TailwindCSS v4 import syntax (single→double quotes) **Outcome:** ✅
+   Build system restored, dev server running successfully  
+   **Architecture Impact:** Established dual Supabase client/server pattern for
+   SSR/CSR separation
+
+## Architectural Decisions
+
+### AD-001: Next.js App Router Architecture
+
+**Date:** 2025-01-19  
+**Decision:** Use Next.js 15 App Router exclusively, no /src directory, no
+pages/api  
+**Rationale:** Modern React patterns, better performance, cleaner file
+structure  
+**Impact:** All routes in /app directory, server components by default
+
+### AD-002: Authentication Strategy
+
+**Date:** 2025-01-19  
+**Decision:** Supabase Auth with Google OAuth + Email Magic Link only  
+**Rationale:** User requirement for specific auth methods, security best
+practices  
+**Impact:** No other auth providers allowed, simplified auth flow
+
+### AD-003: Payment Architecture
+
+**Date:** 2025-01-19  
+**Decision:** Stripe one-time payments only, no subscriptions/bundles  
+**Rationale:** Business model focused on individual course purchases  
+**Impact:** Simplified pricing model, no recurring billing complexity
+
+### AD-004: Color Palette Restriction
+
+**Date:** 2025-01-19  
+**Decision:** Strict prohibition of blue colors, use Mint Sage/Mocha
+Mousse/Evergreen  
+**Rationale:** Brand differentiation and specific design requirements  
+**Impact:** All UI components must use approved color palette
+
+### AD-005: Content Management Strategy
+
+**Date:** 2025-01-19  
+**Decision:** File-system based SSOT with data/courses/<slug>/course/meta.json  
+**Rationale:** Version control, simplicity, build-time optimization  
+**Impact:** No CMS needed, content managed through repository
+
+### AD-006: Exam Policy
+
+**Date:** 2025-01-19  
+**Decision:** 2 attempts maximum, 85% pass score, timed sessions  
+**Rationale:** Educational standards and certification integrity  
+**Impact:** Strict exam enforcement, attempt tracking required

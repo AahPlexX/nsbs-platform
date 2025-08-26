@@ -1,0 +1,450 @@
+name: tailwindcss-ssot
+version: "1.0.0"
+scope: "NSBS Platform"
+applies_to:
+  runtime:
+    next: "15.5.0"        # App Router under src/
+    react: "19.1.1"
+    react-dom: "19.1.1"
+    typescript: "5.9.2"   # strict; target es2024; jsx=preserve
+    node: ">=18.17.0"
+  styling:
+    tailwindcss: "4.1.12"
+    "@tailwindcss/postcss": "4.1.12"
+principles:
+  - "CSS-first configuration (no JS config needed); configure in CSS via directives."
+  - "Import Tailwind with @import 'tailwindcss'; no @tailwind base/components/utilities in v4."
+  - "Use @theme to declare tokens (colors, fonts, breakpoints, spacing)."
+  - "Use variants (state, responsive, dark, data/aria, group/peer, structural) via prefixes."
+  - "Prefer tokenized utilities; allow arbitrary values with [<value>] and custom-prop shorthand (...-(<custom-property>))."
+  - "Detect classes automatically; refine with @source when heuristics miss files; safelist inline."
+  - "Avoid v3-only utilities; use official v4 replacements."
+project_invariants:
+  directory_layout:
+    - "App Router lives at src/app/** (no /pages)."
+    - "Global stylesheet at src/app/globals.css; layout at src/app/layout.tsx."
+  tsconfig.json:
+    compilerOptions:
+      target: "ES2024"
+      jsx: "preserve"
+      strict: true
+      forceConsistentCasingInFileNames: true
+      skipLibCheck: true
+      module: "ESNext"
+      moduleResolution: "Bundler"
+      noUncheckedIndexedAccess: true
+      noImplicitOverride: true
+      noFallthroughCasesInSwitch: true
+      exactOptionalPropertyTypes: true
+      isolatedModules: true
+    include:
+      - "next-env.d.ts"
+      - "**/*.ts"
+      - "**/*.tsx"
+      - ".next/types/**/*.ts"
+nextjs_integration:
+  files:
+    postcss.config.mjs: |
+      const config = {
+        plugins: {
+          "@tailwindcss/postcss": {},
+        },
+      };
+      export default config;
+    src/app/globals.css: |
+      /* Tailwind v4 import */
+      @import "tailwindcss";
+
+      /* (Optional) Add your tokens in @theme. Keep small; app-level tokens preferred.) */
+      @theme {
+        /* Breakpoints (mobile-first). Values in rem for correct sort order. */
+        --breakpoint-sm: 40rem;   /* 640px */
+        --breakpoint-md: 48rem;   /* 768px */
+        --breakpoint-lg: 64rem;   /* 1024px */
+        --breakpoint-xl: 80rem;   /* 1280px */
+        --breakpoint-2xl: 96rem;  /* 1536px */
+
+        /* Brand colors (example). */
+        --color-brand-50: oklch(97% 0.02 260);
+        --color-brand-500: oklch(70% 0.12 260);
+        --color-brand-700: oklch(60% 0.12 260);
+
+        /* Fonts, easing, spacing seeds, etc., as needed. */
+        --font-sans: ui-sans-serif, system-ui, sans-serif;
+      }
+
+      /* (Optional) custom variant; prefer the built-in `dark:` unless you truly need a custom trigger. */
+      @custom-variant theme-midnight (&:where([data-theme="midnight"] *));
+    src/app/layout.tsx: |
+      import type { Metadata } from "next";
+      import "./globals.css";
+
+      export const metadata: Metadata = {
+        title: "NSBS Platform",
+        description: "National Society of Business Sciences Certification Platform",
+      };
+
+      export default function RootLayout({ children }: { children: React.ReactNode }) {
+        return (
+          <html lang="en" suppressHydrationWarning>
+            <body className="min-h-dvh bg-white text-gray-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
+              {children}
+            </body>
+          </html>
+        );
+      }
+  notes:
+    - "Prefer the v4 PostCSS plugin `@tailwindcss/postcss`. Autoprefixing and imports are handled; no separate `autoprefixer` or `postcss-import` required."
+    - "Use `@source` to include UI packages or unusual file patterns when Tailwind’s auto-detection misses them."
+tailwind_v4_directives_and_functions:
+  # Source of truth: Functions & Directives reference
+  directives:
+    - "@import"         # import Tailwind & other CSS
+    - "@theme"          # tokens: colors, fonts, breakpoints, spacing, etc.
+    - "@source"         # explicit content sources; safelist with inline()
+    - "@utility"        # register custom utilities that work with variants
+    - "@variant"        # apply an existing variant block-scoped in CSS
+    - "@custom-variant" # define custom variant (e.g., alternative dark trigger)
+    - "@apply"          # inline existing utilities into authored CSS
+    - "@reference"      # reference main stylesheet in SFCs/modules for @apply/@variant
+  functions:
+    - "--alpha()"       # adjust color opacity at build-time
+    - "--spacing()"     # compute spacing from theme at build-time
+  compatibility:
+    - "@config"         # (legacy) load JS config; CSS-first overrides take precedence
+    - "@plugin"         # (legacy) load JS plugins; prefer CSS-first where possible
+  deprecations:
+    - "theme() function deprecated in v4 — prefer CSS theme variables"
+class_detection:
+  defaults:
+    mode: "automatic"
+    ignores:
+      - ".gitignore entries are respected (node_modules, .next, coverage, build, etc.)"
+  refine_with_source:
+    examples:
+      - '@source "src/**/*.{ts,tsx,js,jsx,mdx}"'
+      - '@source "../packages/ui/**/*.{ts,tsx}"'
+      - '@source inline("btn btn-primary btn-secondary") # safelist dynamic strings'
+  guidance:
+    - "Prefer literal classnames; for dynamic classes use explicit `@source inline()` or map objects with finite keys."
+variants_and_prefixing:
+  responsive:
+    prefixes: ["sm", "md", "lg", "xl", "2xl"]
+    rule: "mobile-first (min-width); stackable with state/data/aria variants"
+  color_scheme:
+    - "dark:"     # built-in dark variant (class or media strategy; use as prefix)
+    - "theme-midnight:"  # example from @custom-variant above
+  state_and_interaction:
+    # See docs for exhaustive list; representative allowed prefixes:
+    - "hover:" "focus:" "active:" "visited:" "target:" "focus-visible:" "focus-within:" "disabled:" "enabled:" "checked:" "indeterminate:" "open:" "closed:"
+  structural_pseudo:
+    - "first:" "last:" "only:" "odd:" "even:" "empty:" "first-of-type:" "last-of-type:" "only-of-type:"
+    - "placeholder:" "marker:" "selection:" "first-line:" "first-letter:"
+  group_and_peer:
+    - "group/* + group-*: e.g., group-hover:, group-focus:, group-open:"
+    - "peer/* + peer-*: e.g., peer-checked:, peer-invalid:, peer-open:"
+  attribute_driven:
+    - "aria-[busy=true]:" "aria-[expanded=false]:" "data-[state=open]:"
+    - "has-[selector]:"   # :has() powered variant
+  directionality:
+    - "rtl:" "ltr:"
+  stacking_examples:
+    - "dark:md:hover:bg-fuchsia-600"
+utility_value_grammar:
+  # Patterns you may emit safely across categories (examples; see per-utility docs)
+  tokens_and_scales:
+    color_tokens: "text-{color}-{50..950}, bg-{color}-{50..950}, border-{color}-{50..950}, etc."
+    color_alpha_modifier: "…/{0..100}  (e.g., text-blue-600/75)"
+    spacing_scale: "0, px, 0.5, 1, 1.5, 2, … (use --spacing() in CSS as needed)"
+    font_sizes: "text-xs..text-9xl; combine with line-height via slash (e.g., text-sm/6)"
+    radii: "rounded-none|rounded-xs|rounded-sm|rounded|rounded-md|rounded-lg|rounded-xl|rounded-2xl|rounded-3xl|rounded-full"
+    shadows: "shadow-none|shadow-xs|shadow-sm|shadow|shadow-md|shadow-lg|shadow-xl|shadow-2xl"
+    blurs: "blur-0|blur-xs|blur-sm|blur|blur-md|blur-lg"
+    size_shorthand: "size-*, sets width and height together (e.g., size-16, size-px, size-full)"
+  arbitrary_values:
+    brackets: "property-[<value>]  e.g., w-[72px], grid-cols-[15], text-[14px]"
+    custom_props_short:
+      text: "text-(--my-color) == text-[var(--my-color)]"
+      max_w: "max-w-(--my-max-width) == max-w-[var(--my-max-width)]"
+    calc_and_mix: "allowed inside [<value>] (e.g., py-[calc(--spacing(4)-1px)])"
+  examples_safe:
+    - 'grid grid-cols-15 gap-4 md:grid-cols-24'
+    - 'text-red-600/80 dark:text-sky-400/90'
+    - 'data-[state=open]:animate-in aria-[busy=true]:opacity-50'
+allowed_utilities_catalog:
+  # This section enumerates the official categories you can emit from the LLM.
+  # Each key is 1:1 with the Tailwind v4 docs page; all utilities on those pages are allowed.
+  layout:
+    pages:
+      - aspect-ratio
+      - columns
+      - break-after
+      - break-before
+      - break-inside
+      - box-decoration-break
+      - box-sizing
+      - display
+      - float
+      - clear
+      - isolation
+      - object-fit
+      - object-position
+      - overflow
+      - overscroll-behavior
+      - position
+      - top / right / bottom / left
+      - visibility
+      - z-index
+  flexbox_and_grid:
+    pages:
+      - flex-basis
+      - flex-direction
+      - flex-wrap
+      - flex
+      - flex-grow
+      - flex-shrink
+      - order
+      - grid-template-columns
+      - grid-column
+      - grid-template-rows
+      - grid-row
+      - grid-auto-flow
+      - grid-auto-columns
+      - grid-auto-rows
+      - gap
+      - justify-content
+      - justify-items
+      - justify-self
+      - align-content
+      - align-items
+      - align-self
+      - place-content
+      - place-items
+      - place-self
+  spacing:
+    pages: [padding, margin]
+  sizing:
+    pages: [width, min-width, max-width, height, min-height, max-height]
+    notes:
+      - "Use size-* to set width+height together."
+  typography:
+    pages:
+      - font-family
+      - font-size
+      - font-smoothing
+      - font-style
+      - font-weight
+      - font-stretch
+      - font-variant-numeric
+      - letter-spacing
+      - line-clamp
+      - line-height
+      - list-style-image
+      - list-style-position
+      - list-style-type
+      - text-align
+      - color
+      - text-decoration-line
+      - text-decoration-color
+      - text-decoration-style
+      - text-decoration-thickness
+      - text-underline-offset
+      - text-transform
+      - text-overflow
+      - text-wrap
+      - text-indent
+      - vertical-align
+      - white-space
+      - word-break
+      - overflow-wrap
+      - hyphens
+      - content
+  backgrounds:
+    pages:
+      - background-attachment
+      - background-clip
+      - background-color
+      - background-image
+      - background-origin
+      - background-position
+      - background-repeat
+      - background-size
+  borders_and_outlines:
+    pages:
+      - border-radius
+      - border-width
+      - border-color
+      - border-style
+      - outline-width
+      - outline-color
+      - outline-style
+      - outline-offset
+  effects:
+    pages:
+      - box-shadow
+      - text-shadow
+      - opacity
+      - mix-blend-mode
+      - background-blend-mode
+      - mask-clip
+      - mask-composite
+      - mask-image
+      - mask-mode
+      - mask-origin
+      - mask-position
+      - mask-repeat
+      - mask-size
+      - mask-type
+  filters:
+    pages:
+      - filter
+      - filter-blur
+      - filter-brightness
+      - filter-contrast
+      - filter-drop-shadow
+      - filter-grayscale
+      - filter-hue-rotate
+      - filter-invert
+      - filter-saturate
+      - filter-sepia
+      - backdrop-filter
+      - backdrop-filter-blur
+      - backdrop-filter-brightness
+      - backdrop-filter-contrast
+      - backdrop-filter-grayscale
+      - backdrop-filter-hue-rotate
+      - backdrop-filter-invert
+      - backdrop-filter-opacity
+      - backdrop-filter-saturate
+      - backdrop-filter-sepia
+  tables:
+    pages: [border-collapse, border-spacing, table-layout, caption-side]
+  transitions_and_animation:
+    pages:
+      - transition-property
+      - transition-behavior
+      - transition-duration
+      - transition-timing-function
+      - transition-delay
+      - animation
+  transforms:
+    pages:
+      - backface-visibility
+      - perspective
+      - perspective-origin
+      - rotate
+      - scale
+      - skew
+      - transform
+      - transform-origin
+      - transform-style
+      - translate
+  interactivity:
+    pages:
+      - accent-color
+      - appearance
+      - caret-color
+      - color-scheme
+      - cursor
+      - field-sizing
+      - pointer-events
+      - resize
+      - scroll-behavior
+      - scroll-margin
+      - scroll-padding
+      - scroll-snap-align
+      - scroll-snap-stop
+      - scroll-snap-type
+      - touch-action
+      - user-select
+      - will-change
+  svg:
+    pages: [fill, stroke, stroke-width]
+  accessibility:
+    pages: [forced-color-adjust]
+theme_and_colors:
+  tokens:
+    - "Default palette: slate, gray, zinc, neutral, stone, red, orange, amber, yellow, lime, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose (50..950)."
+  customize:
+    - "Define custom tokens in @theme; utilities like text-regal-blue are generated from --color-regal-blue."
+  opacity:
+    - "Use color opacity modifier `/NN` (e.g., text-blue-600/75)."
+dark_mode:
+  default: "Use built-in `dark:` variant."
+  custom_trigger_example: "@custom-variant dark (&:where(.dark, .dark *));"
+  usage: "dark:md:hover:bg-fuchsia-600"
+best_practices:
+  - "Prefer tokens; only use arbitrary values when design requires it."
+  - "Constrain dynamic class generation; safelist with @source inline() for runtime strings."
+  - "Compose variants sparingly (order: responsive → state)."
+  - "Use size-* for square elements (avatars, icons) instead of separate w-/h-."
+  - "Preflight is enabled by default via @import 'tailwindcss'; disable only if you fully manage resets."
+forbidden_and_migrations:
+  do_not_use:
+    - "@tailwind base|components|utilities (removed in v4)"
+    - "v3-deprecated opacity utilities: bg-opacity-*, text-opacity-*, border-opacity-*, divide-opacity-*, ring-opacity-*, placeholder-opacity-*"
+    - "v3 flex aliases: flex-shrink-*, flex-grow-* (use shrink-*, grow-*)"
+    - "overflow-ellipsis (use text-ellipsis)"
+  renamed_utilities:
+    - from: "shadow-sm"
+      to: "shadow-xs"
+    - from: "shadow"
+      to: "shadow-sm"
+    - from: "drop-shadow-sm"
+      to: "drop-shadow-xs"
+    - from: "drop-shadow"
+      to: "drop-shadow-sm"
+    - from: "blur-sm"
+      to: "blur-xs"
+    - from: "blur"
+      to: "blur-sm"
+    - from: "backdrop-blur-sm"
+      to: "backdrop-blur-xs"
+    - from: "backdrop-blur"
+      to: "backdrop-blur-sm"
+    - from: "rounded-sm"
+      to: "rounded-xs"
+    - from: "rounded"
+      to: "rounded-sm"
+    - from: "outline-none"
+      to: "outline-hidden"
+    - from: "ring"   # bare
+      to: "ring-3"
+  config_and_tooling_notes:
+    - "JS config `tailwind.config.js` is legacy; prefer CSS-first. `@config` allowed for incremental migration, but avoid new reliance."
+    - "PostCSS: use '@tailwindcss/postcss' plugin; do not configure `tailwindcss` directly as a PostCSS plugin in v4."
+    - "Remove redundant `autoprefixer`/`postcss-import` unless you have explicit non-Tailwind needs."
+validation_snippets:
+  disable_preflight_example: |
+    /* Only if you intentionally want to disable preflight */
+    /* See docs: Preflight → disabling */
+    @import "tailwindcss/preflight" layer(base none);
+    @import "tailwindcss/utilities";
+  add_custom_utility_example: |
+    /* Tab size utility that supports hover/focus/lg variants */
+    @utility tab-4 { tab-size: 4; }
+  custom_variant_example: |
+    @custom-variant coffee (&:where([data-theme="coffee"] *));
+    /* usage: coffee:text-amber-500 */
+references:
+  official_docs:
+    install: "https://tailwindcss.com/docs/installation"
+    next_guide: "https://tailwindcss.com/docs/guides/nextjs"
+    editor_setup: "https://tailwindcss.com/docs/editor-setup"
+    compatibility: "https://tailwindcss.com/docs/compatibility"
+    upgrade_guide: "https://tailwindcss.com/docs/upgrade-guide"
+    core_concepts:
+      - "https://tailwindcss.com/docs/styling-with-utility-classes"
+      - "https://tailwindcss.com/docs/hover-focus-and-other-states"
+      - "https://tailwindcss.com/docs/responsive-design"
+      - "https://tailwindcss.com/docs/dark-mode"
+      - "https://tailwindcss.com/docs/theme"
+      - "https://tailwindcss.com/docs/colors"
+      - "https://tailwindcss.com/docs/adding-custom-styles"
+      - "https://tailwindcss.com/docs/detecting-classes-in-source-files"
+      - "https://tailwindcss.com/docs/functions-and-directives"
+      - "https://tailwindcss.com/docs/preflight"
+    utilities_index: "https://tailwindcss.com/docs/functions-and-directives#(utility-index-on-page)"
+  npm_verification:
+    tailwindcss: "https://www.npmjs.com/package/tailwindcss/v/4.1.12"
+    postcss_plugin: "https://www.npmjs.com/package/@tailwindcss/postcss/v/4.1.12"

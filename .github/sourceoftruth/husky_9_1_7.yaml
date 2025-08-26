@@ -1,0 +1,123 @@
+spec:
+  name: husky-9.1.7-ssot
+  purpose: "Authoritative rules for Git hooks with Husky 9.1.7 in a Next.js App Router repo"
+  last_verified: "2025-08-15"
+
+versions:
+  husky: "9.1.7" # EXACT — no ^, ~, ranges, or “Vx”
+  next: "15.4.6" # EXACT
+  react: "19.1.1" # EXACT
+  react-dom: "19.1.1" # EXACT
+  typescript: "5.9.2" # EXACT
+  tailwindcss: "4.1.1" # EXACT
+  "@tailwindcss/postcss": "4.1.1" # EXACT
+
+install_and_bootstrap:
+  steps:
+    - "npm i -D --save-exact husky@9.1.7" # installs Husky
+    - "npx husky init" # creates .husky/pre-commit AND updates scripts.prepare to 'husky'  # official
+  results:
+    - "A .husky/ directory exists with hook files (e.g., .husky/pre-commit)."
+    - 'package.json contains { "scripts": { "prepare": "husky" } } (for npm/pnpm). For Yarn, use postinstall per docs.'
+  verify:
+    - 'node -e "console.log(require(''husky/package.json'').version)"  # must print 9.1.7'
+
+tsconfig_contract:
+  file: "tsconfig.json"
+  required.compilerOptions:
+    target: "ES2024"
+    lib: ["ES2024", "DOM", "DOM.Iterable"]
+    jsx: "preserve"
+    module: "ESNext"
+    moduleResolution: "Bundler"
+    strict: true
+    verbatimModuleSyntax: true
+    noUncheckedSideEffectImports: true
+    forceConsistentCasingInFileNames: true
+    skipLibCheck: false
+    noEmit: true
+
+project_layout_contract:
+  app_router_only: true
+  must_exist: ["/app/layout.tsx", "/app/page.tsx", "/app/globals.css", "/postcss.config.mjs"]
+  must_not_exist: ["/src", "/pages"]
+  css_setup:
+    globals_css_first_line: '@import "tailwindcss";'
+  postcss:
+    plugins: ["@tailwindcss/postcss"]
+
+core_usage_rules (husky 9.1.7):
+  init (recommended):
+    command: "npx husky init"
+    effects:
+      - "Creates a .husky/pre-commit file."
+      - "Updates package.json to add: { scripts: { prepare: 'husky' } }."
+  add_hooks (simple way):
+    how_to:
+      - "Create/modify hooks by editing files in .husky/ (e.g., .husky/pre-commit)."
+      - "Content is plain POSIX shell; you may call npm scripts, or run shell pipelines."
+  valid_hooks_reference:
+    note: "Use Git’s official hook names (pre-commit, commit-msg, pre-push, etc.)."
+  path_and_engineering_notes:
+    - "If hooks don’t run, ensure 'git config core.hooksPath' points to '.husky/_' and Git ≥ 2.9." # official
+  disabling_on_CI_or_temporarily:
+    env: "HUSKY=0" # globally disables installation/run when set  # official
+  package_manager_notes:
+    npm_pnpm:
+      scripts.prepare: "husky" # manual setup alternative also allowed by docs
+    yarn:
+      scripts.postinstall: "husky" # Yarn doesn’t support 'prepare'; use 'postinstall' + optional 'pinst' for publishing
+
+allowed_examples:
+  pre_commit_minimal: |
+    # .husky/pre-commit
+    npm test
+  pre_commit_ts_lint_prettier: |
+    # .husky/pre-commit
+    npm run -s typecheck   # e.g., "tsc --noEmit"
+    npm run -s lint        # e.g., "eslint . --max-warnings=0"
+    npm run -s format:check  # e.g., "prettier --check ."
+  commit_msg_with_commitlint (optional): |
+    # .husky/commit-msg
+    npx --no -- commitlint --edit "$1"
+
+best_practices:
+  hooks_content:
+    - "Prefer calling project scripts (npm run ...) for portability."
+    - "Keep hooks fast; fail early; exit non-zero to block bad commits."
+    - "When testing hooks, append 'exit 1' to force failure safely."
+  portability:
+    - "Write POSIX-compatible shell; not all contributors have bash."
+    - "If GUI + Node version manager causes PATH issues, source ~/.config/husky/init.sh to initialize the manager." # official
+  repo_hygiene:
+    - "Commit only .husky/* hook files (text). Generated internals under .husky/_ stay ignored."
+
+forbidden_outdated_unusable:
+  versions:
+    - "Any Husky version other than exactly 9.1.7."
+  config_and_patterns:
+    - 'Legacy v4 JSON config in package.json ("husky": { "hooks": ... }) — removed; use .husky/* files.' # official migration
+    - "Using deprecated env vars: HUSKY_GIT_PARAMS (use $1, $2...), HUSKY_SKIP_HOOKS/HUSKY_SKIP_INSTALL (use HUSKY)." # official migration
+    - "Placing hook files with invalid names (e.g., 'precommit', 'pre-commit.sh'). Use exact Git hook names." # official
+  structure:
+    - "Presence of /src or /pages (App Router must be rooted at /app)."
+
+validation_matrix_ci_targets:
+  package_json_exact_pins:
+    - "husky == 9.1.7 (devDependency or dependency as you prefer)"
+    - "next == 15.4.6"
+    - "react == 19.1.1"
+    - "react-dom == 19.1.1"
+    - "typescript == 5.9.2"
+    - "tailwindcss == 4.1.1"
+    - "@tailwindcss/postcss == 4.1.1"
+    - "No '^', '~', 'x', or '*' in any version string"
+  scripts_presence:
+    - "scripts.prepare == 'husky' OR (for Yarn projects) scripts.postinstall == 'husky'"
+  tsconfig_invariants:
+    - "target == ES2024; jsx == preserve; strict == true; verbatimModuleSyntax == true; noUncheckedSideEffectImports == true"
+  filesystem:
+    - "app/layout.tsx contains <html> and <body>"
+    - ".husky/ directory exists; at least one hook file (pre-commit) exists"
+  hook_integrity:
+    - "Hook files are executable in Git (init sets this); contain at least one command."

@@ -1,0 +1,271 @@
+spec:
+  name: supabase-ssr-next-locked
+  purpose: "Authoritative rules for Supabase in Next.js App Router using @supabase/ssr 0.6.1 and @supabase/supabase-js 2.55.0 — with exactly two roles: user | admin"
+  last_verified: "2025-08-15"
+
+versions:
+  "@supabase/ssr": "0.6.1" # EXACT — no ^, ~, ranges, or “Vx”
+  "@supabase/supabase-js": "2.55.0" # EXACT
+  next: "15.4.6" # EXACT (App Router; no /src, no /pages)
+  react: "19.1.1" # EXACT
+  react-dom: "19.1.1" # EXACT
+  typescript: "5.9.2" # EXACT
+  tailwindcss: "4.1.1" # EXACT
+  "@tailwindcss/postcss": "4.1.1" # EXACT
+
+install_and_verify:
+  npm_install:
+    - "npm i --save-exact @supabase/ssr@0.6.1 @supabase/supabase-js@2.55.0"
+    - "npm i --save-exact next@15.4.6 react@19.1.1 react-dom@19.1.1"
+    - "npm i -D --save-exact typescript@5.9.2 tailwindcss@4.1.1 @tailwindcss/postcss@4.1.1"
+  verify_versions:
+    - 'node -e "console.log(require(''@supabase/ssr/package.json'').version)"      # 0.6.1'
+    - 'node -e "console.log(require(''@supabase/supabase-js/package.json'').version)" # 2.55.0'
+
+tsconfig_contract:
+  file: "tsconfig.json"
+  compilerOptions:
+    target: "ES2024"
+    lib: ["ES2024", "DOM", "DOM.Iterable"]
+    jsx: "preserve"
+    module: "ESNext"
+    moduleResolution: "Bundler"
+    strict: true
+    verbatimModuleSyntax: true
+    noUncheckedSideEffectImports: true
+    forceConsistentCasingInFileNames: true
+    skipLibCheck: false
+    noEmit: true
+  invariants:
+    - "jsx MUST be 'preserve' (Next controls JSX transform)."
+    - "target MUST be 'ES2024'."
+
+project_layout_contract:
+  must_exist:
+    [
+      "/app/layout.tsx",
+      "/app/page.tsx",
+      "/app/globals.css",
+      "/postcss.config.mjs",
+      "/utils/supabase/client.ts",
+      "/utils/supabase/server.ts",
+    ]
+  must_not_exist: ["/src", "/pages"]
+  css_setup:
+    globals_css_first_line: '@import "tailwindcss";'
+  postcss:
+    plugins: ["@tailwindcss/postcss"]
+
+env_contract:
+  required_public:
+    - "NEXT_PUBLIC_SUPABASE_URL"
+    - "NEXT_PUBLIC_SUPABASE_ANON_KEY"
+  required_server_secret:
+    - "SUPABASE_SERVICE_ROLE_KEY  # server-only; NEVER shipped to the client"
+  notes:
+    - "Use cookie-based auth for SSR; tokens are stored in secure cookies via @supabase/ssr utilities." # doc refs
+
+client_factory_patterns:
+  files:
+    - path: "/utils/supabase/client.ts"
+      contents: |
+        import { createBrowserClient } from '@supabase/ssr';
+
+        export function createClient() {
+          return createBrowserClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+          );
+        }
+    - path: "/utils/supabase/server.ts"
+      contents: |
+        import { cookies, headers } from 'next/headers';
+        import { createServerClient } from '@supabase/ssr';
+
+        export async function createClient() {
+          // Call cookies() / headers() BEFORE creating the client to opt out of caching for auth-bound fetches
+          // (required by Next App Router auth patterns)
+          const cookieStore = await cookies();
+          const headerList = await headers();
+
+          return createServerClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            {
+              cookies: {
+                get: (name: string) => cookieStore.get(name)?.value,
+                set: (name: string, value: string, options: { path?: string; domain?: string; sameSite?: "lax"|"strict"|"none"; expires?: Date; httpOnly?: boolean; secure?: boolean }) => {
+                  cookieStore.set({ name, value, ...options });
+                },
+                remove: (name: string, options: { path?: string; domain?: string }) => {
+                  cookieStore.delete({ name, ...options });
+                },
+              },
+              // Optional: forward X-Forwarded-* when behind a proxy/CDN
+              headers: {
+                get: (name: string) => headerList.get(name) ?? undefined,
+              },
+            }
+          );
+        }
+  rules:
+    - "Use createBrowserClient ONLY in Client Components."
+    - "Use createServerClient ONLY in Server Components / Server Actions / Route Handlers."
+    - "Call cookies()/headers() before any Supabase call in server paths to opt out of Next cache for authenticated requests." # doc refs
+
+middleware_contract:
+  file: "/middleware.ts"
+  purpose:
+    - "Refresh expired auth tokens and write cookies since Server Components cannot write cookies directly."
+    - "Pass refreshed tokens to server and browser (request.cookies.set + response.cookies.set)."
+  must:
+    - "Use updateSession helper (pattern per docs) and a matcher that excludes static assets & images."
+  cautions:
+    - "Never trust getSession() in server code; use getUser() to revalidate tokens on every protected request." # doc refs
+
+minimal_usage_examples:
+  server_component_guard: |
+    // app/private/page.tsx
+    import { redirect } from 'next/navigation';
+    import { createClient } from '@/utils/supabase/server';
+
+    export default async function PrivatePage(): Promise<JSX.Element> {
+      const supabase = await createClient();
+      const { data, error } = await supabase.auth.getUser();
+      if (error || !data?.user) redirect('/login');
+      return <p>Hello {data.user.email}</p>;
+    }
+  server_action_auth: |
+    // app/login/actions.ts
+    'use server';
+    import { createClient } from '@/utils/supabase/server';
+
+    export async function login(_: unknown, formData: FormData): Promise<{ok: boolean}> {
+      const supabase = await createClient();
+      const email = String(formData.get('email') ?? '');
+      const password = String(formData.get('password') ?? '');
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      return { ok: true };
+    }
+  client_component_usage: |
+    // app/_components/Profile.tsx
+    'use client';
+    import { useEffect, useState } from 'react';
+    import { createClient } from '@/utils/supabase/client';
+
+    export default function Profile(): JSX.Element {
+      const [email, setEmail] = useState<string>('');
+      useEffect(() => {
+        const supabase = createClient();
+        void supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? ''));
+      }, []);
+      return <span>{email}</span>;
+    }
+
+database_roles_and_policies:
+  # Application-level roles are LIMITED to exactly two: 'user' and 'admin'.
+  enum_and_users:
+    sql: |
+      -- One-time: a tight enum for app roles
+      create type app_role as enum ('user','admin');
+
+      -- Example users table (if you keep roles in DB as well)
+      create table if not exists public.app_users (
+        id uuid primary key references auth.users(id) on delete cascade,
+        role app_role not null default 'user',
+        created_at timestamptz not null default now()
+      );
+
+  jwt_claims_strategy:
+    approach: "Custom Access Token Hook to stamp role into the JWT as 'user_role'"
+    notes:
+      - "Hook runs before token issuance and adds claims; RLS reads claims via auth.jwt()." # doc refs
+      - "Do NOT rely on user_metadata for RLS — users can modify it; use custom claim or DB join." # doc refs
+    pseudo_config: |
+      -- In Supabase Dashboard → Authentication → Hooks → Custom access token
+      -- Pseudocode the hook returns: { user_role: 'user' | 'admin' }
+      -- Ensure the claim key matches your policies (e.g., 'user_role').
+
+  rls_policy_examples:
+    enable_rls: |
+      alter table public.app_users enable row level security;
+    policy_user_self:
+      sql: |
+        create policy "read own row"
+        on public.app_users
+        for select
+        using (
+          auth.uid() = id
+        );
+    policy_admin_read_all:
+      sql: |
+        create policy "admin read all"
+        on public.app_users
+        for select
+        using (
+          coalesce(auth.jwt()->>'user_role','user') = 'admin'
+        );
+    policy_admin_update_roles:
+      sql: |
+        create policy "admin update roles"
+        on public.app_users
+        for update
+        using (coalesce(auth.jwt()->>'user_role','user') = 'admin');
+
+  invariants:
+    - "JWT claim key used in policies MUST be a custom access token claim (e.g., user_role) or a secure server-derived value."
+    - "Only 'user' and 'admin' are permitted app roles everywhere (DB, JWT, UI)."
+
+security_and_best_practices:
+  must:
+    - "Use cookie-based auth for SSR; never rely on localStorage on the server path." # doc refs
+    - "Never expose SUPABASE_SERVICE_ROLE_KEY to the browser (server-side only)." # doc refs
+    - "Protect pages with supabase.auth.getUser() (revalidates token), not getSession(), in server code." # doc refs
+    - "Prefer Row Level Security + policies keyed off auth.uid() and specific JWT claims."
+  avoid:
+    - "Deprecated '@supabase/auth-helpers-nextjs' — replaced by '@supabase/ssr'." # doc refs
+    - "Using createBrowserClient in server paths, or createServerClient in client components."
+    - "Trusting user_metadata in RLS; it’s user-modifiable." # doc refs
+
+forbidden_outdated_unusable:
+  versions:
+    - "Any @supabase/ssr other than exactly 0.6.1"
+    - "Any @supabase/supabase-js other than exactly 2.55.0"
+    - "Any TS/Next/React/Tailwind versions other than those pinned above"
+  patterns:
+    - "Use of '@supabase/auth-helpers-*' packages (legacy)"
+    - "LocalStorage token handling for SSR paths"
+    - "Service role key in any client bundle or Client Component"
+    - "Any application role besides 'user' or 'admin' in DB/JWT/UI"
+  structure:
+    - "Presence of /src or /pages (App Router must be rooted at /app)"
+
+validation_matrix:
+  package_json_exact_pins:
+    - "@supabase/ssr == 0.6.1"
+    - "@supabase/supabase-js == 2.55.0"
+    - "next == 15.4.6"
+    - "react == 19.1.1"
+    - "react-dom == 19.1.1"
+    - "typescript == 5.9.2"
+    - "tailwindcss == 4.1.1"
+    - "@tailwindcss/postcss == 4.1.1"
+    - "No '^', '~', 'x', '*', or ranges anywhere"
+  tsconfig_invariants:
+    - "target == ES2024"
+    - "jsx == preserve"
+    - "strict == true"
+    - "verbatimModuleSyntax == true"
+    - "noUncheckedSideEffectImports == true"
+  filesystem:
+    - "app/layout.tsx renders <html> and <body>"
+    - "No /src or /pages"
+  code_checks:
+    - "No imports from '@supabase/auth-helpers-*'"
+    - "Server code uses createServerClient; client code uses createBrowserClient"
+    - "Middleware present and updates session"
+    - "No references to SUPABASE_SERVICE_ROLE_KEY in client bundles"
+  rls_checks:
+    - "Only 'user'|'admin' roles appear in SQL migrations and JWT claims"
+    - "Policies reference auth.jwt()->>'user_role' or auth.uid()"

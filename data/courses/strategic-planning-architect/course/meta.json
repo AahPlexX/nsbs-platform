@@ -1,0 +1,27 @@
+{
+  "title": "Strategic Planning Architect",
+  "slug": "strategic-planning-architect",
+  "description": "Master the art of strategic planning and organizational architecture.",
+  "price": 299,
+  "currency": "USD",
+  "category": "Business Strategy",
+  "tags": ["strategy", "planning", "architecture", "business"],
+  "learningObjectives": [
+    "Develop comprehensive strategic planning frameworks",
+    "Master organizational architecture design principles",
+    "Create effective strategic implementation roadmaps",
+    "Analyze and mitigate strategic risks",
+    "Design portfolio strategies for resource allocation"
+  ],
+  "certification": {
+    "name": "Strategic Planning Architect Certification",
+    "code": "SPA-CERT",
+    "validityPeriod": "Never expires"
+  },
+  "exam": {
+    "passingScore": 85,
+    "maxAttempts": 2,
+    "questionCount": 50
+  },
+  "lessons": []
+}

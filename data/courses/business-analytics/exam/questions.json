@@ -1,0 +1,25 @@
+[
+  {
+    "question": "Which type of analytics answers the question 'What happened?'",
+    "options": ["Descriptive Analytics", "Diagnostic Analytics", "Predictive Analytics", "Prescriptive Analytics"],
+    "correctAnswer": 0,
+    "explanation": "Descriptive analytics summarizes historical data to understand past performance and answers 'What happened?'"
+  },
+  {
+    "question": "What is the primary goal of prescriptive analytics?",
+    "options": [
+      "To understand why something happened",
+      "To predict future outcomes",
+      "To recommend specific actions",
+      "To summarize historical data"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Prescriptive analytics recommends actions based on data analysis, answering 'What should we do?'"
+  },
+  {
+    "question": "Which step comes first in the business analytics process?",
+    "options": ["Collect Data", "Define the Problem", "Clean and Prepare Data", "Analyze Data"],
+    "correctAnswer": 1,
+    "explanation": "The first step is to clearly define the business problem or question that needs to be addressed."
+  }
+]

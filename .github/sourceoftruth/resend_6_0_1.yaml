@@ -1,0 +1,291 @@
+name: resend
+single_source_of_truth: true
+version: "6.0.1" # exact; no caret/range allowed
+package_name: "resend"
+install:
+  pnpm: "pnpm add -E resend@6.0.1"
+  npm: "npm i --save-exact resend@6.0.1"
+  yarn: "yarn add --exact resend@6.0.1"
+
+stack_invariants:
+  node: ">=18.17.0"
+  typescript: "5.9.2" # strict mode on
+  tsconfig:
+    compilerOptions:
+      target: "ES2024"
+      jsx: "preserve"
+      strict: true
+  react: "19.1.1"
+  react_dom: "19.1.1"
+  nextjs_app_router:
+    next: "15.4.7"
+    layout: "app/**" # no src/ directory
+    pages_dir: false
+  tailwind:
+    tailwindcss: "4.1.1"
+    postcss_plugin: "@tailwindcss/postcss@4.1.1"
+
+env:
+  required:
+    - "RESEND_API_KEY" # never exposed client-side
+  optional:
+    - "RESEND_REGION" # if multi-region is configured (dashboard)
+  domain_verification_required: true # sending from your domain requires verification in Resend dashboard
+
+sdk_basics:
+  import_and_client:
+    allowed:
+      - "import { Resend } from 'resend';"
+      - "const resend = new Resend(process.env.RESEND_API_KEY!);"
+    server_only: true # never construct/use Resend in the browser or client components
+  http_base_url: "https://api.resend.com"
+  esm_first: true # prefer ESM import; CommonJS require discouraged in this stack
+  idempotency:
+    description: "Prevent duplicates by supplying an idempotency key."
+    node_usage: "await resend.emails.send(payload, { idempotencyKey: 'entity/unique-id' });"
+    constraints:
+      unique_per_request: true
+      ttl_hours: 24
+      max_length: 256
+    headers:
+      rate_limit_headers:
+        - ratelimit-limit
+        - ratelimit-remaining
+        - ratelimit-reset
+        - retry-after
+
+rate_limits_and_quotas:
+  api_default_rps: 2 # requests/second by default
+  guidance:
+    - "Queue, throttle, or batch to respect RPS (e.g., job queue)."
+  send_limits:
+    to_cc_bcc_max_recipients_per_single_send: 50
+  batch:
+    max_items_per_call: 100
+
+types_and_fields:
+  send_email_node:
+    method: "resend.emails.send(payload[, options])"
+    payload_fields:
+      from: "string  # 'Name <sender@yourdomain.com>'"
+      to: "string | string[]  # max 50"
+      subject: "string"
+      html: "string  # optional if using text or react"
+      text: "string  # optional"
+      react: "ReactElement  # optional; template rendered server-side"
+      cc: "string | string[]  # optional"
+      bcc: "string | string[]  # optional"
+      replyTo: "string | string[]  # optional"
+      headers: "Record<string,string>  # optional; custom email headers"
+      tags: "Array<{ name: string; value: string }>"
+      attachments: "Array<{ filename: string; content?: string|Buffer; path?: string; content_type?: string; content_id?: string }>"
+      scheduledAt: "string  # natural language ('in 1 hour') or ISO 8601; scheduling constraints apply"
+    options_fields:
+      idempotencyKey: "string (<=256 chars)"
+  batch_send_node:
+    method: "resend.batch.send(items[, options])"
+    items: "Array<send_email_node.payload>  # same payload subset, with limitations"
+    options_fields:
+      idempotencyKey: "string"
+  retrieve_email:
+    method: "resend.emails.get(id)"
+  update_email:
+    method: "resend.emails.update({ id, scheduledAt })"
+  cancel_email:
+    method: "resend.emails.cancel(id)"
+
+constraints_and_limitations:
+  scheduling:
+    supported_field: "scheduledAt"
+    can_schedule_up_to_days: 30
+    not_supported_with:
+      - "attachments"
+      - "batch_send"
+      - "SMTP"
+  attachments:
+    max_total_message_size_mb_after_base64: 40
+    unsupported_with:
+      - "batch_send"
+      - "scheduledAt"
+    inline_images:
+      use_cid: true
+      steps:
+        - "Set <img src='cid:my-image-id'> in HTML"
+        - "Provide matching attachment with content_id: 'my-image-id'"
+  tags:
+    format: "ASCII letters/numbers/underscore/dash; <= 256 chars"
+  camelCase_vs_snake_case:
+    note: "Node SDK uses camelCase (e.g., replyTo, scheduledAt); REST payloads may use snake_case."
+
+nextjs_app_router_reference_impls:
+  simple_route_send:
+    path: "app/api/email/route.ts"
+    code: |
+      import 'server-only';
+      import { Resend } from 'resend';
+      import { NextRequest } from 'next/server';
+
+      const resend = new Resend(process.env.RESEND_API_KEY!);
+
+      export async function POST(req: NextRequest) {
+        try {
+          const body = (await req.json()) as {
+            to: string | string[];
+            subject: string;
+            html?: string;
+            text?: string;
+            cc?: string | string[];
+            bcc?: string | string[];
+            replyTo?: string | string[];
+            idempotencyKey?: string;
+          };
+
+          const { data, error } = await resend.emails.send(
+            {
+              from: 'NSBS <noreply@yourdomain.com>',
+              to: body.to,
+              subject: body.subject,
+              html: body.html,
+              text: body.text,
+              cc: body.cc,
+              bcc: body.bcc,
+              replyTo: body.replyTo,
+            },
+            body.idempotencyKey ? { idempotencyKey: body.idempotencyKey } : undefined
+          );
+
+          if (error) {
+            return new Response(JSON.stringify({ error }), { status: 500 });
+          }
+          return new Response(JSON.stringify({ data }), { status: 200 });
+        } catch (e) {
+          return new Response(JSON.stringify({ error: String(e) }), { status: 500 });
+        }
+      }
+  react_email_template_send:
+    note: "Server-render a React Email component and pass via `react:`."
+    code: |
+      import 'server-only';
+      import { Resend } from 'resend';
+      import { EmailTemplate } from '@/app/components/email/EmailTemplate'; // React component (tsx)
+      const resend = new Resend(process.env.RESEND_API_KEY!);
+
+      export async function POST() {
+        const { data, error } = await resend.emails.send({
+          from: 'NSBS <noreply@yourdomain.com>',
+          to: ['user@example.com'],
+          subject: 'Welcome!',
+          react: EmailTemplate({ firstName: 'Luccas' }),
+        });
+        if (error) throw error;
+        return Response.json({ data });
+      }
+  schedule_email:
+    note: "Use `scheduledAt` with natural language or ISO 8601. Not with attachments or batch."
+    code: |
+      await resend.emails.send({
+        from: 'NSBS <noreply@yourdomain.com>',
+        to: ['user@example.com'],
+        subject: 'Reminder',
+        html: '<p>See you soon</p>',
+        scheduledAt: 'tomorrow 9am PST',
+      });
+
+  batch_send:
+    note: "Up to 100 items; each item must respect single-send limits. No attachments; no scheduling."
+    code: |
+      await resend.batch.send(
+        [
+          { from: 'NSBS <noreply@yourdomain.com>', to: ['a@example.com'], subject: 'Hi', html: '<p>Hi A</p>' },
+          { from: 'NSBS <noreply@yourdomain.com>', to: ['b@example.com'], subject: 'Hi', html: '<p>Hi B</p>' },
+        ],
+        { idempotencyKey: 'digest/2025-08-23' }
+      );
+
+attachments_reference:
+  remote_file: |
+    await resend.emails.send({
+      from: 'NSBS <noreply@yourdomain.com>',
+      to: 'user@example.com',
+      subject: 'Report',
+      html: '<p>Attached</p>',
+      attachments: [{ path: 'https://example.com/report.pdf', filename: 'report.pdf' }],
+    });
+  local_base64: |
+    import { readFileSync } from 'node:fs';
+    const content = readFileSync('/path/to/file.pdf').toString('base64');
+    await resend.emails.send({
+      from: 'NSBS <noreply@yourdomain.com>',
+      to: 'user@example.com',
+      subject: 'Report',
+      html: '<p>Attached</p>',
+      attachments: [{ filename: 'file.pdf', content }],
+    });
+  inline_image_cid: |
+    await resend.emails.send({
+      from: 'NSBS <noreply@yourdomain.com>',
+      to: 'user@example.com',
+      subject: 'Logo',
+      html: '<img src="cid:logo-image">',
+      attachments: [{ path: 'https://resend.com/static/sample/logo.png', filename: 'logo.png', content_id: 'logo-image' }],
+    });
+
+error_handling_and_retries:
+  api_error_code_429: "Back off per ratelimit-headers; queue and retry with jitter."
+  duplicate_prevention: "Use idempotencyKey; Resend deduplicates within 24h."
+  delivery_issues:
+    common:
+      - "Unverified domain (fix in dashboard)."
+      - "Sandbox/Free account recipient restrictions."
+    observability: "Inspect delivery events & logs in Resend dashboard."
+
+forbidden_and_replacements:
+  - pattern: "Client-side SDK usage (e.g., in files marked with 'use client')"
+    reason: "API key exposure; SDK is server-side."
+    replacement: "Move all Resend calls to server (route handlers, server actions, or server utilities)."
+  - pattern: "Snake_case fields in Node SDK payload (e.g., reply_*to*, scheduled_*at*)"
+    reason: "Node SDK expects camelCase."
+    replacement: "Use replyTo, scheduledAt, etc."
+  - pattern: "Using `attachments` with batch sending"
+    reason: "Batch endpoint does not support attachments."
+    replacement: "Use single sends or drop attachments."
+  - pattern: "Using `scheduledAt` with attachments or batch"
+    reason: "Scheduling not supported with attachments or batch."
+    replacement: "Remove attachments or send individually; or remove scheduling."
+  - pattern: "Exceeding 50 recipients in `to/cc/bcc` for a single send"
+    reason: "Documented limit."
+    replacement: "Split recipients across multiple sends or use batch (without attachments/scheduling)."
+  - pattern: "Lack of idempotency on retryable flows"
+    reason: "Risk duplicate emails."
+    replacement: "Provide options.idempotencyKey per request."
+  - pattern: "CommonJS require('resend') in this stack"
+    reason: "ESM-first Next.js App Router; consistency."
+    replacement: "import { Resend } from 'resend';"
+  - pattern: "Using Pages Router (`pages/api/*`) for new endpoints in this repo"
+    reason: "Project standard is App Router only."
+    replacement: "Create `app/api/<name>/route.ts`."
+
+validation_with_zod_4_0_17:
+  example: |
+    import { z } from 'zod';
+    export const EmailRequest = z.object({
+      to: z.union([z.string().email(), z.array(z.string().email()).nonempty()]),
+      subject: z.string().min(1),
+      html: z.string().optional(),
+      text: z.string().optional(),
+      cc: z.union([z.string().email(), z.array(z.string().email())]).optional(),
+      bcc: z.union([z.string().email(), z.array(z.string().email())]).optional(),
+      replyTo: z.union([z.string().email(), z.array(z.string().email())]).optional(),
+      idempotencyKey: z.string().max(256).optional(),
+    }).refine(v => Boolean(v.html || v.text), { message: "Provide html or text" });
+
+compliance_checks:
+  version_pinning:
+    package_json_must_contain:
+      - '"resend": "6.0.1"'
+  directory_policy:
+    must_have:
+      - "app/api/**"
+    must_not_have:
+      - "src/app/**"
+      - "pages/api/**  # new code"

@@ -1,0 +1,203 @@
+spec:
+  name: "clsx-single-source-of-truth"
+  version_lock: "2.1.1" # exact; no ^, ~, ranges, or other versions
+  library: "clsx"
+  description: "Authoritative rules for clsx@2.1.1 usage in Next.js 15.4.6 App Router, React 19.1.1, TS 5.9.2 (strict, target es2024, jsx preserve), Tailwind 4.1.1."
+  provenance:
+    docs: "https://github.com/lukeed/clsx#readme"
+    npm: "https://www.npmjs.com/package/clsx"
+    cdn: ["https://unpkg.com/clsx@2.1.1/", "https://cdn.jsdelivr.net/npm/clsx@2.1.1/"]
+    last_verified: "2025-08-15"
+
+stack_contract:
+  next: "15.4.6" # App Router only; /app/**; no /src or /pages
+  react: "19.1.1"
+  react-dom: "19.1.1"
+  typescript: "5.9.2"
+  tsconfig_required:
+    compilerOptions:
+      strict: true
+      target: "es2024"
+      module: "node20" # or "nodenext" if your monorepo requires it
+      moduleDetection: "force"
+      verbatimModuleSyntax: true
+      isolatedModules: true
+      exactOptionalPropertyTypes: true
+      noUncheckedIndexedAccess: true
+      jsx: "preserve"
+      types: []
+  tailwind:
+    tailwindcss: "4.1.1"
+    "@tailwindcss/postcss": "4.1.1"
+
+install:
+  npm:
+    - "npm i --save-exact clsx@2.1.1"
+  pnpm:
+    - "pnpm add -E clsx@2.1.1"
+  yarn:
+    - "yarn add --exact clsx@2.1.1"
+
+module_artifacts: # confirmed by README & CDN listings
+  esm: "dist/clsx.mjs"
+  cjs: "dist/clsx.js"
+  umd: "dist/clsx.min.js" # for non-bundled browser scenarios
+  types:
+    - "clsx.d.ts"
+    - "clsx.d.mts"
+  node_support: "All Node versions supported by project; use ESM/CJS per bundler."
+  browser_support_note: "All browsers with Array.isArray (IE9+). For IE8, use clsx@1.0.x only (forbidden here)."
+
+api_surface:
+  default_export:
+    name: "clsx"
+    type: "(...inputs: ClassValue[]) => string"
+  named_export:
+    name: "clsx"
+    from: "clsx"
+  type_aliases:
+    - "ClassValue"
+    - "ClassDictionary"
+    - "ClassArray"
+  lite_build:
+    path: "clsx/lite"
+    behavior: "Accepts ONLY string arguments; any non-string is ignored."
+  reference: "Usage and API semantics per README." # see citations
+
+semantics:
+  inputs_accepted:
+    - "string (truthy strings kept; '' discarded)"
+    - "number (0 discarded; other numeric values stringified)"
+    - "boolean (standalone always discarded)"
+    - "null | undefined | NaN (discarded)"
+    - "object map { className: truthyFalsy } -> keeps keys with truthy values"
+    - "arrays (any depth) -> flattened; values processed with same rules"
+  outputs:
+    - "Whitespace-separated normalized class string"
+  rules_of_thumb:
+    - "Falsy values are removed (including 0, '', false, null, undefined, NaN)."
+    - "Objects contribute keys whose values are truthy."
+    - "Arrays are deeply flattened before evaluation."
+    - "Prefer stable keys in object maps to avoid accidental toggles."
+
+allowed_usage:
+  imports:
+    esm: "import clsx from 'clsx';  // or: import { clsx } from 'clsx';"
+    cjs: "const clsx = require('clsx');"
+    lite: "import clsx from 'clsx/lite'; // ONLY strings allowed"
+  react_next_examples:
+    server_component: |
+      // app/(group)/page.tsx (Server Component)
+      import clsx from 'clsx';
+      export default function Page() {
+        const isHero = true as const;
+        return <h1 className={clsx('text-2xl', isHero && 'font-bold')}>Hello</h1>;
+      }
+    client_component: |
+      // app/components/Button.tsx (Client Component)
+      'use client';
+      import * as React from 'react';
+      import clsx from 'clsx';
+      type Props = Readonly<{ primary?: boolean; className?: string; children: React.ReactNode }>;
+      export default function Button({ primary = false, className, children }: Props) {
+        return (
+          <button
+            className={clsx(
+              'inline-flex items-center rounded px-3 py-1',
+              primary ? 'bg-black text-white' : 'bg-white text-black',
+              className
+            )}
+          >
+            {children}
+          </button>
+        );
+      }
+    tailwind_utility_merging_note: |
+      # clsx does not resolve Tailwind class conflicts.
+      # Combine clsx with a Tailwind class-merger (e.g., tailwind-merge) at call sites if needed.
+      # Keep versions pinned to Tailwind 4.1.1 toolchain in this project.
+
+best_practices:
+  general:
+    - "Prefer object maps for toggles (readability & diff noise reduction)."
+    - "Keep dynamic pieces minimal; precompute booleans."
+    - "When many variants exist, extract a helper (e.g., getButtonClasses) returning clsx(...) result."
+    - "For Tailwind 4.1.1: keep classes literal where possible to maximize IntelliSense & purge accuracy."
+  typing_with_ts_5_9_2:
+    - "Annotate inputs if you wrap clsx to ensure only string/object/array are accepted."
+    - "Under `verbatimModuleSyntax: true`, import the default or named symbol exactly as used."
+  perf:
+    - "Use `clsx/lite` if you only ever pass strings (no objects/arrays) to reduce footprint."
+  next_app_router:
+    - "Use within `className` props in both Server & Client Components."
+    - "Do not attempt to compute classes in middleware (no DOM there)."
+  tailwind_intellisense:
+    vscode_settings_snippet: |
+      {
+        "tailwindCSS.experimental.classRegex": [
+          ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^'\"`]*)(?:'|\"|`)"]
+        ]
+      }
+
+forbidden_and_outdated:
+  versions:
+    - "Any clsx version other than exactly 2.1.1 is forbidden."
+    - "Using clsx@1.x (IE8-specific path) is forbidden."
+  patterns:
+    - "Do NOT import or rely on `classnames` in this codebase; clsx replaces it."
+    - "Do NOT pass non-stringifiable complex objects (e.g., DOM nodes, Dates) expecting special handling—only keys from plain object maps are considered."
+    - "Do NOT expect Tailwind conflict resolution (e.g., 'p-2' vs 'p-3') from clsx—use a merge utility if needed."
+    - "Do NOT use dynamic class strings that bypass Tailwind’s safelisting strategy without configuring Tailwind accordingly."
+  repo_structure:
+    - "/src/**: forbidden"
+    - "/pages/**: forbidden"
+  tsconfig_deviations:
+    - "Changing target from es2024 or jsx from preserve is forbidden in this project."
+
+ci_enforcement:
+  package_json_rules:
+    dependencies_exact:
+      clsx: "2.1.1"
+      next: "15.4.6"
+      react: "19.1.1"
+      react-dom: "19.1.1"
+      typescript: "5.9.2"
+      tailwindcss: "4.1.1"
+      "@tailwindcss/postcss": "4.1.1"
+    forbid_ranges: true # fail if '^', '~', '>=', '*' detected
+  filesystem_rules:
+    - "Fail if /src or /pages exists."
+    - "Fail if /app/layout.tsx missing or missing <html>/<body>."
+  grep_rules:
+    - pattern: "\\bclassnames\\b"
+      action: "fail"
+    - pattern: "from 'clsx/lite'"
+      note: "allow only when a file is annotated with // clsx-lite-ok and uses strings-only"
+  allowed_import_forms:
+    - "import clsx from 'clsx'"
+    - "import { clsx } from 'clsx'"
+
+reference_snippets:
+  simple:
+    tsx: "className={clsx('block', isActive && 'text-green-600', disabled && 'opacity-50')}"
+  objects:
+    tsx: "className={clsx({ 'font-semibold': bold, 'text-gray-500': !bold })}"
+  arrays_and_nesting:
+    tsx: "className={clsx('p-2', ['rounded', compact && 'px-1'], [['text-sm','leading-5']])}"
+  lite_build_only_strings:
+    tsx: "import clsx from 'clsx/lite'; className={clsx('text-base', isOn && 'font-bold')}"
+
+security_licensing:
+  license: "MIT (clsx)"
+  considerations:
+    - "No runtime network access."
+    - "No transitive dependencies."
+    - "Tiny surface area; safe for Server/Client Components."
+
+glossary:
+  ClassDictionary: "Record<string, unknown> where truthy values include the key"
+  ClassArray: "Array<ClassValue> (recursively flattened)"
+  ClassValue: "string | number | boolean | null | undefined | ClassDictionary | ClassArray"
+
+notes:
+  - "All behavioral rules above are taken from the official README (inputs, falsy removal, arrays, objects, lite build) and the distribution files present for v2.1.1 on CDN registries."

@@ -1,0 +1,227 @@
+name: nextjs
+single_source_of_truth: true
+version: "15.5.0" # exact; no ranges/carets allowed
+package_name: "next"
+
+install:
+  pnpm: "pnpm add -E next@15.5.0"
+  npm: "npm i --save-exact next@15.5.0"
+  yarn: "yarn add --exact next@15.5.0"
+
+stack_invariants:
+  node: ">=18.17.0"
+  react: "19.1.1"
+  react_dom: "19.1.1"
+  typescript: "5.9.2"
+  tailwindcss: "4.1.1"
+  tailwind_postcss_plugin: "@tailwindcss/postcss@4.1.1"
+
+tsconfig_required:
+  file: "tsconfig.json"
+  compilerOptions:
+    target: "ES2024"
+    jsx: "preserve"
+    strict: true
+    moduleResolution: "bundler"
+    module: "esnext"
+    allowJs: false
+    noEmit: true
+    incremental: true
+  includes:
+    - "app/**/*.ts"
+    - "app/**/*.tsx"
+    - "lib/**/*.ts"
+    - "lib/**/*.tsx"
+  excludes:
+    - "node_modules"
+    - ".next"
+
+project_structure_policy:
+  layout: "App Router only"
+  root_app_directory_required: "app/" # MUST exist at repo root
+  forbidden:
+    - "src/app/**" # see NOTE above
+    - "pages/**" # no Pages Router
+    - "pages/api/**"
+  allowed:
+    - "public/**" # must remain at repo root
+    - "app/**"
+    - "lib/**"
+    - "components/**"
+
+app_router_file_conventions:
+  required_root_files:
+    - "app/layout.tsx  # must contain <html> and <body>"
+    - "app/page.tsx"
+    - "app/globals.css"
+  optional_special_files:
+    - "app/error.tsx"
+    - "app/not-found.tsx"
+    - "app/loading.tsx"
+    - "app/template.tsx"
+    - "app/api/**/route.ts"
+    - "middleware.ts"
+  segment_files:
+    page: "page.tsx" # route entry
+    layout: "layout.tsx" # wraps children
+    route_handler: "route.ts" # REST-like handlers
+    metadata:
+      object_export: "export const metadata"
+      function: "export async function generateMetadata(...)"
+  references:
+    docs:
+      - "App Router overview"
+      - "Project structure"
+      - "Route Handlers"
+      - "Middleware"
+      - "Metadata API"
+
+rendering_and_components:
+  defaults:
+    server_components: true # pages/layouts are Server Components by default
+    client_components: "opt-in via 'use client' at top of file"
+  allowed:
+    - "Server Actions via 'use server' in server functions"
+    - "Client components can call Server Actions"
+  forbidden:
+    - "getServerSideProps / getStaticProps / getInitialProps (Pages Router APIs)"
+    - "next/head in App Router (use Metadata API)"
+  references:
+    - "Server Actions"
+    - "App Router migration: replace GSSP/GSP with new APIs"
+    - "Metadata API (object or generateMetadata)"
+
+data_fetching_and_cache:
+  server_fetch:
+    api: "next extends global fetch"
+    options:
+      cache: ["force-cache", "no-store"]
+      next:
+        revalidate: "number (seconds)"
+        tags: "string[]"
+    examples:
+      static: "await fetch(url, { cache: 'force-cache' })"
+      revalidate: "await fetch(url, { next: { revalidate: 60 } })"
+      no_store: "await fetch(url, { cache: 'no-store' })"
+  revalidation:
+    functions:
+      - "revalidatePath"
+      - "revalidateTag"
+  guidance:
+    - "Prefer server fetches inside Server Components"
+    - "Tag responses you plan to invalidate"
+  references:
+    - "fetch API (App Router)"
+    - "Caching & Revalidating guide"
+
+route_handlers:
+  file: "app/**/route.ts"
+  runtime: "Web Fetch API (Request/Response)"
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
+  must_return: "Response (do not call NextResponse.next() here)"
+  notes:
+    - "Use Route Handlers instead of pages/api"
+  references:
+    - "route.ts API"
+    - "Error: NextResponse.next() not allowed in App Route Handler"
+
+middleware:
+  file: "middleware.ts"
+  behavior: "Runs before routes; modify, redirect, rewrite"
+  uses: "Authentication gates, localization, header transforms"
+  references:
+    - "Middleware docs"
+
+css_and_tailwind_v4:
+  postcss_config:
+    file: "postcss.config.mjs"
+    content: "export default { plugins: { '@tailwindcss/postcss': {} } };"
+  globals_css:
+    first_line: "@import 'tailwindcss';"
+  component_styles: "CSS Modules or other; avoid global leakage"
+
+next_config_invariants:
+  file: "next.config.ts"
+  recommended:
+    reactStrictMode: true
+    eslint:
+      ignoreDuringBuilds: false
+    typescript:
+      ignoreBuildErrors: false
+  allow:
+    experimental: {} # avoid enabling unstable flags unless justified
+
+images_fonts_links:
+  next_image: "Use <Image> for optimized images; domain whitelisting in next.config.ts if remote"
+  next_font: "Use @next/font (automatic) or link tags"
+  next_link: "Use <Link> for client nav; prefetching is automatic"
+
+allowed_examples:
+  server_page_example: |
+    // app/page.tsx
+    import type { Metadata } from 'next';
+
+    export const metadata: Metadata = { title: 'Home' };
+
+    async function getData(): Promise<{ msg: string }> {
+      const res = await fetch('https://api.example.com', { next: { revalidate: 60 } });
+      if (!res.ok) throw new Error('Failed');
+      return res.json() as Promise<{ msg: string }>;
+    }
+
+    export default async function Page(): Promise<JSX.Element> {
+      const data = await getData();
+      return <main>{data.msg}</main>;
+    }
+  route_handler_example: |
+    // app/api/hello/route.ts
+    export async function GET(): Promise<Response> {
+      return Response.json({ hello: 'world' });
+    }
+
+forbidden_and_replacements:
+  - pattern: "pages/** or pages/api/**"
+    reason: "Pages Router APIs not allowed in this repo"
+    replacement: "Move to App Router and Route Handlers under app/api/**/route.ts"
+    docs: "App Router docs"
+  - pattern: "getServerSideProps / getStaticProps / getInitialProps"
+    reason: "Replaced by server fetch + new data APIs"
+    replacement: "Fetch in Server Components; use revalidate & tags"
+    docs: "Migration guide"
+  - pattern: "import Head from 'next/head'"
+    reason: "App Router uses Metadata API"
+    replacement: "export const metadata or generateMetadata"
+    docs: "Metadata API"
+  - pattern: "NextResponse.next() inside app/**/route.ts"
+    reason: "Route Handlers must return Response"
+    replacement: "Return Response (e.g., Response.json(...))"
+    docs: "Error message doc"
+  - pattern: "Client components doing privileged server work"
+    reason: "Security & bundle size"
+    replacement: "Server Actions or Route Handlers"
+  - pattern: "Placing app/ under src/"
+    reason: "Forbidden by repo policy"
+    replacement: "Keep app/ at repository root"
+
+version_pinning_and_engines:
+  package_json_must_include:
+    - '"next": "15.5.0"'
+    - '"react": "19.1.1"'
+    - '"react-dom": "19.1.1"'
+    - '"typescript": "5.9.2"'
+    - '"tailwindcss": "4.1.1"'
+    - '"@tailwindcss/postcss": "4.1.1"'
+  disallow_version_ranges: true
+  engines:
+    node: "18.17.0"
+    pnpm: "9.0.0"
+
+compliance_checklist:
+  - "app/layout.tsx exists and defines <html> and <body>"
+  - "app/page.tsx exists (default route)"
+  - "No pages/**"
+  - "No src/app/**"
+  - "Metadata uses object or generateMetadata"
+  - "Route Handlers return Response"
+  - "fetch uses cache/no-store/revalidate with tags where needed"
+  - "tsconfig target ES2024, jsx preserve, strict true"

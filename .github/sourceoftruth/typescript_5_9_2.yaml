@@ -1,0 +1,206 @@
+# typescript-5.9.2.sot.yaml
+meta:
+  scope: "TypeScript usage across a Next.js App Router project (no src/), React 19.1.1, Tailwind 4.1.1"
+  generated_at: "2025-08-15"
+  authoritative_versions:
+    typescript: "5.9.2" # exact, no ^ or ~
+    next: "15.4.6" # exact, no ^ or ~  (App Router, no src/)
+    react: "19.1.1" # exact, no ^ or ~
+    react-dom: "19.1.1" # exact, no ^ or ~
+    tailwindcss: "4.1.1" # exact, no ^ or ~
+    "@tailwindcss/postcss": "4.1.1" # exact, no ^ or ~
+  npm_verification:
+    # These pages confirm existence/pinning of the above versions.
+    typescript_5_9_2: "verified on npm"
+    tailwindcss_4_1_1: "verified on npm"
+    tailwindcss_postcss_pkg: "verified on npm"
+
+project_structure:
+  must_have:
+    - "app/layout.tsx  # root layout, must include <html> and <body>"
+    - "app/page.tsx    # homepage"
+    - "app/global-error.tsx (optional but recommended)"
+    - "public/         # static assets"
+    - "app/globals.css # Tailwind entry point with @import 'tailwindcss'"
+  forbidden:
+    - "src/ directory for app router (project must be rooted at /app)"
+  notes:
+    - "Root layout must include <html> and <body>, and Metadata API should be used for <head>."
+
+packages_json:
+  dependencies_exact:
+    next: "15.4.6"
+    react: "19.1.1"
+    react-dom: "19.1.1"
+  devDependencies_exact:
+    typescript: "5.9.2"
+    tailwindcss: "4.1.1"
+    "@tailwindcss/postcss": "4.1.1"
+  constraints:
+    - "No version ranges (^, ~, *, x.x) permitted anywhere."
+    - "If Node types are needed, add '@types/node' exact-pin; otherwise prefer DOM/Web APIs."
+
+tsconfig:
+  file: "tsconfig.json"
+  required.compilerOptions:
+    # Target + libs
+    target: "ES2024" # supported since TS 5.7; valid in 5.9.2
+    lib: ["DOM", "DOM.Iterable", "ES2024"]
+    # JSX
+    jsx: "preserve" # Next controls JSX transform
+    # Modules & resolution
+    module: "ESNext" # for Next/bundler (alternative profile: Node20 below)
+    moduleResolution: "Bundler"
+    moduleDetection: "force" # TS 5.9 default in --init sample
+    # Emit & interop
+    noEmit: true
+    isolatedModules: true
+    verbatimModuleSyntax: true # enforce import/export exactness and type-only imports
+    allowArbitraryExtensions: false
+    # Strictness
+    strict: true # implies noImplicitAny, etc.
+    noUncheckedIndexedAccess: true
+    exactOptionalPropertyTypes: true
+    useUnknownInCatchVariables: true
+    noFallthroughCasesInSwitch: true
+    noImplicitOverride: true
+    # Source maps / incremental
+    sourceMap: true
+    incremental: true
+    # Side-effects
+    noUncheckedSideEffectImports: true
+    # Paths/globs
+    forceConsistentCasingInFileNames: true
+    skipLibCheck: false
+  required.include:
+    - "next-env.d.ts"
+    - "**/*.ts"
+    - "**/*.tsx"
+  required.exclude:
+    - "node_modules"
+    - ".next"
+    - "dist"
+  alternative_profiles:
+    node_runtime_cli:
+      compilerOptions:
+        module: "Node20" # TS 5.9 added; safe for Node 20 ESM/CJS interop
+        moduleResolution: "Node10" # let TS infer Node semantics; adjust only if required
+        noEmit: false # if actually emitting for CLI tools
+      use_when: "Building server-only Node CLIs/scripts outside Next bundling."
+  invariants:
+    - "`jsx` MUST remain 'preserve' in Next projects (Next handles the transform)."
+    - "`target` MUST be 'ES2024'."
+    - "`verbatimModuleSyntax` MUST be enabled (type-only imports/exports are required)."
+
+typing_standards:
+  default: "zero-'any' policy (strictly enforced)"
+  allowed_substitutions:
+    - "Use `unknown` over `any` for untyped values; narrow via refinement."
+    - "Use generics or template literal types instead of `any` placeholders."
+    - "For third-party gaps, prefer `zod`/runtime validation + inferred types."
+  narrowly_permitted_any:
+    - "Only at isolated boundary shims (e.g., legacy SDKs), with inline justification comment AND ESLint disable-next-line for that single line."
+  must_use:
+    - "readonly (params & arrays/tuples) where appropriate"
+    - "satisfies operator for narrowing object literals"
+    - "const assertions (`as const`) to preserve literal types"
+    - "discriminated unions instead of boolean flags"
+  prohibited:
+    - "Bare `any` in declarations, assertions (`as any`), or casts (`<any>`)."
+    - "Implicit `any` (caught by `strict`)."
+
+modules_and_imports:
+  allowed:
+    - "ESM `import`/`export` exclusively."
+    - "`import type` / `export type` for type-only references (enforced by verbatimModuleSyntax)."
+    - "Dynamic `import()` for code-splitting or conditional loading."
+  required_for_json_modules:
+    - "Import **attributes**: `import data from './file.json' with { type: 'json' }`."
+  forbidden:
+    - "Import **assertions**: `assert { type: 'json' }` (errors under NodeNext/TS ≥5.8)."
+    - "`require()` in `.ts`/`.tsx` ESM modules (use dynamic `import()`)."
+    - "TS-specific CommonJS forms in ESM (`export =` / `import = require`)."
+  notes:
+    - "TS 5.9 supports `import defer` (namespace imports only; useful in perf-sensitive cases). Enable only with module modes that preserve ESM semantics."
+
+react_jsx_usage:
+  runtime: "React 19.1.1"
+  jsx_mode: "preserve (Next-controlled)"
+  client_server_split:
+    - "Server Components by default; add `'use client'` when needed."
+  typing_guidelines:
+    - "Type props via exact object types; avoid `React.FC` for children unless needed."
+    - "Use `React.ElementType` for polymorphic components."
+
+next_app_router_rules:
+  root_layout:
+    must_include: ["<html>", "<body>"]
+    must_not_include: ["manual <head> tags (use Metadata API)"]
+  metadata_api:
+    - "Prefer static `export const metadata` or `generateMetadata` in server files."
+  caching_revalidation:
+    - "Use `revalidatePath`/`revalidateTag` inside Server Actions/Route Handlers only."
+
+tailwind_v4_setup:
+  postcss_config_mjs:
+    plugins: ["@tailwindcss/postcss"]
+  css_entrypoint:
+    content: |
+      @import "tailwindcss";
+  notes:
+    - "Tailwind v4 is CSS-first; many customizations live directly in CSS via @theme/@plugin directives."
+    - "Do not use `tailwindcss` directly as a PostCSS plugin; use `@tailwindcss/postcss`."
+  forbidden:
+    - "Old v3 content scanning arrays in JS config (v4 auto-detects)."
+
+allowed_language_features_ts_5_9_2:
+  - "Decorators (ECMAScript standard semantics). Avoid legacy `--experimentalDecorators`."
+  - "Satisfies operator; const type parameters; template literal types; variadic tuple types; infer improvements."
+  - "Top-level await in modules (target ES2024)."
+  - "`using` / `Disposable` not standardized—avoid unless runtime supports."
+
+forbidden_or_outdated_in_this_project:
+  - "Any usage of `any` without a one-line, justified exception as described."
+  - "Import assertions `assert { ... }`."
+  - "Legacy decorators mode (`experimentalDecorators: true`) in this Next app."
+  - "CommonJS-only patterns (`module.exports`, `require`) in `.ts/.tsx`."
+  - "Creating `src/` with an App Router—must be rooted at `/app`."
+
+reference_snippets:
+  app/layout.tsx_minimal: |
+    // app/layout.tsx
+    import type { Metadata } from 'next';
+
+    export const metadata: Metadata = { title: 'App' };
+
+    export default function RootLayout({ children }: { children: React.ReactNode }) {
+      return (
+        <html lang="en">
+          <body>{children}</body>
+        </html>
+      );
+    }
+  postcss_config_mjs: |
+    // postcss.config.mjs
+    export default {
+      plugins: ["@tailwindcss/postcss"]
+    }
+  globals_css: |
+    /* app/globals.css */
+    @import "tailwindcss";
+
+validation_matrix:
+  tsconfig:
+    - "target == 'ES2024'"
+    - "jsx == 'preserve'"
+    - "strict == true"
+    - "verbatimModuleSyntax == true"
+    - "module in {'ESNext','Node20'} depending on profile"
+    - "noUncheckedSideEffectImports == true"
+  codebase:
+    - "No `assert {` occurrences in imports."
+    - "No `: any`, `as any`, or `<any>` outside allowed shims."
+    - "Dynamic import used when conditional loading is needed."
+  filesystem:
+    - "app/layout.tsx exists and renders <html> and <body>."
+    - "No /src/ when using App Router."

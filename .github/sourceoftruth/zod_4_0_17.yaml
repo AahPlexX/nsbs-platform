@@ -1,0 +1,233 @@
+spec:
+  name: zod-4.0.17-ssot
+  purpose: "Authoritative rules for using Zod 4.0.17 with TypeScript 5.9.2 (ES2024), Next.js App Router (/app only), React 19.1.2, Tailwind 4.1.2"
+  last_verified: "2025-08-15"
+
+versions:
+  zod: "4.0.17" # EXACT — no ^, ~, ranges, or 'Vx' strings
+  typescript: "5.9.2" # EXACT
+  next: "15.5.0" # EXACT (App Router; no /src, no /pages)
+  react: "19.1.2" # EXACT
+  react-dom: "19.1.2" # EXACT
+  tailwindcss: "4.1.2" # EXACT
+  "@tailwindcss/postcss": "4.1.2" # EXACT
+
+install_and_verify:
+  npm_install:
+    - "npm i --save-exact zod@4.0.17"
+  verification:
+    - 'node -e "console.log(require(''zod/package.json'').version)"  # must print 4.0.17'
+    - "Open npm page shows 4.0.17 as published version." # see receipts
+
+tsconfig_contract:
+  file: "tsconfig.json"
+  must_have.compilerOptions:
+    target: "ES2024"
+    lib: ["ES2024", "DOM", "DOM.Iterable"]
+    jsx: "preserve"
+    module: "ESNext"
+    moduleResolution: "Bundler"
+    strict: true
+    verbatimModuleSyntax: true
+    noUncheckedSideEffectImports: true
+    forceConsistentCasingInFileNames: true
+    skipLibCheck: false
+    noEmit: true
+  notes:
+    - "These flags ensure precise types for Zod inferences and clean ESM usage in Next/React."
+
+project_layout_contract:
+  app_router_only: true
+  must_exist: ["/app/layout.tsx", "/app/page.tsx", "/app/globals.css", "/postcss.config.mjs"]
+  must_not_exist: ["/src", "/pages"]
+  css_setup:
+    globals_css_first_line: '@import "tailwindcss";'
+  postcss:
+    plugins: ["@tailwindcss/postcss"]
+
+imports_and_packages:
+  preferred_imports:
+    - "import * as z from 'zod';         # root now exports Zod 4"
+    - "import * as zm from 'zod/mini';   # optional, only if you opt into Zod Mini"
+  allowed_alternatives:
+    - "import * as z from 'zod/v4';      # subpath is still supported; root is preferred"
+  forbidden_imports:
+    - "'zod/v3'  # never allowed"
+  notes:
+    - "As of 2025-07-08 the package root 'zod' exports v4; subpaths remain forever for back-compat."
+
+core_usage:
+  parsing_apis:
+    sync: ["schema.parse(input)", "schema.safeParse(input)"]
+    async: ["await schema.parseAsync(input)", "await schema.safeParseAsync(input)"]
+    behavior: "parse throws ZodError; safeParse returns { success, data | error }."
+  type_inference:
+    - "z.infer<typeof Schema>  # output type"
+    - "z.input<typeof Schema>  # input type (may differ with transforms)"
+    - "z.output<typeof Schema> # alias of z.infer"
+  coercion:
+    - "Use z.coerce.string/number/boolean/bigint — coerced schemas have input type 'unknown'." # v4 change
+  transforms_vs_overwrites:
+    transform: "schema.transform(fn) => changes output type"
+    overwrite: "schema.overwrite(fn) => does NOT change inferred type; good for normalization"
+
+schemas_and_methods (v4 canonical):
+  primitives:
+    - "z.string(), z.number(), z.bigint(), z.boolean(), z.symbol(), z.null(), z.undefined(), z.nan(), z.void()"
+  numbers:
+    rules:
+      - "z.number() only accepts finite numbers; ±Infinity invalid"
+      - "z.int() (or z.number().int()) restricts to safe integers only"
+      - "z.int32() restricts to 32-bit range"
+  strings:
+    builtins:
+      [
+        "min",
+        "max",
+        "length",
+        "regex",
+        "startsWith",
+        "endsWith",
+        "includes",
+        "trim",
+        "toLowerCase",
+        "toUpperCase",
+        "normalize",
+      ]
+    formats_top_level:
+      - "z.email(), z.uuid(), z.url(), z.hostname(), z.emoji(), z.base64(), z.base64url(), z.jwt()"
+      - "z.nanoid(), z.cuid(), z.cuid2(), z.ulid(), z.ipv4(), z.ipv6(), z.cidrv4(), z.cidrv6()"
+      - "z.iso.date(), z.iso.time(), z.iso.datetime(), z.iso.duration()"
+    important_changes:
+      - "Use TOP-LEVEL format validators (e.g., z.email()) — method forms on z.string() are deprecated."
+  literals_and_enums:
+    - "z.literal(value) or z.literal([...values])"
+    - "z.enum(['red','green']) OR z.enum(YourEnum)  # z.nativeEnum() deprecated"
+  arrays_tuples_sets_maps:
+    arrays:
+      - "z.array(T).nonempty() now ≡ .min(1) and yields T[] (not tuple type)"
+      - "For [T, ...T[]] semantics use z.tuple([T], T)"
+    tuples: "z.tuple([...], rest?)"
+    sets: "z.set(T)"
+    maps: "z.map(K, V)"
+  objects:
+    definition: "z.object({ ...shape })"
+    strictness:
+      - "Use z.strictObject({...}) for strict; z.looseObject({...}) for passthrough"
+      - "z.object().strict()/passthrough() are legacy (kept for back-compat) — prefer top-level helpers"
+    defaults_in_optional_fields: "Defaults inside optional fields now apply."
+    shape_ops_preferred: "Prefer shape spread or .extend(); .merge() deprecated."
+  unions_and_discriminators:
+    - "z.union([A,B,...])"
+    - "z.discriminatedUnion('tag',[...]) upgraded and more robust"
+  effects_refinements:
+    - "Refinements live inside schemas in v4; chain .refine() anywhere"
+  functions:
+    - "z.function(args, returns) — throws ZodError for invalid calls"
+
+metadata_and_json_schema:
+  registries:
+    - "z.registry<T>() for typed metadata; schema.register(registry, meta)"
+    - "z.globalRegistry.add(schema, meta); schema.meta(meta) adds to global registry"
+    - "schema.describe(text) still exists but .meta(...) is preferred"
+  json_schema:
+    - "z.toJSONSchema(schema[, options]) — first-party JSON Schema conversion includes registry metadata"
+
+error_system (v4):
+  unified_error_param:
+    - "Use { error: 'msg' | (issue) => string | undefined }"
+  precedence:
+    - "Schema-level error takes precedence over parse-context error callback"
+  deprecated_removed:
+    - "message (deprecated; still parses) — prefer 'error'"
+    - "invalid_type_error / required_error — removed; express via error(issue)"
+    - "errorMap — renamed/rolled into 'error' func; returning string allowed"
+    - "ZodError#format() / #flatten() / #formErrors — deprecated; use z.treeifyError()"
+    - "ZodError#addIssue(s) — deprecated; push to err.issues[] directly"
+
+policy_allowed:
+  - "Import from 'zod' (or 'zod/mini' if bundle size is critical)."
+  - "Top-level format validators (z.email(), z.uuid(), …)."
+  - "Refinements via .refine(), .check() (Mini), and .overwrite() for non-type-changing transforms."
+  - "JSON Schema generation via z.toJSONSchema()."
+  - "Metadata via registries and .meta()."
+
+policy_forbidden_outdated_unusable:
+  imports:
+    - "from 'zod/v3'"
+  versions:
+    - "Any zod other than exactly 4.0.17"
+  api_patterns:
+    - "z.string().email() and other method-form formats on strings (deprecated) — use top-level z.email(), etc."
+    - "invalid_type_error / required_error options"
+    - "errorMap (schema or parse-time)"
+    - "ZodError.format()/flatten()/formErrors()/addIssue()/addIssues()"
+    - "z.nativeEnum()"
+    - "z.object().nonstrict()  # removed"
+    - "z.object().strip()      # deprecated; use plain z.object(shape)"
+    - "z.object().merge(other) # deprecated; prefer .extend() or shape spread"
+    - "z.promise(...)          # deprecated; await before parsing"
+    - "z.string().ip() or .cidr()  # use z.ipv4()/z.ipv6()/z.cidrv4()/z.cidrv6()"
+  number_rules:
+    - "Using ±Infinity with z.number()"
+    - "Using unsafe integers with z.number().int()  # switch to z.int()/z.int32()"
+
+nextjs_integration_examples:
+  route_handler_validation:
+    - path: "app/api/users/route.ts"
+      kind: "POST"
+      code: |
+        // Validate request JSON body with Zod 4.0.17
+        import * as z from 'zod';
+
+        const CreateUser = z.strictObject({
+          id: z.nanoid(),
+          email: z.email(),
+          name: z.string().min(1),
+          roles: z.array(z.enum(['admin','user'])).default(['user']),
+        });
+
+        export async function POST(req: Request): Promise<Response> {
+          const json = await req.json();
+          const parsed = CreateUser.safeParse(json);
+          if (!parsed.success) {
+            // Use treeified errors in v4
+            return new Response(JSON.stringify({ error: z.treeifyError(parsed.error) }), { status: 400 });
+          }
+          const user = parsed.data;
+          // ... do work (Server Action/DB/etc.)
+          return Response.json({ ok: true, user }, { status: 201 });
+        }
+  server_action_example:
+    code: |
+      'use server';
+      import * as z from 'zod';
+
+      const FormSchema = z.strictObject({
+        email: z.email({ /* pattern optional */ }),
+        plan: z.enum(['free','pro','team']),
+      });
+
+      export async function submit(formData: FormData): Promise<{ ok: true }> {
+        const data = Object.fromEntries(formData);
+        const parsed = FormSchema.parse(data); // throws on invalid
+        // ... mutate server state
+        return { ok: true };
+      }
+
+tailwind_notes:
+  - 'Tailwind v4 uses the ''@tailwindcss/postcss'' plugin and ''@import "tailwindcss"'' in CSS.'
+  - "Classic content scanning arrays are not used in v4."
+
+validation_matrix_ci_targets:
+  package:
+    - "zod dependency pinned exactly to 4.0.17; no ranges"
+  code:
+    - "No forbidden APIs listed above"
+    - "Top-level format validators used instead of string-method forms"
+  tsconfig:
+    - "target ES2024"
+    - "jsx preserve"
+    - "strict true"
+    - "verbatimModuleSyntax true"
+    - "module ESNext or Node20 in non-Next CLIs"

@@ -1,0 +1,277 @@
+name: react-react-dom-ssot
+version: 1.0.0
+scope: production
+summary: >
+  Single source of truth for React 19.1.1 + react-dom 19.1.1 usage in a Next.js App Router
+  project (no /src), with TypeScript 5.9.2 (strict), target ES2024, JSX preserve, and Tailwind 4.1.1.
+
+stack_constraints:
+  typescript:
+    allowed: ["5.9.2"]
+    tsconfig:
+      compilerOptions:
+        target: ES2024
+        module: ESNext
+        moduleResolution: bundler
+        lib: ["ES2024", "DOM", "DOM.Iterable"]
+        jsx: preserve
+        strict: true
+        noUncheckedIndexedAccess: true
+        exactOptionalPropertyTypes: true
+        noImplicitOverride: true
+        noImplicitReturns: true
+        noFallthroughCasesInSwitch: true
+  nextjs:
+    version: "15.4.6"
+    app_router_only: true
+    src_directory: forbidden # project root uses /app, not /src
+  tailwind:
+    version: "4.1.1"
+    postcss_plugin: "@tailwindcss/postcss@4.1.1"
+    integration:
+      - add "globals.css" and import it in app/layout.tsx
+      - prefer component-level styles via Tailwind utilities; co-locate any additional CSS as needed
+        using React 19 stylesheet components with precedence (see react-dom components below)
+  react:
+    version: "19.1.1" # exact; no ^ or ~
+  react_dom:
+    version: "19.1.1" # exact; no ^ or ~
+  package_manager:
+    enforce_exact_versions: true # use --save-exact; never use ^ or ~
+
+install:
+  npm:
+    - npm i --save-exact react@19.1.1 react-dom@19.1.1
+    - npm i --save-exact typescript@5.9.2
+    - npm i --save-exact tailwindcss@4.1.1 @tailwindcss/postcss@4.1.1
+    # Types for TS 5.9.2 projects using React 19:
+    - npm i --save-exact @types/react@19.1.x @types/react-dom@19.1.x # pin exact when chosen
+
+runtime_model:
+  rendering:
+    client_root_api: react-dom/client.createRoot
+    ssr_hydration_api: react-dom/client.hydrateRoot
+    error_hooks:
+      # Root options to implement error reporting:
+      onUncaughtError: allowed
+      onCaughtError: allowed
+      onRecoverableError: allowed
+    strict_mode: recommended_dev_only
+    transitions:
+      async_in_transitions: allowed # supports async functions in transitions
+  server_components:
+    status: stable_with_frameworks
+    default_in_next_app_router: true
+    directives:
+      use_server: for Server Functions only
+      use_client: mark client components explicitly
+  document_metadata_and_assets:
+    components:
+      - title # always hoisted to <head>
+      - meta # hoisted to <head>
+      - link # supports precedence for stylesheets
+      - style # supports href + precedence; can be hoisted
+      - script # supports async hoisting semantics
+    stylesheet_ordering:
+      precedence_required_for_stylesheets: true
+      deduplication:
+        automatic_by_href: true
+    resource_hints_and_preloads:
+      prefetchDNS: allowed
+      preconnect: allowed
+      preload: allowed
+      preloadModule: allowed
+      preinit: allowed
+      preinitModule: allowed
+
+allowed_apis_and_syntax:
+  core_hooks:
+    - useState
+    - useReducer
+    - useEffect
+    - useLayoutEffect
+    - useMemo
+    - useCallback
+    - useRef # TS 5.9 types require an argument; pass undefined for empty refs
+    - useId
+    - useTransition
+    - useDeferredValue
+    - useSyncExternalStore
+  new_or_updated_in_19:
+    - use # for awaiting thenables in components/hooks (prefer async/await in RSC)
+    - useOptimistic
+    - useActionState # returns [state, formAction, isPending]
+  react_dom_hooks:
+    - useFormStatus # form pending/error state within the nearest <form>
+  forms_and_actions:
+    action_attribute_on_form: allowed
+    button_formAction_prop: allowed
+    server_functions_with_actions: allowed # 'use server' in function body or file
+    requestFormReset: allowed
+  refs:
+    ref_as_prop:
+      allowed: true
+      recommendation: "Prefer ref-as-prop for new code; continue to support forwardRef for libs."
+      typing_guidance:
+        function_component_with_ref:
+          # Example typing pattern for intrinsic elements:
+          - "type InputProps = React.ComponentPropsWithRef<'input'>"
+          - "function TextInput(props: InputProps) { const {ref, ...rest} = props; return <input ref={ref} {...rest} /> }"
+        custom_component_ref:
+          - "type MyCompProps = { ref?: React.Ref<HTMLDivElement>; ... }"
+    forwardRef: allowed_for_compat
+  portals_and_sync:
+    - createPortal
+    - flushSync
+  server_rendering_apis:
+    note: "Framework (Next.js) handles react-dom/server; direct usage generally not needed."
+    apis: [renderToPipeableStream, renderToReadableStream, renderToStaticMarkup, renderToString]
+  dom_components_with_special_behavior:
+    title:
+      hoisted: true
+      single_title_recommended: true
+    meta:
+      hoisted: true
+    link:
+      stylesheet_precedence_prop_required: true
+      deduplication_by_href: true
+    style:
+      supports_href_and_precedence: true
+      can_suspend_while_loading: true
+    script:
+      hoistable_with_async_true: true
+      caveats: ["Async scripts must be safe to reorder/hoist."]
+  keys_and_lists:
+    stable_keys_required: true
+    index_keys:
+      allowed: discouraged
+      note: "Only use as last resort for static, non-reordered lists."
+  jsx_transform:
+    requirement: "Modern JSX transform is required in React 19"
+    tsconfig_jsx: preserve
+    bundler:
+      next_swc_handles_transform: true
+
+forbidden_outdated_removed:
+  # Removals / hard deprecations in React 19:
+  react_package:
+    - "propTypes runtime checks removed; usage is ignored"
+    - "defaultProps on function components removed (use ES default params)"
+    - "legacy context via contextTypes/getChildContext removed"
+    - "string refs removed (use callback refs or createRef)"
+    - "module pattern factories removed"
+    - "React.createFactory removed (use JSX)"
+  react_dom_package:
+    - "ReactDOM.render removed (use createRoot)"
+    - "ReactDOM.hydrate removed (use hydrateRoot)"
+    - "ReactDOM.unmountComponentAtNode removed (use root.unmount())"
+    - "react-test-renderer/shallow removed; use react-shallow-renderer directly"
+    - "UMD builds removed; do not load react/react-dom via UMD script tags"
+  patterns_to_avoid:
+    - "Using third-party head managers (e.g. react-helmet) for title/meta when React 19 components suffice"
+    - "Mutating DOM outside React (findDOMNode) except in legacy escape-hatch cases"
+    - "Outdated JSX transform requiring explicit React import at top of every file"
+    - "Class component legacy lifecycles without UNSAFE_ prefixes"
+    - "Implicit return values in ref callback (TS now rejects non-void returns)"
+  nextjs_specific_prohibitions:
+    - "No /src directory; app router only"
+    - "Do not use Pages Router APIs"
+    - "Do not import or rely on UMD builds of React in Next"
+
+typescript_5_9_specifics_for_react_19:
+  useRef_requires_argument:
+    rule: "Always call useRef with an explicit initial value (e.g., undefined)."
+  ref_callback_return_type:
+    rule: "Ref callbacks must return void or a cleanup function; avoid implicit value returns."
+  default_props:
+    rule: "Use ES default parameters instead of defaultProps for function components."
+  typing_ref_as_prop_examples:
+    intrinsic_example: |
+      type ButtonProps = React.ComponentPropsWithRef<'button'>
+      export function Button(p: ButtonProps) { const { ref, ...rest } = p; return <button ref={ref} {...rest} /> }
+    custom_ref_example: |
+      export type PanelProps = { ref?: React.Ref<HTMLDivElement>; children?: React.ReactNode }
+      export function Panel({ ref, children }: PanelProps) { return <div ref={ref}>{children}</div> }
+  eslint_rules_recommended:
+    - react/jsx-no-constructed-context-values
+    - react-hooks/rules-of-hooks
+    - react-hooks/exhaustive-deps
+    - "@typescript-eslint/no-misused-promises"
+    - "@typescript-eslint/await-thenable"
+
+react_forms_best_practices_19:
+  progressive_enhancement:
+    - "Use <form action={serverFn}> with Server Functions where appropriate."
+    - "Prefer <button formAction={wrappedAction}> with useActionState when client state from action result is needed."
+  hooks:
+    useFormStatus:
+      usage: "Read pending/submission state inside the nearest form."
+    useActionState:
+      signature: "[state, formAction, isPending] = useActionState(fn, initialState, permalink?)"
+      notes:
+        - "Wrapped action receives (prevState, ...usualArgs)."
+        - "Works before hydration in RSC-enabled frameworks (e.g., Next App Router)."
+  resets:
+    requestFormReset: "Programmatic reset supported."
+
+resource_loading_performance:
+  use_when_framework_does_not_handle:
+    prefetchDNS: "Hint DNS for expected hosts."
+    preconnect: "Open early connections."
+    preload: "Fetch critical fonts/CSS/images/scripts early."
+    preloadModule: "Fetch ESM modules early."
+    preinit: "Initialize external scripts/styles with attributes (e.g., as='script')."
+    preinitModule: "Initialize ESM modules early."
+  notes:
+    - "Next often handles many hints; use these APIs for hotspots where you measure wins."
+
+error_handling_and_reporting:
+  root_options:
+    onUncaughtError: "Errors not caught by Error Boundaries."
+    onCaughtError: "Errors caught by Error Boundaries."
+    onRecoverableError: "Recoverable warnings/errors (e.g., hydration mismatches)."
+  reporting_strategy:
+    - "Wire these options at createRoot/hydrateRoot to forward errors to your reporter."
+    - "React 19 no longer re-throws render errors; rely on the above callbacks."
+
+accessibility_and_semantics:
+  links_and_navigation:
+    - "Use semantic <a> for navigation; in Next, prefer next/link."
+  titles_and_meta:
+    - "Use <title> with a single string child; only one active at a time."
+  forms:
+    - "Use native labels and ARIA attributes; let React 19 form APIs manage state/pending UX."
+
+ci_enforcement_and_checks:
+  package_json:
+    engines:
+      node: ">=18.18.0"
+    policy:
+      - "All dependencies pinned exactly (no ^ or ~)."
+  lint:
+    - "Enable react-hooks plugin and TypeScript ESLint strict recommended."
+  static_checks:
+    forbid_patterns:
+      - "ReactDOM.render("
+      - "ReactDOM.hydrate("
+      - "unmountComponentAtNode("
+      - ".propTypes"
+      - ".defaultProps" # for function components
+      - "createFactory("
+      - "ref: '"
+  type_checks:
+    - "CI must run tsc --noEmit with TS 5.9.2."
+
+migration_notes_from_18_x:
+  required_actions:
+    - "Replace ReactDOM.render -> createRoot(...).render"
+    - "Replace ReactDOM.hydrate -> hydrateRoot"
+    - "Replace unmountComponentAtNode -> root.unmount()"
+    - "Remove function-component defaultProps; convert to default params"
+    - "Remove string refs; use callback refs or createRef"
+    - "Migrate legacy context to createContext/contextType/provider/consumer"
+    - "Ensure modern JSX transform is enabled by the toolchain (Next handles this)"
+  optional_actions_but_recommended:
+    - "Adopt document metadata components (<title>, <meta>, <link>, <style>, <script>)"
+    - "Adopt resource hinting (prefetchDNS/preconnect/preload/preinit) for measured bottlenecks"
+    - "Adopt useActionState/useFormStatus where server-driven forms benefit UX"

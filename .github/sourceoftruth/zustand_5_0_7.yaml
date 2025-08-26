@@ -1,0 +1,216 @@
+spec:
+  name: zustand-5.0.7-ssot
+  purpose: "Authoritative rules for Zustand 5.0.7 usage with Next.js App Router, TS 5.9.2 (ES2024), React 19.1.1"
+  last_verified: "2025-08-15"
+
+versions:
+  zustand: "5.0.7" # EXACT — no ^, ~, ranges, or “Vx”
+  next: "15.4.6" # EXACT (App Router; no /src, no /pages)
+  react: "19.1.1" # EXACT
+  react-dom: "19.1.1" # EXACT
+  typescript: "5.9.2" # EXACT
+  tailwindcss: "4.1.1" # EXACT
+  "@tailwindcss/postcss": "4.1.1" # EXACT
+
+install_and_verify:
+  npm_install:
+    - "npm i --save-exact zustand@5.0.7"
+    - "npm i --save-exact next@15.4.6 react@19.1.1 react-dom@19.1.1"
+    - "npm i -D --save-exact typescript@5.9.2 tailwindcss@4.1.1 @tailwindcss/postcss@4.1.1"
+  verify_versions:
+    - 'node -e "console.log(require(''zustand/package.json'').version)"  # must print 5.0.7'
+  receipts:
+    - "npm shows 5.0.7 as latest with published date & history." # citation below
+
+tsconfig_contract:
+  file: "tsconfig.json"
+  required.compilerOptions:
+    target: "ES2024"
+    lib: ["ES2024", "DOM", "DOM.Iterable"]
+    jsx: "preserve"
+    module: "ESNext"
+    moduleResolution: "Bundler"
+    strict: true
+    verbatimModuleSyntax: true
+    noUncheckedSideEffectImports: true
+    forceConsistentCasingInFileNames: true
+    skipLibCheck: false
+    noEmit: true
+
+project_layout_contract:
+  must_exist: ["/app/layout.tsx", "/app/page.tsx", "/app/globals.css", "/postcss.config.mjs"]
+  must_not_exist: ["/src", "/pages"]
+  css_setup:
+    globals_css_first_line: '@import "tailwindcss";'
+  postcss:
+    plugins: ["@tailwindcss/postcss"]
+
+core_apis_v5:
+  imports:
+    allowed:
+      - "import { create } from 'zustand';        # v5 uses named export; default export dropped" # v5 release notes
+      - "import { createStore } from 'zustand/vanilla';  # vanilla stores outside React"
+      - "import { persist, devtools, subscribeWithSelector, combine } from 'zustand/middleware';"
+      - "import { shallow } from 'zustand/shallow';"
+      - "Optional: import { createWithEqualityFn } from 'zustand/traditional';  # for default equalityFn at hook creation" # RFC/discussion
+    forbidden:
+      - "import create from 'zustand'                # default export removed in v5"
+      - "import { createContext } from 'zustand/context'  # deprecated in v4, removed in v5; use your own/provider utils"
+  creating_stores:
+    react_hook_store: |
+      // Good (TS 5.9.2 strict)
+      type CounterState = {
+        count: number;
+        inc: (by?: number) => void;
+        reset: () => void;
+      };
+
+      export const useCounter = create<CounterState>()((set) => ({
+        count: 0,
+        inc: (by = 1) => set((s) => ({ count: s.count + by })),
+        reset: () => set({ count: 0 }),
+      }));
+    vanilla_store: |
+      // For non-React usage or bridging server code
+      import { createStore } from 'zustand/vanilla';
+
+      type ThemeState = { theme: 'light'|'dark'; toggle: () => void };
+      export const themeStore = createStore<ThemeState>()((set, get) => ({
+        theme: 'light',
+        toggle: () => set({ theme: get().theme === 'light' ? 'dark' : 'light' }),
+      }));
+    selectors_and_equlity: |
+      // Select minimal state; prefer object-pick + shallow for multiple fields
+      import { shallow } from 'zustand/shallow';
+      const { count, inc } = useCounter((s) => ({ count: s.count, inc: s.inc }), shallow);
+  middleware_usage:
+    persist:
+      rule: "Use persist to store to localStorage/AsyncStorage/IDB via createJSONStorage or defaults."
+      v5_change: "Persist middleware no longer writes at store creation; rehydration & writes occur after. Do not rely on creation-time write." # migration note
+      example: |
+        import { persist, createJSONStorage } from 'zustand/middleware';
+
+        type Auth = { token: string | null; setToken: (t: string | null) => void };
+
+        export const useAuth = create<Auth>()(
+          persist(
+            (set) => ({
+              token: null,
+              setToken: (t) => set({ token: t }),
+            }),
+            {
+              name: 'auth',                               // storage key
+              storage: createJSONStorage(() => localStorage),
+              partialize: (s) => ({ token: s.token }),    // persist only token
+            }
+          )
+        );
+    subscribeWithSelector:
+      rule: "Subscribe to derived slices outside components."
+      example: |
+        import { subscribeWithSelector } from 'zustand/middleware';
+        export const useStore = create<{ a: number; b: number }>()(
+          subscribeWithSelector(() => ({ a: 0, b: 0 })),
+        );
+        const unsub = useStore.subscribe(
+          (s) => s.a,
+          (a) => console.log('a changed:', a),
+          { fireImmediately: true }
+        );
+    devtools:
+      rule: "Wire Redux DevTools for debugging in dev only."
+      example: |
+        import { devtools } from 'zustand/middleware';
+
+        type Bear = { bears: number; add: (n?: number) => void };
+        export const useBear = create<Bear>()(
+          devtools(
+            (set) => ({
+              bears: 0,
+              add: (n = 1) => set((s) => ({ bears: s.bears + n })),
+            }),
+            { name: 'bear-store' }
+          )
+        );
+    combine:
+      rule: "Compose slices with initial state + stateCreator."
+      docs: "combine(initialState, stateCreator)"
+  nextjs_app_router_and_ssr:
+    hydration_guide:
+      rules:
+        - "Client Components may call Zustand hooks directly."
+        - "For SSR/streaming, prefer passing server-fetched data as props to a Client wrapper that seeds the store on mount."
+        - "If using persist, expect async rehydration—render UI that tolerates null/initial values until rehydrated."
+      references:
+        - "Official SSR/hydration guide." # citations below
+    minimal_client_wrapper: |
+      // app/(feature)/page.tsx (Server Component) -> passes data down
+      import Client from './client';
+
+      export default async function Page(): Promise<JSX.Element> {
+        const serverData = { initial: 3 };
+        return <Client initial={serverData.initial} />;
+      }
+
+      // app/(feature)/client.tsx (Client Component)
+      'use client';
+      import { useEffect } from 'react';
+      import { useCounter } from '@/stores/counter';
+
+      export default function Client({ initial }: { initial: number }): JSX.Element {
+        const count = useCounter((s) => s.count);
+        const inc = useCounter((s) => s.inc);
+        useEffect(() => { if (count === 0 && initial > 0) inc(initial); }, [count, initial, inc]);
+        return <div>count: {count}</div>;
+      }
+
+best_practices:
+  selection:
+    - "Select the smallest slice needed; use object-picks + shallow for multiple keys." # shallow docs
+    - "Avoid selecting entire state objects — causes needless re-renders."
+  actions:
+    - "Expose actions alongside state; prefer functional updates: set((s)=>({...}))."
+    - "Keep stores serializable when using persist/devtools."
+  structure:
+    - "Use slice pattern for large stores; compose with combine."
+  devtools:
+    - "Enable only in dev; name your store for clarity."
+  typescript:
+    - "Always call create<T>() for perfect inference under strict mode."
+    - "If you need a default equality fn for the hook itself, use createWithEqualityFn from 'zustand/traditional' (v5 path) and optionally pass shallow." # RFC link
+  performance:
+    - "Do side-effects outside reducers where possible; keep setters synchronous."
+  security:
+    - "Never persist secrets/tokens in SSR cookies via client storage; if persisting auth, scope to non-sensitive data only."
+
+policy_forbidden_outdated_unusable:
+  versions:
+    - "Any zustand other than exactly 5.0.7."
+    - "Any TS/Next/React/Tailwind versions other than those pinned."
+  imports_and_apis:
+    - "Default import: `import create from 'zustand'`  # removed in v5." # v5 release
+    - "`zustand/context` API  # deprecated/removed; do not use." # deprecation to removal path
+    - "Relying on persist to write at store creation (v4 behavior)  # v5 changed; do not assume."
+  patterns:
+    - "Selecting whole state objects in components."
+    - "Mutating state objects outside set((s)=>...)."
+    - "Global store hydration assumptions that ignore async persist rehydration."
+
+validation_matrix_ci_targets:
+  package_json_exact_pins:
+    - "zustand == 5.0.7; no '^', '~', '*', 'x' anywhere"
+    - "react == 19.1.1; react-dom == 19.1.1"
+    - "next == 15.4.6"
+    - "typescript == 5.9.2"
+    - "tailwindcss == 4.1.1"
+    - "@tailwindcss/postcss == 4.1.1"
+  tsconfig_invariants:
+    - "target == ES2024; jsx == preserve; strict == true; verbatimModuleSyntax == true; noUncheckedSideEffectImports == true"
+  filesystem:
+    - "app/layout.tsx renders <html> and <body>"
+    - "No /src or /pages"
+  code_checks:
+    - "No default import from 'zustand'"
+    - "No imports from 'zustand/context'"
+    - "If multiple keys selected, prefer shallow or createWithEqualityFn"
+    - "Persist handlers configured correctly; no creation-time write assumptions"

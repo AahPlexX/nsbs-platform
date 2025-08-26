@@ -1,0 +1,193 @@
+spec:
+  name: stripe-one-time-only-ssot
+  purpose: "Authoritative, zero-variance rules for Stripe one-time payments in Next.js App Router"
+  last_verified: "2025-08-15"
+
+versions:
+  stripe: "18.4.0" # EXACT — no ^, ~, ranges, or “Vx”
+  "@stripe/react-stripe-js": "3.9.0" # EXACT
+  "@stripe/stripe-js": "7.8.0" # EXACT (browser loader required by React Stripe.js)
+  next: "15.4.6" # EXACT
+  react: "19.1.1" # EXACT
+  react-dom: "19.1.1" # EXACT
+  typescript: "5.9.2" # EXACT
+  tailwindcss: "4.1.1" # EXACT
+  "@tailwindcss/postcss": "4.1.1" # EXACT
+
+constraints:
+  payments_scope: "One-time payments only (NO subscriptions of any kind)."
+  project_layout:
+    root: "/app" # App Router only
+    forbid: ["/src", "/pages"] # must not exist
+  tsconfig.required.compilerOptions:
+    target: "ES2024"
+    lib: ["ES2024", "DOM", "DOM.Iterable"]
+    jsx: "preserve"
+    module: "ESNext"
+    moduleResolution: "Bundler"
+    strict: true
+    verbatimModuleSyntax: true
+    noUncheckedSideEffectImports: true
+    forceConsistentCasingInFileNames: true
+    skipLibCheck: false
+    noEmit: true
+
+install_and_verify:
+  npm_install:
+    - "npm i --save-exact stripe@18.4.0 @stripe/react-stripe-js@3.9.0 @stripe/stripe-js@7.8.0"
+    - "npm i --save-exact next@15.4.6 react@19.1.1 react-dom@19.1.1"
+    - "npm i -D --save-exact typescript@5.9.2 tailwindcss@4.1.1 @tailwindcss/postcss@4.1.1"
+  verify_versions:
+    - 'node -e "console.log(require(''stripe/package.json'').version)"             # 18.4.0'
+    - 'node -e "console.log(require(''@stripe/react-stripe-js/package.json'').version)"  # 3.9.0'
+    - 'node -e "console.log(require(''@stripe/stripe-js/package.json'').version)" # 7.8.0'
+
+stripe_js_loading_policy:
+  requirement:
+    - "Load Stripe.js from js.stripe.com (PCI). `@stripe/stripe-js` inserts the script or uses an existing one."
+  allowed_imports:
+    - "import {loadStripe} from '@stripe/stripe-js';"
+    - "import {Elements, PaymentElement, useStripe, useElements} from '@stripe/react-stripe-js';"
+  notes:
+    - "Keep Stripe.js available site-wide for fraud signals if needed (see @stripe/stripe-js guidance)."
+
+server_sdk_usage (stripe@18.4.0):
+  init:
+    - "import Stripe from 'stripe';"
+    - "const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-06-20' });  # pin your API version in Dashboard"
+  one_time_flow_only:
+    api: "Payment Intents"
+    steps:
+      - "Create PaymentIntent on the server (amount/ currency/ metadata)."
+      - "Return client_secret to the client."
+      - "Confirm on client with Payment Element or card Element."
+  forbidden_apis:
+    - "Subscriptions API (subscriptions, subscription_schedules)"
+    - "Checkout Session with mode='subscription'"
+    - "Billing Portal"
+    - "Prices with 'recurring' objects for this project"
+  webhook_notes:
+    - "For one-time payments, handle `payment_intent.succeeded` and `payment_intent.payment_failed`."
+    - "Use Stripe-Signature verification on webhooks."
+
+next_app_router_integration:
+  must_have_files:
+    - "/app/layout.tsx" # contains <html> and <body>
+    - "/app/page.tsx"
+    - "/app/globals.css" # begins with: @import "tailwindcss";
+    - "/postcss.config.mjs" # plugin: "@tailwindcss/postcss"
+    - "/app/api/stripe/create-payment-intent/route.ts"
+  server_action_or_route_handler:
+    recommendation: "Use Route Handler (app/**/route.ts) to create PaymentIntents."
+  example_route_handler: |
+    // app/api/stripe/create-payment-intent/route.ts
+    import Stripe from 'stripe';
+
+    export async function POST(req: Request): Promise<Response> {
+      const { amount, currency = 'usd' } = await req.json() as { amount: number; currency?: string };
+
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-06-20' });
+
+      // Minimum server-side validation
+      if (!Number.isInteger(amount) || amount <= 0) {
+        return new Response(JSON.stringify({ error: 'Invalid amount' }), { status: 400 });
+      }
+
+      const pi = await stripe.paymentIntents.create({
+        amount,
+        currency,
+        automatic_payment_methods: { enabled: true },
+        metadata: { purpose: 'one_time' }
+      });
+
+      return Response.json({ clientSecret: pi.client_secret });
+    }
+
+react_client_example (Elements + PaymentElement, one-time):
+  notes:
+    - "Place <Elements> high in the tree of a Client Component. Use PaymentElement for many payment methods."
+  code: |
+    // app/(checkout)/checkout/page.tsx  (Client Component)
+    'use client';
+    import { useEffect, useMemo, useState } from 'react';
+    import { loadStripe } from '@stripe/stripe-js';
+    import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
+
+    const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+
+    function CheckoutForm(): JSX.Element {
+      const stripe = useStripe();
+      const elements = useElements();
+      const [message, setMessage] = useState<string>('');
+      const [isLoading, setLoading] = useState(false);
+
+      const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!stripe || !elements) return;
+
+        setLoading(true);
+        const { error } = await stripe.confirmPayment({
+          elements,
+          confirmParams: { return_url: `${window.location.origin}/thank-you` },
+          redirect: 'if_required'
+        });
+
+        if (error) setMessage(error.message ?? 'Payment failed');
+        else setMessage('Payment processing…');
+        setLoading(false);
+      };
+
+      return (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <PaymentElement />
+          <button disabled={!stripe || isLoading} className="px-4 py-2 rounded bg-black text-white">
+            {isLoading ? 'Processing…' : 'Pay now'}
+          </button>
+          {message && <p role="status">{message}</p>}
+        </form>
+      );
+    }
+
+    export default function CheckoutPage(): JSX.Element {
+      const [clientSecret, setClientSecret] = useState<string>('');
+
+      useEffect(() => {
+        void fetch('/api/stripe/create-payment-intent', { method: 'POST', body: JSON.stringify({ amount: 1999, currency: 'usd' }) })
+          .then(r => r.json()).then(d => setClientSecret(d.clientSecret));
+      }, []);
+
+      const options = useMemo(() => ({ clientSecret }), [clientSecret]);
+
+      if (!clientSecret) return <p>Loading…</p>;
+
+      return (
+        <Elements stripe={stripePromise} options={options}>
+          <CheckoutForm />
+        </Elements>
+      );
+    }
+
+tailwind_v4_requirements:
+  postcss.config.mjs: |
+    export default { plugins: { "@tailwindcss/postcss": {} } };
+  app/globals.css: |
+    @import "tailwindcss";
+
+security_and_best_practices:
+  - "Never expose STRIPE_SECRET_KEY to the browser."
+  - "Validate amounts server-side; do not trust client amounts."
+  - "Prefer Payment Element for multi-method support; use Automatic Payment Methods."
+  - "Use webhooks to mark orders paid; don’t trust client confirmation callbacks alone."
+  - "Load Stripe.js from js.stripe.com (React loader does this for you)."
+
+forbidden_outdated_unusable:
+  versions:
+    - "Any package versions other than exactly those pinned above."
+  patterns:
+    - "Any use of Subscriptions API (e.g., stripe.subscriptions.*, subscription_schedules.*)."
+    - "Checkout Session with { mode: 'subscription' }."
+    - "Prices with { recurring: ... }."
+    - "Billing Portal (stripe.billingPortal.*)."
+    - "Client-side creation of PaymentIntent (must be server-side)."
+  structure:
+    - "Presence of /src or /pages in this App Router project."

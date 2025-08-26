@@ -1,0 +1,169 @@
+spec:
+  name: lucide-react-0.539.0-ssot
+  purpose: "Authoritative rules for using lucide-react 0.539.0 in a Next.js App Router project with TS 5.9.2 (ES2024) and React 19.1.1"
+  last_verified: "2025-08-15"
+
+versions:
+  lucide-react: "0.539.0" # EXACT — no ranges
+  next: "15.4.6" # EXACT — App Router only (no /src, no /pages)
+  react: "19.1.1" # EXACT
+  react-dom: "19.1.1" # EXACT
+  typescript: "5.9.2" # EXACT
+  tailwindcss: "4.1.1" # EXACT
+  "@tailwindcss/postcss": "4.1.1" # EXACT
+
+install:
+  npm:
+    - "npm i --save-exact lucide-react@0.539.0"
+    - "npm i --save-exact next@15.4.6 react@19.1.1 react-dom@19.1.1"
+    - "npm i -D --save-exact typescript@5.9.2"
+    - "npm i -D --save-exact tailwindcss@4.1.1 @tailwindcss/postcss@4.1.1"
+  verify:
+    - 'node -e "console.log(require(''lucide-react/package.json'').version)"  # must print 0.539.0'
+
+tsconfig_contract:
+  file: "tsconfig.json"
+  required.compilerOptions:
+    target: "ES2024"
+    lib: ["ES2024", "DOM", "DOM.Iterable"]
+    jsx: "preserve"
+    module: "ESNext"
+    moduleResolution: "Bundler"
+    strict: true
+    verbatimModuleSyntax: true
+    noUncheckedSideEffectImports: true
+    forceConsistentCasingInFileNames: true
+    skipLibCheck: false
+    noEmit: true
+  invariants:
+    - "jsx MUST be 'preserve' (Next controls JSX transform)."
+    - "target MUST be 'ES2024'."
+
+project_layout_contract:
+  must_exist: ["/app/layout.tsx", "/app/page.tsx", "/app/globals.css", "/postcss.config.mjs"]
+  must_not_exist: ["/src", "/pages"]
+  css_setup:
+    globals_css_first_line: '@import "tailwindcss";'
+  postcss:
+    plugins: ["@tailwindcss/postcss"]
+
+lucide-react_usage:
+  import_patterns:
+    allowed:
+      - "Named import per icon (tree-shakeable): import { Camera, House } from 'lucide-react';"
+      - "Dynamic by name for CMS-driven UIs: import { DynamicIcon } from 'lucide-react/dynamic'; <DynamicIcon name='camera'/>"
+      - "Custom/lab icons via <Icon iconNode={...}/> from 'lucide-react' when needed."
+    forbidden:
+      - "Wildcard import that pulls the entire module: import * as Icons from 'lucide-react';"
+      - "Using the vanilla 'lucide' package inside React components (that’s for DOM injection, not React)."
+      - "Importing every icon at once (e.g., 'icons' map from 'lucide'); defeats tree-shaking."
+  props_contract: # Defaults & semantics defined by lucide-react
+    size:
+      type: "number"
+      default: 24
+      notes: "Width/height in px. Can also size with CSS (className, w-*/h-*)."
+    color:
+      type: "string"
+      default: "currentColor"
+      notes: "Inherits from parent text color; pass color prop to override."
+    strokeWidth:
+      type: "number"
+      default: 2
+      notes: "SVG stroke width; relative to size unless absoluteStrokeWidth=true."
+    absoluteStrokeWidth:
+      type: "boolean"
+      default: false
+      notes: "Keeps on-screen stroke width constant when size changes."
+    svg_attributes:
+      accepts_all_svg_presentation_attributes: true
+  accessibility_best_practices:
+    - "Do NOT put aria-labels on the icon component when it’s inside a button/link; label the interactive wrapper (or include visually hidden text) instead."
+    - "Use visible labels next to icons where feasible; don’t rely on color alone; keep adequate contrast; minimum hit target ~44×44px for icon buttons."
+  tailwind_usage:
+    - "Prefer className for sizing with Tailwind (e.g., 'w-6 h-6 text-zinc-500')."
+    - "Remember color inherits via currentColor; set text color on a parent or the icon."
+  dynamic_icons:
+    recommended:
+      component: "DynamicIcon (from 'lucide-react/dynamic')"
+      note: "Use for dynamic name strings (e.g., CMS); import specific icons for static cases."
+  types:
+    recommended_types:
+      - "Use the exported 'LucideProps' to type custom icon wrappers."
+      - "Icon components are forwardRef exotic components over <svg>."
+  filled_icons:
+    policy:
+      - "Fills are not officially part of the design system; you may set fill and strokeWidth={0} when appropriate (e.g., stars)."
+  global_styling:
+    class_name: "All icons include class='lucide' — can be targeted by CSS."
+    absolute_stroke_css: "To enforce absolute strokes globally: .lucide * { vector-effect: non-scaling-stroke }"
+
+allowed_examples:
+  direct_import_tree_shaking: |
+    // Server or Client component OK
+    import { Camera } from 'lucide-react';
+
+    export default function Hero(): JSX.Element {
+      return <Camera className="w-10 h-10 text-zinc-700" strokeWidth={1.5} />;
+    }
+  dynamic_icon_by_name: |
+    // Client component (dynamic icon name at runtime)
+    'use client';
+    import { DynamicIcon } from 'lucide-react/dynamic';
+
+    export function MenuIcon({ name }: { name: string }): JSX.Element {
+      return <DynamicIcon name={name} size={20} absoluteStrokeWidth />;
+    }
+  custom_or_lab_icon: |
+    import { Icon } from 'lucide-react';
+    import { coconut } from '@lucide/lab';
+
+    export function Coconut(): JSX.Element {
+      return <Icon iconNode={coconut} className="w-6 h-6" />;
+    }
+  accessibility_button: |
+    import { X } from 'lucide-react';
+
+    export function CloseButton(): JSX.Element {
+      return (
+        <button className="btn-icon" type="button">
+          <X aria-hidden="true" focusable="false" />
+          <span className="sr-only">Close dialog</span>
+        </button>
+      );
+    }
+
+forbidden_outdated_unusable:
+  versions:
+    - "Any lucide-react version other than exactly 0.539.0"
+    - "Any React/React-DOM other than exactly 19.1.1"
+    - "Any TypeScript other than exactly 5.9.2"
+    - "Any Tailwind/@tailwindcss/postcss other than exactly 4.1.1"
+  patterns:
+    - "import * as Icons from 'lucide-react'  # pulls the whole module, harms bundle size"
+    - "Using 'lucide' (vanilla DOM) in React components"
+    - "Attempting legacy dynamic maps like 'dynamicIconImports' instead of 'lucide-react/dynamic'"
+  structure:
+    - "Presence of /src/ or /pages/ directories in App Router project"
+
+validation_matrix:
+  package_json_exact_pins:
+    - "lucide-react == 0.539.0"
+    - "react == 19.1.1"
+    - "react-dom == 19.1.1"
+    - "typescript == 5.9.2"
+    - "tailwindcss == 4.1.1"
+    - "@tailwindcss/postcss == 4.1.1"
+    - "No '^', '~', 'x', '*', or ranges anywhere"
+  tsconfig_invariants:
+    - "target == ES2024"
+    - "jsx == preserve"
+    - "strict == true"
+    - "verbatimModuleSyntax == true"
+    - "noUncheckedSideEffectImports == true"
+  filesystem:
+    - "app/layout.tsx renders <html> and <body>"
+    - "No /src or /pages"
+  code_checks:
+    - "No wildcard imports from 'lucide-react'"
+    - "No imports from 'lucide' package in React components"
+    - "Dynamic import uses 'lucide-react/dynamic' where name is runtime-variable"
