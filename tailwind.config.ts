@@ -1,5 +1,5 @@
-// Tailwind CSS v4 - Minimal config for legacy compatibility only
-// Most configuration moved to CSS @theme directive in globals.css
+// Tailwind CSS v4 - CSS-first configuration
+// All theme configuration is in app/globals.css via @theme directive
 import type { Config } from "tailwindcss"
 
 const config: Config = {
@@ -8,17 +8,6 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./lib/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  theme: {
-    extend: {
-      colors: {
-        "mocha-mousse": "hsl(var(--mocha-mousse))",
-        "mint-sage": "hsl(var(--mint-sage))",
-        sage: "hsl(var(--sage))",
-        evergreen: "hsl(var(--evergreen))",
-      },
-    },
-  },
-  plugins: [],
 }
 
 export default config

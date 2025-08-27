@@ -24,28 +24,62 @@ export function InteractiveExamInterface() {
 #### **Development Environment Issues & Solutions**
 
 ##### **Issue: Custom Element Already Defined (webcomponents-ce.js)**
+
 ```
 Error: A custom element with name 'mce-autosize-textarea' has already been defined.
 ```
 
-**Root Cause**: Browser extension (likely TinyMCE-related) or external script defining custom elements multiple times during hot reload.
+**Root Cause**: Browser extension (likely TinyMCE-related) or external script
+defining custom elements multiple times during hot reload.
 
 **Solutions**:
+
 1. **Browser Extension Conflict**: Disable browser extensions during development
-2. **External Scripts**: Check for TinyMCE or rich text editor scripts in browser network tab
+2. **External Scripts**: Check for TinyMCE or rich text editor scripts in
+   browser network tab
 3. **Development Only**: This error doesn't affect production builds
 4. **Ignore in Development**: Add to known development issues list
 
 **Prevention**:
+
 ```javascript
 // If using custom elements, wrap in conditional
-if (!customElements.get('my-element')) {
-  customElements.define('my-element', MyElement);
+if (!customElements.get("my-element")) {
+  customElements.define("my-element", MyElement)
 }
 ```
 
+##### **Issue: TailwindCSS v4 CSS Warnings in VS Code**
+
+```
+Unknown at rule @theme
+Unknown at rule @apply
+```
+
+**Root Cause**: VS Code CSS language server doesn't recognize TailwindCSS v4
+directives.
+
+**Solutions**:
+
+1. **VS Code Settings**: Created `.vscode/settings.json` with CSS validation
+   disabled
+2. **TailwindCSS Extension**: Recommended `bradlc.vscode-tailwindcss` extension
+3. **CSS-First Configuration**: Removed legacy theme config from
+   `tailwind.config.ts`
+4. **PostCSS Integration**: Confirmed `@tailwindcss/postcss` plugin is properly
+   configured
+
+**Files Fixed**:
+
+- `app/globals.css`: Changed `@theme inline` to `@theme`
+- `tailwind.config.ts`: Simplified to v4 CSS-first approach
+- `.vscode/settings.json`: Disabled CSS validation warnings
+- `.vscode/extensions.json`: Recommended TailwindCSS extension
+
 ##### **Issue: Missing Favicon (404)**
+
 **Solution**: Added favicon.svg and favicon.ico to /public directory
+
 - Favicon.svg: NSBS-branded SVG with evergreen/mint-sage colors
 - Favicon.ico: Fallback for older browsers
 

@@ -3,10 +3,10 @@ version: "1.0.0"
 scope: "NSBS Platform"
 applies_to:
   runtime:
-    next: "15.5.0"        # App Router under src/
+    next: "15.5.0"
     react: "19.1.1"
     react-dom: "19.1.1"
-    typescript: "5.9.2"   # strict; target es2024; jsx=preserve
+    typescript: "5.9.2"
     node: ">=18.17.0"
   styling:
     tailwindcss: "4.1.12"
@@ -44,14 +44,14 @@ project_invariants:
       - ".next/types/**/*.ts"
 nextjs_integration:
   files:
-    postcss.config.mjs: |
+    "postcss.config.mjs": |
       const config = {
         plugins: {
           "@tailwindcss/postcss": {},
         },
       };
       export default config;
-    src/app/globals.css: |
+    "src/app/globals.css": |
       /* Tailwind v4 import */
       @import "tailwindcss";
 
@@ -75,7 +75,7 @@ nextjs_integration:
 
       /* (Optional) custom variant; prefer the built-in `dark:` unless you truly need a custom trigger. */
       @custom-variant theme-midnight (&:where([data-theme="midnight"] *));
-    src/app/layout.tsx: |
+    "src/app/layout.tsx": |
       import type { Metadata } from "next";
       import "./globals.css";
 
@@ -95,24 +95,23 @@ nextjs_integration:
       }
   notes:
     - "Prefer the v4 PostCSS plugin `@tailwindcss/postcss`. Autoprefixing and imports are handled; no separate `autoprefixer` or `postcss-import` required."
-    - "Use `@source` to include UI packages or unusual file patterns when Tailwind’s auto-detection misses them."
+    - "Use `@source` to include UI packages or unusual file patterns when Tailwind's auto-detection misses them."
 tailwind_v4_directives_and_functions:
-  # Source of truth: Functions & Directives reference
   directives:
-    - "@import"         # import Tailwind & other CSS
-    - "@theme"          # tokens: colors, fonts, breakpoints, spacing, etc.
-    - "@source"         # explicit content sources; safelist with inline()
-    - "@utility"        # register custom utilities that work with variants
-    - "@variant"        # apply an existing variant block-scoped in CSS
-    - "@custom-variant" # define custom variant (e.g., alternative dark trigger)
-    - "@apply"          # inline existing utilities into authored CSS
-    - "@reference"      # reference main stylesheet in SFCs/modules for @apply/@variant
+    - "@import"
+    - "@theme"
+    - "@source"
+    - "@utility"
+    - "@variant"
+    - "@custom-variant"
+    - "@apply"
+    - "@reference"
   functions:
-    - "--alpha()"       # adjust color opacity at build-time
-    - "--spacing()"     # compute spacing from theme at build-time
+    - "--alpha()"
+    - "--spacing()"
   compatibility:
-    - "@config"         # (legacy) load JS config; CSS-first overrides take precedence
-    - "@plugin"         # (legacy) load JS plugins; prefer CSS-first where possible
+    - "@config"
+    - "@plugin"
   deprecations:
     - "theme() function deprecated in v4 — prefer CSS theme variables"
 class_detection:
@@ -129,29 +128,59 @@ class_detection:
     - "Prefer literal classnames; for dynamic classes use explicit `@source inline()` or map objects with finite keys."
 variants_and_prefixing:
   responsive:
-    prefixes: ["sm", "md", "lg", "xl", "2xl"]
+    prefixes:
+      - "sm"
+      - "md"
+      - "lg"
+      - "xl"
+      - "2xl"
     rule: "mobile-first (min-width); stackable with state/data/aria variants"
   color_scheme:
-    - "dark:"     # built-in dark variant (class or media strategy; use as prefix)
-    - "theme-midnight:"  # example from @custom-variant above
+    - "dark:"
+    - "theme-midnight:"
   state_and_interaction:
-    # See docs for exhaustive list; representative allowed prefixes:
-    - "hover:" "focus:" "active:" "visited:" "target:" "focus-visible:" "focus-within:" "disabled:" "enabled:" "checked:" "indeterminate:" "open:" "closed:"
+    - "hover:"
+    - "focus:"
+    - "active:"
+    - "visited:"
+    - "target:"
+    - "focus-visible:"
+    - "focus-within:"
+    - "disabled:"
+    - "enabled:"
+    - "checked:"
+    - "indeterminate:"
+    - "open:"
+    - "closed:"
   structural_pseudo:
-    - "first:" "last:" "only:" "odd:" "even:" "empty:" "first-of-type:" "last-of-type:" "only-of-type:"
-    - "placeholder:" "marker:" "selection:" "first-line:" "first-letter:"
+    - "first:"
+    - "last:"
+    - "only:"
+    - "odd:"
+    - "even:"
+    - "empty:"
+    - "first-of-type:"
+    - "last-of-type:"
+    - "only-of-type:"
+    - "placeholder:"
+    - "marker:"
+    - "selection:"
+    - "first-line:"
+    - "first-letter:"
   group_and_peer:
     - "group/* + group-*: e.g., group-hover:, group-focus:, group-open:"
     - "peer/* + peer-*: e.g., peer-checked:, peer-invalid:, peer-open:"
   attribute_driven:
-    - "aria-[busy=true]:" "aria-[expanded=false]:" "data-[state=open]:"
-    - "has-[selector]:"   # :has() powered variant
+    - "aria-[busy=true]:"
+    - "aria-[expanded=false]:"
+    - "data-[state=open]:"
+    - "has-[selector]:"
   directionality:
-    - "rtl:" "ltr:"
+    - "rtl:"
+    - "ltr:"
   stacking_examples:
     - "dark:md:hover:bg-fuchsia-600"
 utility_value_grammar:
-  # Patterns you may emit safely across categories (examples; see per-utility docs)
   tokens_and_scales:
     color_tokens: "text-{color}-{50..950}, bg-{color}-{50..950}, border-{color}-{50..950}, etc."
     color_alpha_modifier: "…/{0..100}  (e.g., text-blue-600/75)"
@@ -168,200 +197,214 @@ utility_value_grammar:
       max_w: "max-w-(--my-max-width) == max-w-[var(--my-max-width)]"
     calc_and_mix: "allowed inside [<value>] (e.g., py-[calc(--spacing(4)-1px)])"
   examples_safe:
-    - 'grid grid-cols-15 gap-4 md:grid-cols-24'
-    - 'text-red-600/80 dark:text-sky-400/90'
-    - 'data-[state=open]:animate-in aria-[busy=true]:opacity-50'
+    - "grid grid-cols-15 gap-4 md:grid-cols-24"
+    - "text-red-600/80 dark:text-sky-400/90"
+    - "data-[state=open]:animate-in aria-[busy=true]:opacity-50"
 allowed_utilities_catalog:
-  # This section enumerates the official categories you can emit from the LLM.
-  # Each key is 1:1 with the Tailwind v4 docs page; all utilities on those pages are allowed.
   layout:
     pages:
-      - aspect-ratio
-      - columns
-      - break-after
-      - break-before
-      - break-inside
-      - box-decoration-break
-      - box-sizing
-      - display
-      - float
-      - clear
-      - isolation
-      - object-fit
-      - object-position
-      - overflow
-      - overscroll-behavior
-      - position
-      - top / right / bottom / left
-      - visibility
-      - z-index
+      - "aspect-ratio"
+      - "columns"
+      - "break-after"
+      - "break-before"
+      - "break-inside"
+      - "box-decoration-break"
+      - "box-sizing"
+      - "display"
+      - "float"
+      - "clear"
+      - "isolation"
+      - "object-fit"
+      - "object-position"
+      - "overflow"
+      - "overscroll-behavior"
+      - "position"
+      - "top / right / bottom / left"
+      - "visibility"
+      - "z-index"
   flexbox_and_grid:
     pages:
-      - flex-basis
-      - flex-direction
-      - flex-wrap
-      - flex
-      - flex-grow
-      - flex-shrink
-      - order
-      - grid-template-columns
-      - grid-column
-      - grid-template-rows
-      - grid-row
-      - grid-auto-flow
-      - grid-auto-columns
-      - grid-auto-rows
-      - gap
-      - justify-content
-      - justify-items
-      - justify-self
-      - align-content
-      - align-items
-      - align-self
-      - place-content
-      - place-items
-      - place-self
+      - "flex-basis"
+      - "flex-direction"
+      - "flex-wrap"
+      - "flex"
+      - "flex-grow"
+      - "flex-shrink"
+      - "order"
+      - "grid-template-columns"
+      - "grid-column"
+      - "grid-template-rows"
+      - "grid-row"
+      - "grid-auto-flow"
+      - "grid-auto-columns"
+      - "grid-auto-rows"
+      - "gap"
+      - "justify-content"
+      - "justify-items"
+      - "justify-self"
+      - "align-content"
+      - "align-items"
+      - "align-self"
+      - "place-content"
+      - "place-items"
+      - "place-self"
   spacing:
-    pages: [padding, margin]
+    pages:
+      - "padding"
+      - "margin"
   sizing:
-    pages: [width, min-width, max-width, height, min-height, max-height]
+    pages:
+      - "width"
+      - "min-width"
+      - "max-width"
+      - "height"
+      - "min-height"
+      - "max-height"
     notes:
       - "Use size-* to set width+height together."
   typography:
     pages:
-      - font-family
-      - font-size
-      - font-smoothing
-      - font-style
-      - font-weight
-      - font-stretch
-      - font-variant-numeric
-      - letter-spacing
-      - line-clamp
-      - line-height
-      - list-style-image
-      - list-style-position
-      - list-style-type
-      - text-align
-      - color
-      - text-decoration-line
-      - text-decoration-color
-      - text-decoration-style
-      - text-decoration-thickness
-      - text-underline-offset
-      - text-transform
-      - text-overflow
-      - text-wrap
-      - text-indent
-      - vertical-align
-      - white-space
-      - word-break
-      - overflow-wrap
-      - hyphens
-      - content
+      - "font-family"
+      - "font-size"
+      - "font-smoothing"
+      - "font-style"
+      - "font-weight"
+      - "font-stretch"
+      - "font-variant-numeric"
+      - "letter-spacing"
+      - "line-clamp"
+      - "line-height"
+      - "list-style-image"
+      - "list-style-position"
+      - "list-style-type"
+      - "text-align"
+      - "color"
+      - "text-decoration-line"
+      - "text-decoration-color"
+      - "text-decoration-style"
+      - "text-decoration-thickness"
+      - "text-underline-offset"
+      - "text-transform"
+      - "text-overflow"
+      - "text-wrap"
+      - "text-indent"
+      - "vertical-align"
+      - "white-space"
+      - "word-break"
+      - "overflow-wrap"
+      - "hyphens"
+      - "content"
   backgrounds:
     pages:
-      - background-attachment
-      - background-clip
-      - background-color
-      - background-image
-      - background-origin
-      - background-position
-      - background-repeat
-      - background-size
+      - "background-attachment"
+      - "background-clip"
+      - "background-color"
+      - "background-image"
+      - "background-origin"
+      - "background-position"
+      - "background-repeat"
+      - "background-size"
   borders_and_outlines:
     pages:
-      - border-radius
-      - border-width
-      - border-color
-      - border-style
-      - outline-width
-      - outline-color
-      - outline-style
-      - outline-offset
+      - "border-radius"
+      - "border-width"
+      - "border-color"
+      - "border-style"
+      - "outline-width"
+      - "outline-color"
+      - "outline-style"
+      - "outline-offset"
   effects:
     pages:
-      - box-shadow
-      - text-shadow
-      - opacity
-      - mix-blend-mode
-      - background-blend-mode
-      - mask-clip
-      - mask-composite
-      - mask-image
-      - mask-mode
-      - mask-origin
-      - mask-position
-      - mask-repeat
-      - mask-size
-      - mask-type
+      - "box-shadow"
+      - "text-shadow"
+      - "opacity"
+      - "mix-blend-mode"
+      - "background-blend-mode"
+      - "mask-clip"
+      - "mask-composite"
+      - "mask-image"
+      - "mask-mode"
+      - "mask-origin"
+      - "mask-position"
+      - "mask-repeat"
+      - "mask-size"
+      - "mask-type"
   filters:
     pages:
-      - filter
-      - filter-blur
-      - filter-brightness
-      - filter-contrast
-      - filter-drop-shadow
-      - filter-grayscale
-      - filter-hue-rotate
-      - filter-invert
-      - filter-saturate
-      - filter-sepia
-      - backdrop-filter
-      - backdrop-filter-blur
-      - backdrop-filter-brightness
-      - backdrop-filter-contrast
-      - backdrop-filter-grayscale
-      - backdrop-filter-hue-rotate
-      - backdrop-filter-invert
-      - backdrop-filter-opacity
-      - backdrop-filter-saturate
-      - backdrop-filter-sepia
+      - "filter"
+      - "filter-blur"
+      - "filter-brightness"
+      - "filter-contrast"
+      - "filter-drop-shadow"
+      - "filter-grayscale"
+      - "filter-hue-rotate"
+      - "filter-invert"
+      - "filter-saturate"
+      - "filter-sepia"
+      - "backdrop-filter"
+      - "backdrop-filter-blur"
+      - "backdrop-filter-brightness"
+      - "backdrop-filter-contrast"
+      - "backdrop-filter-grayscale"
+      - "backdrop-filter-hue-rotate"
+      - "backdrop-filter-invert"
+      - "backdrop-filter-opacity"
+      - "backdrop-filter-saturate"
+      - "backdrop-filter-sepia"
   tables:
-    pages: [border-collapse, border-spacing, table-layout, caption-side]
+    pages:
+      - "border-collapse"
+      - "border-spacing"
+      - "table-layout"
+      - "caption-side"
   transitions_and_animation:
     pages:
-      - transition-property
-      - transition-behavior
-      - transition-duration
-      - transition-timing-function
-      - transition-delay
-      - animation
+      - "transition-property"
+      - "transition-behavior"
+      - "transition-duration"
+      - "transition-timing-function"
+      - "transition-delay"
+      - "animation"
   transforms:
     pages:
-      - backface-visibility
-      - perspective
-      - perspective-origin
-      - rotate
-      - scale
-      - skew
-      - transform
-      - transform-origin
-      - transform-style
-      - translate
+      - "backface-visibility"
+      - "perspective"
+      - "perspective-origin"
+      - "rotate"
+      - "scale"
+      - "skew"
+      - "transform"
+      - "transform-origin"
+      - "transform-style"
+      - "translate"
   interactivity:
     pages:
-      - accent-color
-      - appearance
-      - caret-color
-      - color-scheme
-      - cursor
-      - field-sizing
-      - pointer-events
-      - resize
-      - scroll-behavior
-      - scroll-margin
-      - scroll-padding
-      - scroll-snap-align
-      - scroll-snap-stop
-      - scroll-snap-type
-      - touch-action
-      - user-select
-      - will-change
+      - "accent-color"
+      - "appearance"
+      - "caret-color"
+      - "color-scheme"
+      - "cursor"
+      - "field-sizing"
+      - "pointer-events"
+      - "resize"
+      - "scroll-behavior"
+      - "scroll-margin"
+      - "scroll-padding"
+      - "scroll-snap-align"
+      - "scroll-snap-stop"
+      - "scroll-snap-type"
+      - "touch-action"
+      - "user-select"
+      - "will-change"
   svg:
-    pages: [fill, stroke, stroke-width]
+    pages:
+      - "fill"
+      - "stroke"
+      - "stroke-width"
   accessibility:
-    pages: [forced-color-adjust]
+    pages:
+      - "forced-color-adjust"
 theme_and_colors:
   tokens:
     - "Default palette: slate, gray, zinc, neutral, stone, red, orange, amber, yellow, lime, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose (50..950)."
@@ -408,7 +451,7 @@ forbidden_and_migrations:
       to: "rounded-sm"
     - from: "outline-none"
       to: "outline-hidden"
-    - from: "ring"   # bare
+    - from: "ring"
       to: "ring-3"
   config_and_tooling_notes:
     - "JS config `tailwind.config.js` is legacy; prefer CSS-first. `@config` allowed for incremental migration, but avoid new reliance."

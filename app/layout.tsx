@@ -1,17 +1,24 @@
-import { GeistMono } from "geist/font/mono"
-import { GeistSans } from "geist/font/sans"
 import type { Metadata } from "next"
+import { Inter, JetBrains_Mono } from "next/font/google"
+import type React from "react"
 import "./globals.css"
 
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-sans",
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-mono",
+})
+
 export const metadata: Metadata = {
-  title: "National Society of Business Sciences",
-  description: "Professional business certification platform",
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
-    ],
-  },
+  title: "NSBS - National Society of Business Sciences",
+  description: "Professional certification courses and business education",
+  generator: "v0.app",
 }
 
 export default function RootLayout({
@@ -20,10 +27,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
-      <body className="min-h-screen bg-background font-sans antialiased" suppressHydrationWarning>
-        {children}
-      </body>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+      <body className={inter.className}>{children}</body>
     </html>
   )
 }
