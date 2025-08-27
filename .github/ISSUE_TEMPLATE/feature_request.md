@@ -1,9 +1,9 @@
 ---
 name: Feature Request
 about: Suggest an idea for the NSBS Platform
-title: '[FEATURE] '
-labels: ['enhancement', 'needs-triage']
-assignees: ''
+title: "[FEATURE] "
+labels: ["enhancement", "needs-triage"]
+assignees: ""
 ---
 
 ## 🚀 Feature Description
@@ -12,13 +12,13 @@ assignees: ''
 
 ## 💡 Problem Statement
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+**Is your feature request related to a problem? Please describe.** A clear and
+concise description of what the problem is. Ex. I'm always frustrated when [...]
 
 ## ✨ Proposed Solution
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+**Describe the solution you'd like** A clear and concise description of what you
+want to happen.
 
 ## 🔄 User Story
 
@@ -38,7 +38,8 @@ A clear and concise description of what you want to happen.
 
 ## 🔗 Additional Context
 
-**Add any other context, screenshots, or examples about the feature request here**
+**Add any other context, screenshots, or examples about the feature request
+here**
 
 ## 🔄 Alternatives Considered
 

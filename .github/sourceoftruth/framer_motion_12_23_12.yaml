@@ -1,0 +1,233 @@
+ssot:
+  name: motion-react
+  package:
+    name: motion
+    version: "12.23.12"     # pinned; no ^, ~, range
+    ecosystem: react
+    source_of_truth:
+      - https://motion.dev/docs/react               # Motion component & React docs
+      - https://motion.dev/docs/react-animate-presence
+      - https://motion.dev/docs/react-layout-group
+      - https://motion.dev/docs/react-motion-config
+      - https://motion.dev/docs/react-use-in-view
+      - https://motion.dev/docs/react-use-scroll
+      - https://motion.dev/docs/react-use-spring
+      - https://motion.dev/docs/react-use-transform
+      - https://motion.dev/docs/react-use-motion-value-event
+      - https://motion.dev/docs/react-use-animate
+      - https://motion.dev/docs/react-use-animation-frame
+      - https://motion.dev/docs/react-use-drag-controls
+      - https://motion.dev/docs/react-use-reduced-motion
+      - https://motion.dev/docs/react-use-time
+      - https://motion.dev/docs/react-use-velocity
+      - https://motion.dev/docs/react-use-motion-template
+      - https://motion.dev/docs/react-transitions
+      - https://www.npmjs.com/package/motion
+  environment:
+    react: "19.1.1"
+    react-dom: "19.1.1"
+    nextjs_app_router: true
+    nextjs_imports:
+      client_components: 'import { motion, AnimatePresence, LayoutGroup, MotionConfig, LazyMotion, Reorder } from "motion/react"'
+      server_components_rsc: 'import * as motion from "motion/react-client"'
+      notes:
+        - Use "motion/react" only inside files that start with "use client".
+        - For React Server Components, render static styled Motion elements via "motion/react-client". Interactive gestures (hover/tap/drag/scroll) must live in Client Components.   # RSC guidance
+    typescript:
+      version: "5.9.2"
+      compiler_options:
+        strict: true
+        target: es2024
+        jsx: preserve
+      typing_rules:
+        - No "any". Prefer Motion’s provided types (e.g., MotionValue<number>) in props/state.
+  installation:
+    pnpm: 'pnpm add motion@12.23.12'
+    notes:
+      - No additional @types package is required.
+  imports:
+    allowed:
+      - 'import { motion } from "motion/react"'             # Client Components
+      - 'import * as motion from "motion/react-client"'     # React Server Components (RSC)
+      - 'import { AnimatePresence, LayoutGroup, MotionConfig, LazyMotion, Reorder } from "motion/react"'
+    forbidden:
+      - 'import { motion } from "framer-motion"'            # legacy pkg not allowed in this SSOT
+      - 'import * as FramerMotion from "framer-motion"'
+      - 'import { m } from "framer-motion"'                 # alias `m` not part of Motion docs
+      - 'import { motion } from "motion"'                   # plain "motion" is for JS animate() API; not React components
+  react_api:
+    motion_component:
+      selector: 'motion.*'     # HTML/SVG mapping provided by Motion
+      core_props:
+        - initial: "Starting values or variant label."
+        - animate: "Target values or variant label; accepts keyframes [v1, v2, ...]."
+        - exit: "Exit values or variant label; requires <AnimatePresence> wrapper."
+        - transition: 
+            description: "Controls animation timing/physics for the current animation."
+            keys:
+              type: ["tween", "spring", "inertia"]
+              duration: "seconds (tween or spring with bounce)"
+              ease: ['"linear"', '"easeIn"', '"easeOut"', '"easeInOut"', '"circIn"', '"circOut"', '"circInOut"', '"backIn"', '"backOut"', '"backInOut"', '"anticipate"', "[x1,y1,x2,y2] cubic-bezier"]
+              times: "keyframe positions 0..1"
+              bounce: "0..1 (spring)"
+              visualDuration: "seconds (spring visual target)"
+              damping: "number"
+              mass: "number"
+              stiffness: "number"
+              velocity: "number"
+              restSpeed: "number"
+              restDelta: "number"
+              delay: "seconds; negative to offset start"
+              repeat: "0|n|Infinity"
+              repeatType: ["loop","reverse","mirror"]
+              repeatDelay: "seconds"
+              when: ["beforeChildren","afterChildren"]      # with variants
+              delayChildren: "seconds | stagger(...)"
+        - style: "Inline style values; supports MotionValues."
+        - variants: "Object map of named states (e.g., hidden/visible) usable by initial/animate/exit."
+        - custom: "Arbitrary data to feed variant resolvers."
+      gestures:
+        hover:
+          props: [ "whileHover", "onHoverStart", "onHoverEnd" ]
+        tap:
+          props: [ "whileTap", "onTap", "onTapStart", "onTapCancel" ]
+        focus:
+          props: [ "whileFocus" ]
+        pan:
+          props: [ "onPan", "onPanStart", "onPanEnd" ]
+        drag:
+          props:
+            - "drag"             # boolean | 'x' | 'y'
+            - "dragConstraints"  # ref|{top,right,bottom,left}
+            - "dragElastic"      # 0..1
+            - "dragMomentum"     # boolean
+            - "dragTransition"   # inertia config: power, timeConstant, min, max, bounceStiffness, bounceDamping, modifyTarget
+            - "whileDrag"
+      layout:
+        props:
+          - "layout"            # enable layout animations
+          - "layoutDependency"  # rerun layout anims when this changes
+          - "layoutScroll"      # include scroll in layout measurements
+          - "layoutRoot"        # define measurement root
+          - "layoutId"          # shared element transitions (with LayoutGroup)
+      scroll_triggers:
+        props:
+          - "whileInView"       # animate when in viewport
+          - "viewport"          # { amount, once, margin } configuration
+      events_global:
+        - "onUpdate"
+        - "onAnimationStart"
+        - "onAnimationComplete"
+        - "onViewportEnter"
+        - "onViewportLeave"
+    AnimatePresence:
+      purpose: "Enables exit animations for removed elements."
+      import: 'import { AnimatePresence } from "motion/react"'
+      props:
+        - "initial?: boolean"         # disable initial anims for initially present children
+        - "custom?: unknown"          # value passed to exiting variants
+        - 'mode?: "sync"|"wait"|"popLayout"'
+        - "onExitComplete?: () => void"
+        - "propagate?: boolean"       # bubble exit from nested AnimatePresence
+        - "root?: Document|ShadowRoot" # for popLayout CSS injection
+      requirements:
+        - "Direct children must have stable, unique key props."
+    LayoutGroup:
+      purpose: "Group components participating in cross-component layout animations; provides layoutId namespacing."
+      notes:
+        - "Wrap related components so their layout animations coordinate, especially across siblings not mounted together."
+    MotionConfig:
+      purpose: "Project-wide config for child motion components."
+      props:
+        - "transition"      # default transition for descendants
+        - 'reducedMotion: "user"|"always"|"never"'
+        - "nonce"           # for CSP
+  hooks:
+    useInView:
+      purpose: "Detect when a ref enters viewport."
+      usage: "const [ref, inView] = useInView(options?)"
+      options: ["amount (0..1|number)", "once (boolean)", "margin (CSS margin string)"]
+    usePageInView:
+      purpose: "Detect when page itself enters viewport (SPAs, sections)."
+    useScroll:
+      purpose: "MotionValues for scroll progress."
+      returns: ["scrollY","scrollYProgress","scrollX","scrollXProgress"]
+      options: ["container", "target", "offset"]
+    useSpring:
+      purpose: "Create a spring-driven MotionValue from another value."
+      options: ["damping","mass","stiffness","duration","bounce","visualDuration"]
+    useTransform:
+      purpose: "Derive new MotionValue via linear mapping or function transform."
+    useMotionValueEvent:
+      purpose: "Subscribe to MotionValue changes with stable callback."
+    useAnimate:
+      purpose: "Imperative animate() with scoped selectors."
+    useAnimationFrame:
+      purpose: "Per-frame callback tied to rAF."
+    useDragControls:
+      purpose: "Programmatic drag start/stop."
+    useReducedMotion:
+      purpose: "Respect/override reduced motion policy."
+    useTime:
+      purpose: "Progressing time MotionValue."
+    useVelocity:
+      purpose: "Velocity of a MotionValue."
+    useMotionTemplate:
+      purpose: "Template literal that binds MotionValues into strings (e.g., CSS)."
+  transitions:
+    types: ["tween","spring","inertia"]
+    orchestration: ["delay","repeat","repeatType","repeatDelay","when","delayChildren","stagger(...)"]
+    notes:
+      - "Keyframes: set arrays in animate; coordinate with times and per-value transitions."
+  best_practices:
+    - "Prefer variants to co-ordinate parent/child animations; use `when` and `delayChildren` for orchestration."
+    - "Keep enter/exit durations short (≈0.3–0.4s) for responsiveness."
+    - "For RSC pages, render non-interactive Motion nodes via `motion/react-client`; move gesture/scroll logic into Client Components."
+    - "Define project-wide `MotionConfig` with default transitions and a reducedMotion policy."
+    - "Use `LayoutGroup` for shared layout and `layoutId` pairs; add `position:relative` when using `mode=\"popLayout\"` to avoid absolute/transform pitfalls."
+    - "Always provide stable keys for elements inside `AnimatePresence`."
+  forbidden_and_outdated_for_this_project:
+    - "Any import from 'framer-motion' (old package) — use 'motion' paths only."
+    - "Importing React Motion components from 'motion' root (JS API) — use 'motion/react' or 'motion/react-client'."
+    - "Using Motion APIs inside Server Components that require event/gesture handlers (hover/tap/drag/scroll). Move to Client Components."
+    - "Alias `m` imports or undocumented shorthands."
+    - "Non-pinned versions or semver ranges for motion."
+  ts_examples:
+    client_component_sample: |
+      "use client";
+      import { motion, AnimatePresence, LayoutGroup, MotionConfig } from "motion/react";
+      import type { MotionValue } from "motion/react";  // types available via package
+
+      export function Card({ isOpen }: { isOpen: boolean }): JSX.Element {
+        return (
+          <MotionConfig transition={{ duration: 0.35, ease: "easeOut" }}>
+            <LayoutGroup>
+              <AnimatePresence mode="wait">
+                {isOpen ? (
+                  <motion.section
+                    key="panel"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 12 }}
+                    layout
+                  />
+                ) : null}
+              </AnimatePresence>
+            </LayoutGroup>
+          </MotionConfig>
+        );
+      }
+    rsc_sample: |
+      // app/page.tsx (React Server Component)
+      import * as motion from "motion/react-client";
+
+      export default function Page(): JSX.Element {
+        // Only static initial/animate without interactive gestures here.
+        return <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} />;
+      }
+  nextjs_integration_notes:
+    app_router_only: true
+    src_directory: false         # your convention
+    client_vs_server_rules:
+      - "Client files: 'use client' + import from 'motion/react'."
+      - "Server files: no 'use client' + import from 'motion/react-client'; avoid gestures."

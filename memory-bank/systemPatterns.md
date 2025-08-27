@@ -23,6 +23,27 @@ export function InteractiveExamInterface() {
 
 #### **Development Environment Issues & Solutions**
 
+##### **TypeScript ESLint Integration (8.41.0)**
+
+**Configuration**: ESLint flat config with TypeScript ESLint meta package
+- **Package**: `typescript-eslint@8.41.0` (exact version)
+- **Configuration**: `eslint.config.js` (flat config format)
+- **Project Service**: Enabled for type-aware linting
+- **Ignores**: Config files excluded from type checking
+
+**Key Features**:
+- Type-aware linting with projectService: true
+- Strict TypeScript rules with consistent type imports
+- Custom className enforcement rules (cn() utility)
+- Separate configurations for TS/TSX and JS/JSX files
+- Proper file exclusions for config files
+
+**Motion Package Migration**:
+- **Old**: `framer-motion@12.23.12`
+- **New**: `motion@12.23.12` (Motion package v12)
+- **Import Pattern**: `import { motion } from "motion/react"` for client components
+- **RSC Pattern**: `import * as motion from "motion/react-client"` for server components
+
 ##### **Issue: Custom Element Already Defined (webcomponents-ce.js)**
 
 ```

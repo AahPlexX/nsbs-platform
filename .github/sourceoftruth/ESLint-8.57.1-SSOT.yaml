@@ -1,0 +1,281 @@
+meta:
+  tool: eslint
+  version: "8.57.1"            # must match devDependency
+  node_min: ">=18.17.0"        # your engines; do NOT rely on v9 constraints
+  config_style: "flat-config"  # eslint.config.* only (no eslintrc)
+  rationale:
+    - Flat config is the current config model; ESLint 8 accepts it when an `eslint.config.js` is present. :contentReference[oaicite:1]{index=1}
+    - This SSOT bans legacy `.eslintrc*` and `.eslintignore` to eliminate dual sources of truth. :contentReference[oaicite:2]{index=2}
+
+allowed:
+  config_file_names:           # File must exist at repo root
+    - eslint.config.js
+    - eslint.config.mjs
+    - eslint.config.cjs
+    - eslint.config.ts         # requires jiti on Node < 22.10 (not auto-installed by ESLint 8) :contentReference[oaicite:3]{index=3}
+    - eslint.config.mts
+    - eslint.config.cts
+  config_precedence:           # When multiple exist, JS > TS; can override via CLI -c. :contentReference[oaicite:4]{index=4}
+    order: [eslint.config.js, eslint.config.mjs, eslint.config.cjs, eslint.config.ts, eslint.config.mts, eslint.config.cts]
+  configuration_objects:       # Keys allowed in each config object (array item) :contentReference[oaicite:5]{index=5}
+    - name
+    - basePath
+    - files
+    - ignores                  # replaces .eslintignore in flat config. :contentReference[oaicite:6]{index=6}
+    - rules                    # ruleId: "off" | "warn" | "error" | [severity, ...options] :contentReference[oaicite:7]{index=7}
+    - settings                 # plugin-shared settings object. :contentReference[oaicite:8]{index=8}
+    - plugins                  # { namespace: pluginObject } :contentReference[oaicite:9]{index=9}
+    - processor                # "namespace/processor-name" on objects that target file globs. :contentReference[oaicite:10]{index=10}
+    - language                 # "namespace/language-name" for non-JS languages. :contentReference[oaicite:11]{index=11}
+    - languageOptions:         # JS/TS parsing knobs. :contentReference[oaicite:12]{index=12}
+        keys: [ecmaVersion, sourceType, globals, parserOptions, parser]
+    - linterOptions:           # e.g. noInlineConfig, reportUnused*(..). :contentReference[oaicite:13]{index=13}
+        keys: [noInlineConfig, reportUnusedDisableDirectives, reportUnusedInlineConfigs]
+  language_defaults:           # What ESLint expects unless overridden. :contentReference[oaicite:14]{index=14}
+    ecmaVersion: "latest"
+    sourceType: "module"
+  jsx_parsing:                 # JSX ≠ React semantics; add react plugin for React rules. :contentReference[oaicite:15]{index=15}
+    parserOptions.ecmaFeatures.jsx: true
+    note: "Enabling JSX parsing doesn't enforce React best-practices; use eslint-plugin-react for that."
+  globals_support:
+    via_package: "globals"     # e.g. ...globals.browser, ...globals.jest. :contentReference[oaicite:16]{index=16}
+  rules_basics:
+    severities: ["off","warn","error"] # or 0/1/2; numeric & string equivalents permitted. :contentReference[oaicite:17]{index=17}
+    priority: "Inline configuration comments apply last and override file rules." # :contentReference[oaicite:18]{index=18}
+  disable_comments:
+    allowed:
+      - "/* eslint rule: <level> [-- description] */"
+      - "// eslint-disable-next-line [rule[,...]] [-- description]"
+      - "/* eslint-disable */ ... /* eslint-enable */"
+    best_practices:
+      - "Provide a description after `--` explaining WHY the disable is necessary." # :contentReference[oaicite:19]{index=19}
+    linterOptions:
+      - noInlineConfig: false|true
+      - reportUnusedDisableDirectives: "off|warn|error"
+      - reportUnusedInlineConfigs: "off|warn|error" # default off; set to error in CI. :contentReference[oaicite:20]{index=20}
+  plugins_usage:
+    definition: "plugins: { ns: pluginObj }" # then reference `ns/rule-id`. :contentReference[oaicite:21]{index=21}
+    processors: "processor: ns/processor-name" # e.g. @eslint/markdown. :contentReference[oaicite:22]{index=22}
+    languages: "language: ns/lang"            # e.g. @eslint/json json/jsonc. :contentReference[oaicite:23]{index=23}
+  combine_configs:
+    method: "Spread or concat config arrays/objects imported in flat config."
+    example: "export default defineConfig([ ...js.configs.recommended, ...tseslint.configs.recommended ])" # :contentReference[oaicite:24]{index=24}
+  ignoring_files:
+    use: "ignores: ['.next/**','node_modules/**','coverage/**','dist/**']"
+    cli_overrides:
+      - "--no-ignore"     # disable ignore handling
+      - "--no-warn-ignored" # suppress ignored-file warnings
+    note: ".eslintignore is not honored by flat config; model all ignores in config." # :contentReference[oaicite:25]{index=25}
+  cli:
+    base: "eslint <globs>"
+    useful_flags:
+      - "--fix"
+      - "--max-warnings=0"
+      - "--config <file>"       # override config lookup and precedence. :contentReference[oaicite:26]{index=26}
+      - "--format stylish|json|json-with-metadata|html" # built-in formatters. :contentReference[oaicite:27]{index=27}
+  node_api:
+    classes: ["ESLint"]         # programmatic linting in tools/integrations. :contentReference[oaicite:28]{index=28}
+  config_resolution:
+    search: "cwd → parent dirs for eslint.config.* (first match wins) unless -c is used." # :contentReference[oaicite:29]{index=29}
+
+forbidden:
+  legacy_config_files:
+    - ".eslintrc"
+    - ".eslintrc.js"
+    - ".eslintrc.cjs"
+    - ".eslintrc.json"
+    - ".eslintrc.yaml"
+    - ".eslintrc.yml"
+    reason: "Deprecated format; this repo uses flat config exclusively." # :contentReference[oaicite:30]{index=30}
+  legacy_keys_in_flat_config:
+    - "env"         # replace with languageOptions.globals or `globals` pkg. :contentReference[oaicite:31]{index=31}
+    - "overrides"   # superseded by per-object files/ignores in flat config. :contentReference[oaicite:32]{index=32}
+    - "parser" at top level (legacy semantics)  # use languageOptions.parser. :contentReference[oaicite:33]{index=33}
+    - "ignorePatterns"            # use `ignores`. :contentReference[oaicite:34]{index=34}
+  ignore_file:
+    - ".eslintignore"             # not read by flat config. :contentReference[oaicite:35]{index=35}
+  v9_plus_only_features:         # DO NOT use on ESLint 8.57.1
+    - "Flat-config `extends` key (plugin-identifier strings) — added post-8 era; treat as forbidden to avoid drift." # context+basis: v9 docs/blog. :contentReference[oaicite:36]{index=36}
+    - "Rule API changes referenced in v9 migration docs." # :contentReference[oaicite:37]{index=37}
+
+canon_config:  # drop-in baseline eslint.config.js (ES2024, TS 5.9.2, React JSX parsing)
+  file: "eslint.config.js"
+  contents: |
+    // Flat config for ESLint 8.57.1 (TS 5.9.2 target ES2024, JSX parsing)
+    // Safe for v8 (no flat-config `extends`), CI-hardening enabled.
+    // Requires: npm i -D @eslint/js typescript-eslint globals
+    import { defineConfig } from "eslint/config";
+    import js from "@eslint/js";
+    import tseslint from "typescript-eslint";
+    import globals from "globals";
+
+    export default defineConfig([
+      // Core JS recommended (spread, not extends; stays v8-safe).
+      ...js.configs.recommended,
+
+      // TypeScript (strict) — typed linting enabled via projectService.
+      // typescript-eslint reads tsconfig from repo root by default.
+      // See: https://typescript-eslint.io/getting-started/  :contentReference[oaicite:38]{index=38}
+      ...tseslint.configs.recommendedTypeChecked,
+      {
+        name: "project:globals+language",
+        files: ["**/*.{js,jsx,ts,tsx}"],
+        languageOptions: {
+          ecmaVersion: 2024,
+          sourceType: "module",
+          parserOptions: {
+            // typed rules
+            projectService: true,
+            // JSX parsing for React 19
+            ecmaFeatures: { jsx: true },
+          },
+          globals: {
+            ...globals.browser,
+            ...globals.node,
+          },
+        },
+        linterOptions: {
+          // CI-grade hygiene
+          noInlineConfig: false,
+          reportUnusedDisableDirectives: "error",
+          reportUnusedInlineConfigs: "error",
+        },
+        // Minimal universal rules; customize per repo conventions.
+        rules: {
+          // Prefer const, forbid unused vars, etc.  :contentReference[oaicite:39]{index=39}
+          "prefer-const": "error",
+          "no-unused-vars": "off", // off in favor of TS-aware rule:
+          "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
+
+          // Enforce minimal/rare `any` usage for TS 5.9.2 policy:
+          "@typescript-eslint/no-explicit-any": ["error", { ignoreRestArgs: false }],
+          "@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports", fixStyle: "inline-type-imports" }],
+
+          // Stylistic/build-safety
+          "no-console": ["warn", { allow: ["warn", "error"] }],
+          "no-debugger": "error",
+        },
+        ignores: [
+          "node_modules/**",
+          ".next/**",
+          "dist/**",
+          "coverage/**",
+          "**/*.d.ts",
+        ],
+      },
+    ]);
+
+integration_notes:
+  nextjs:
+    guidance: >
+      Next.js ships `eslint-plugin-next` and a shareable config. For flat config on ESLint 8,
+      prefer importing plugin configs or rules explicitly (avoid flat-config `extends` strings to remain v8-safe).
+      See Next’s ESLint docs for integration specifics. :contentReference[oaicite:40]{index=40}
+  react:
+    guidance: >
+      JSX parsing alone doesn’t enforce React best practices; add `eslint-plugin-react` and/or `eslint-plugin-react-hooks`
+      if you want React-specific rules in addition to TypeScript rules. :contentReference[oaicite:41]{index=41}
+  cli_examples:
+    lint_all: "pnpm dlx eslint \"**/*.{js,jsx,ts,tsx}\""
+    fix_all: "pnpm dlx eslint \"**/*.{js,jsx,ts,tsx}\" --fix"
+    fail_on_warns: "pnpm dlx eslint . --max-warnings=0"  # non-zero exit on any warn. :contentReference[oaicite:42]{index=42}
+  programmatic_api:
+    link: "Node.js API (ESLint class) for integrations/tools." # :contentReference[oaicite:43]{index=43}
+
+ci_enforcement:
+  # Drop-in tiny script and grep-based checks to prevent drift from this SSOT
+  files:
+    - path: "ci/eslint-forbidden.regexes"
+      description: "Regex rules that must not match; fail build if any hit."
+      contents: |
+        # forbid legacy config files (flat config only)
+        FILE_EXISTS:\.eslintrc(\.(js|cjs|json|ya?ml))?$
+        # forbid legacy keys inside flat config (quick heuristic)
+        CONTENT_REGEX:^(?=.*\benv\b)|(?=.*\boverrides\b)|(?=.*\bignorePatterns\b)
+        # forbid .eslintignore usage with flat config
+        FILE_EXISTS:^\.eslintignore$
+        # forbid eslint-disable without a reason description (`--`)
+        LINE_REGEX://\s*eslint-(disable(-next-line)?)(?!.*--).*
+        LINE_REGEX:/\*\s*eslint\s+[^\*]*?(?:\*/|$)(?!.*--)
+
+    - path: "ci/run-eslint-ssot-check.mjs"
+      description: "Node script that enforces regex file and verifies eslint version === 8.57.1"
+      contents: |
+        import { readFileSync, readdirSync } from "node:fs";
+        import { join } from "node:path";
+        import process from "node:process";
+
+        const fail = (msg) => { console.error(msg); process.exit(1); };
+        const ok = (msg) => console.log(msg);
+
+        // 1) version pin check
+        const pkg = JSON.parse(readFileSync("package.json", "utf8"));
+        if ((pkg.devDependencies?.eslint ?? pkg.dependencies?.eslint) !== "8.57.1") {
+          fail(`[SSOT] ESLint version must be exactly 8.57.1. Found: ${pkg.devDependencies?.eslint || pkg.dependencies?.eslint}`);
+        }
+
+        // 2) apply regex rules
+        const rules = readFileSync("ci/eslint-forbidden.regexes", "utf8").split(/\r?\n/).filter(Boolean);
+        const listFiles = (dir) => {
+          const out = [];
+          for (const entry of readdirSync(dir, { withFileTypes: true })) {
+            if (entry.name === "node_modules" || entry.name.startsWith(".")) continue;
+            const p = join(dir, entry.name);
+            if (entry.isDirectory()) out.push(...listFiles(p));
+            else out.push(p);
+          }
+          return out;
+        };
+        const files = listFiles(".");
+        const contentCache = new Map();
+
+        const get = (f) => {
+          if (!contentCache.has(f)) contentCache.set(f, readFileSync(f, "utf8"));
+          return contentCache.get(f);
+        };
+
+        const matchLine = (re, text) => {
+          const rx = new RegExp(re, "m");
+          return rx.test(text);
+        };
+
+        for (const rule of rules) {
+          if (rule.startsWith("FILE_EXISTS:")) {
+            const re = new RegExp(rule.replace("FILE_EXISTS:", ""));
+            const hit = files.some((f) => re.test(f));
+            if (hit) fail(`[SSOT] Forbidden file matched: ${rule}`);
+          } else if (rule.startsWith("CONTENT_REGEX:")) {
+            const re = rule.replace("CONTENT_REGEX:", "");
+            if (files.some((f) => f.endsWith("eslint.config.js") && matchLine(re, get(f)))) {
+              fail(`[SSOT] Forbidden content pattern in eslint.config.js matched: ${re}`);
+            }
+          } else if (rule.startsWith("LINE_REGEX:")) {
+            const re = rule.replace("LINE_REGEX:", "");
+            for (const f of files) {
+              if (!/\.(js|jsx|ts|tsx|mjs|cjs)$/.test(f)) continue;
+              if (matchLine(re, get(f))) fail(`[SSOT] Forbidden eslint-disable style without description in: ${f}`);
+            }
+          }
+        }
+        ok("[SSOT] ESLint checks passed.");
+
+  suggested_scripts:
+    - name: "lint:ssot"
+      value: "node ci/run-eslint-ssot-check.mjs && eslint . --max-warnings=0"
+    - name: "precommit"
+      value: "pnpm lint:ssot"
+
+documentation_citations:
+  # Most critical, version-sensitive sources (max five groups, summarized)
+  - config_files_and_shape: "Flat config file names, object keys, precedence, CLI -c; experimental TS configs." # :contentReference[oaicite:44]{index=44}
+  - rules_and_disable_comments: "Severities, inline config syntax, reportUnused* settings." # :contentReference[oaicite:45]{index=45}
+  - plugins_processors_languages: "How to load plugins, processors, languages in flat config." # :contentReference[oaicite:46]{index=46}
+  - language_options_globals_jsx: "ecmaVersion, sourceType, parserOptions.ecmaFeatures.jsx, globals package usage; React note." # :contentReference[oaicite:47]{index=47}
+  - ignore_behavior_flat_config: "Use `ignores` (not .eslintignore) in flat config." # :contentReference[oaicite:48]{index=48}
+  - cli_and_formatters: "CLI flags & built-in formatters list." # :contentReference[oaicite:49]{index=49}
+  - node_api: "Programmatic `ESLint` class doc + tutorial." # :contentReference[oaicite:50]{index=50}
+  - ts_plugin_quickstart: "typescript-eslint flat-config quickstart & typed linting." # :contentReference[oaicite:51]{index=51}
+
+notes_on_deliberate_omissions:
+  - "Flat-config `extends` strings (e.g., 'js/recommended', 'next/core-web-vitals') *exist* in newest docs but are treated **FORBIDDEN** here to avoid v9+ feature bleed into v8. Use array spread of config arrays instead." # :contentReference[oaicite:52]{index=52}
+  - ".eslintignore is intentionally forbidden. All ignores belong in `ignores` to keep a single source of truth." # :contentReference[oaicite:53]{index=53}

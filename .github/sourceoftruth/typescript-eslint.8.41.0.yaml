@@ -1,0 +1,228 @@
+ssot:
+  name: typescript-eslint
+  scope: "ESLint 8.57.1 + TypeScript 5.9.2 + React 19.1.1 + Next.js App Router"
+  packages:
+    # Single meta package is sufficient (re-exports plugin, parser, configs)
+    - name: typescript-eslint
+      version: "8.41.0"     # exact pin (no ranges)
+      source: "https://www.npmjs.com/package/typescript-eslint"  # latest 8.41.0 as of 2025-08-18
+  compatibility:
+    eslint_supported: "^8.57.0 || ^9.0.0"   # you pin 8.57.1, which is supported
+    typescript_supported: ">=4.8.4 <6.0.0"  # TS 5.9.2 is supported
+    node_supported: "^18.18.0 || ^20.9.0 || >=21.1.0"
+    citations:
+      - "https://typescript-eslint.io/users/dependency-versions/"  # ESLint/TS/Node matrices
+  configuration_model:
+    style: "ESLint flat config only (eslint.config.*)"
+    why: "Flat config is the current model; use it on ESLint v8 by placing eslint.config.js in project root."
+    citations:
+      - "https://typescript-eslint.io/getting-started/"
+      - "https://eslint.org/docs/latest/use/configure/migration-guide"
+  typed_linting:
+    mode: "Project Service"
+    how:
+      - "Enable type-aware rules by using the new Project Service via `parserOptions.projectService: true`."
+      - "Prefer the *TypeChecked* variants of configs (e.g., `recommendedTypeChecked`)."
+    notes:
+      - "Project Service aligns ESLint’s type info with editors (VS Code), supports project references, and simplifies tsconfig wiring."
+    citations:
+      - "https://typescript-eslint.io/getting-started/typed-linting"
+      - "https://typescript-eslint.io/blog/project-service/"
+      - "https://typescript-eslint.io/troubleshooting/typed-linting/"
+  allowed_configs:
+    presets:
+      stable:
+        - "tseslint.configs.recommended"            # no type info
+        - "tseslint.configs.recommendedTypeChecked" # with type info
+        - "tseslint.configs.stylistic"              # style-oriented for TS
+        - "tseslint.configs.stylisticTypeChecked"   # style + type info
+      advanced:
+        - "tseslint.configs.strict"
+        - "tseslint.configs.strictTypeChecked"
+      everything:
+        - "tseslint.configs.all"                    # not recommended for prod
+      citations:
+        - "https://typescript-eslint.io/users/configs/"
+        - "https://typescript-eslint.io/blog/announcing-typescript-eslint-v8/"
+    flat_config_object_keys:
+      - name
+      - files
+      - ignores
+      - plugins
+      - rules
+      - settings
+      - languageOptions   # { parser, ecmaVersion, sourceType, parserOptions, globals }
+      - linterOptions     # { noInlineConfig, reportUnusedDisableDirectives, reportUnusedInlineConfigs }
+      citations:
+        - "https://typescript-eslint.io/getting-started/"
+        - "https://eslint.org/docs/latest/use/configure/configuration-files"
+  forbidden_and_outdated:
+    - "Legacy ESLint config (.eslintrc*, .eslintignore) — flat config only in this repo."
+    - "Using `parserOptions.project` for typed linting (use `parserOptions.projectService: true`)."
+    - "Mixing mismatched versions of @typescript-eslint/parser / eslint-plugin when the meta package is installed."
+    - "Relying on v9-only ESLint flat-config features (stick to v8-safe patterns)."
+    - "Using `@typescript-eslint/eslint-plugin-tslint` (migration bridge; not needed here)."
+    citations:
+      - "https://eslint.org/docs/latest/use/configure/migration-guide"
+      - "https://typescript-eslint.io/troubleshooting/typed-linting/"
+      - "https://typescript-eslint.io/packages/eslint-plugin-tslint"
+  baseline_flat_config:
+    file: "eslint.config.js"
+    contents: |
+      // Flat config for ESLint 8.57.1 + TypeScript 5.9.2 + React 19
+      // Uses typescript-eslint meta package (8.41.0) with typed linting via Project Service.
+      import { defineConfig } from "eslint/config";
+      import js from "@eslint/js";
+      import tseslint from "typescript-eslint";
+      import globals from "globals";
+
+      export default defineConfig([
+        // Core JS recommendations (spread to stay ESLint v8-safe)
+        ...js.configs.recommended,
+
+        // TypeScript recommended with type info (Project Service)
+        ...tseslint.configs.recommendedTypeChecked,
+
+        // Optionally add stylistic rules that don’t fight Prettier:
+        // ...tseslint.configs.stylisticTypeChecked,
+
+        {
+          name: "project:language+globals",
+          files: ["**/*.{ts,tsx,js,jsx}"],
+          languageOptions: {
+            ecmaVersion: 2024,
+            sourceType: "module",
+            parser: tseslint.parser, // from meta package
+            parserOptions: {
+              projectService: true,      // enables typed linting
+              ecmaFeatures: { jsx: true } // JSX parse only (React 19 + Next)
+            },
+            globals: { ...globals.browser, ...globals.node },
+          },
+          linterOptions: {
+            // Enforce hygiene in CI
+            noInlineConfig: false,
+            reportUnusedDisableDirectives: "error",
+            reportUnusedInlineConfigs: "error",
+          },
+          rules: {
+            // Prefer TS-aware rules and strict typing
+            "no-unused-vars": "off",
+            "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
+            "@typescript-eslint/no-explicit-any": ["error", { ignoreRestArgs: false }],
+            "@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports", fixStyle: "inline-type-imports" }],
+
+            // Reasonable defaults for app code
+            "no-console": ["warn", { allow: ["warn", "error"] }],
+            "no-debugger": "error",
+          },
+          ignores: [
+            "node_modules/**", ".next/**", "dist/**", "coverage/**", "**/*.d.ts"
+          ],
+        },
+
+        // Example: disable type-checked linting for plain JS if desired
+        // {
+        //   files: ["**/*.js", "**/*.jsx"],
+        //   ...tseslint.configs.disableTypeChecked,
+        // },
+      ]);
+    citations:
+      - "https://typescript-eslint.io/getting-started/"
+      - "https://typescript-eslint.io/getting-started/typed-linting"
+      - "https://typescript-eslint.io/troubleshooting/typed-linting/"
+  performance_and_editor_behavior:
+    guidance:
+      - "Typed rules run a TypeScript build under the hood; expect added cost on large repos."
+      - "Project Service mirrors editor behavior, improving predictability across VS Code and CI."
+    citations:
+      - "https://typescript-eslint.io/getting-started/typed-linting"
+      - "https://typescript-eslint.io/blog/project-service/"
+  rules_reference:
+    note: "The complete authoritative rules list lives in the official reference (link below). Enable via presets above; fine-tune locally if needed."
+    link: "https://typescript-eslint.io/rules/"
+  nextjs_and_react_integration:
+    notes:
+      - "JSX parsing is enabled via `ecmaFeatures.jsx: true`; React-specific linting (hooks, etc.) requires adding `eslint-plugin-react` / `eslint-plugin-react-hooks` separately if desired."
+      - "Keep interactive React logic in Client Components; ESLint config remains the same."
+    citations:
+      - "https://typescript-eslint.io/getting-started/"
+  formatting_policy:
+    stance: "Use Prettier (already in repo). Avoid enabling ESLint formatting rules that fight Prettier."
+    citations:
+      - "https://typescript-eslint.io/users/what-about-formatting"
+  install_commands:
+    pnpm: "pnpm add -D typescript-eslint@8.41.0 @eslint/js@8.57.1 globals@^15"
+    notes:
+      - "No need to install @typescript-eslint/parser or @typescript-eslint/eslint-plugin separately when using the meta package; it re-exports both along with configs."
+    citations:
+      - "https://www.npmjs.com/package/typescript-eslint"
+      - "https://typescript-eslint.io/packages/typescript-eslint"
+  ci_enforcement:
+    files:
+      - path: "ci/tseslint-ssot-guard.regexes"
+        description: "Hard blocks for legacy/forbidden patterns & version drift."
+        contents: |
+          # forbid legacy config files (flat config only)
+          FILE_EXISTS:\.eslintrc(\.(js|cjs|json|ya?ml))?$
+          # forbid .eslintignore (use `ignores` in flat config)
+          FILE_EXISTS:^\.eslintignore$
+          # forbid legacy typed-linting hook (project) in our config
+          CONTENT_REGEX:\"parserOptions\"\\s*:\\s*\\{[^}]*\\bproject\\b[^}]*\\}
+          # ensure we use Project Service
+          CONTENT_REGEX:\"parserOptions\"\\s*:\\s*\\{[^}]*\\bprojectService\\b\\s*:\\s*true
+          # forbid mixing direct @typescript-eslint/* installs when meta is present
+          LINE_REGEX:from\\s+['"]@typescript-eslint/(parser|eslint-plugin)['"]
+          # enforce exact version pin for typescript-eslint meta package
+          PKG_JSON_REGEX:\"typescript-eslint\"\\s*:\\s*\"8\\.40\\.0\"
+      - path: "ci/run-tseslint-ssot-check.mjs"
+        description: "Node script to enforce the regex rules above."
+        contents: |
+          import fs from "node:fs";
+          import path from "node:path";
+          const fail = (m) => { console.error(m); process.exit(1); };
+          const ok = (m) => console.log(m);
+
+          const rules = fs.readFileSync("ci/tseslint-ssot-guard.regexes","utf8").split(/\r?\n/).filter(Boolean);
+          const pkg = JSON.parse(fs.readFileSync("package.json","utf8"));
+
+          const walk = (d) => fs.readdirSync(d,{withFileTypes:true})
+            .flatMap(e => e.name === "node_modules" ? [] :
+              e.isDirectory() ? walk(path.join(d,e.name)) : [path.join(d,e.name)]);
+
+          const files = walk(".");
+          const read = (f) => fs.readFileSync(f,"utf8");
+
+          for (const rule of rules) {
+            if (rule.startsWith("FILE_EXISTS:")) {
+              const re = new RegExp(rule.replace("FILE_EXISTS:",""));
+              if (files.some(f => re.test(f))) fail(`[SSOT] Forbidden file matched: ${rule}`);
+            } else if (rule.startsWith("PKG_JSON_REGEX:")) {
+              const re = new RegExp(rule.replace("PKG_JSON_REGEX:",""));
+              if (!re.test(read("package.json"))) fail(`[SSOT] Package.json requirement failed: ${rule}`);
+            } else if (rule.startsWith("CONTENT_REGEX:")) {
+              const re = new RegExp(rule.replace("CONTENT_REGEX:",""), "s");
+              const targets = files.filter(f => /eslint\.config\.(js|mjs|cjs|ts|mts|cts)$/.test(f));
+              for (const f of targets) if (re.test(read(f))) {
+                // special case: ensure presence or absence checks are positive/negative as intended
+                if (rule.includes("projectService") && !re.test(read(f)))
+                  fail(`[SSOT] Missing required parserOptions.projectService: true in ${f}`);
+                if (rule.includes("\\bproject\\b"))
+                  fail(`[SSOT] Legacy parserOptions.project usage detected in ${f}`);
+              }
+            } else if (rule.startsWith("LINE_REGEX:")) {
+              const re = new RegExp(rule.replace("LINE_REGEX:",""));
+              for (const f of files) if (/\.(c|m)?(t|j)sx?$/.test(f) && re.test(read(f))) {
+                fail(`[SSOT] Forbidden import or pattern in ${f}: ${re}`);
+              }
+            }
+          }
+          ok("[SSOT] typescript-eslint checks passed.");
+    scripts:
+      - name: "lint:tseslint-ssot"
+        value: "node ci/run-tseslint-ssot-check.mjs && eslint . --max-warnings=0"
+  operational_notes:
+    - "Run `pnpm lint:tseslint-ssot` in CI and locally to catch config drift."
+    - "If you must disable type-aware rules for a pattern (e.g., plain JS), apply `...tseslint.configs.disableTypeChecked` to a matching config object."
+    citations:
+      - "https://typescript-eslint.io/troubleshooting/typed-linting/"

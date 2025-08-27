@@ -2,6 +2,51 @@
 
 ## NSBS Platform Technical Decisions
 
+### **August 27, 2025 - TypeScript ESLint Integration & Motion Package Migration**
+
+#### **Decision #016: TypeScript ESLint 8.41.0 Migration**
+
+**Status**: ✅ Implemented  
+**Impact**: High - Modernizes linting infrastructure with type-aware rules
+
+**Decision**: Migrated from legacy ESLint configuration to TypeScript ESLint flat config
+
+- **Package**: `typescript-eslint@8.41.0` (exact version pin per SSOT)
+- **Config Format**: Legacy `.eslintrc.js` → Flat `eslint.config.js`
+- **Type Awareness**: Enabled projectService for type-aware linting
+- **File Separation**: Separate configs for TypeScript and JavaScript files
+- **Exclusions**: Config files excluded from type checking to prevent parsing errors
+
+**Technical Implementation**:
+- Project Service integration for editor alignment
+- Custom className enforcement rules preserved
+- Strict TypeScript typing with consistent import patterns
+- JavaScript files get basic linting without type checking
+
+**Rationale**: TypeScript ESLint 8.41.0 provides better performance, editor integration, and type-aware linting while following current best practices for flat config.
+
+**Files Modified**: `eslint.config.js` (new), `package.json`, removed `.eslintrc.js`
+
+---
+
+#### **Decision #017: Motion Package Migration (Framer Motion → Motion)**
+
+**Status**: ✅ Implemented  
+**Impact**: Medium - Future-proofs animation library usage
+
+**Decision**: Migrated from Framer Motion to Motion package v12.23.12
+
+- **Package Change**: `framer-motion@12.23.12` → `motion@12.23.12`
+- **Import Pattern**: `import { motion } from "motion/react"` for client components
+- **RSC Support**: `import * as motion from "motion/react-client"` for server components
+- **Documentation**: Updated README.md, website.md to reflect new package
+
+**Rationale**: Motion package is the official evolution of Framer Motion with better React Server Component support and performance optimizations for Next.js App Router.
+
+**Files Modified**: `package.json`, `README.md`, `website.md`
+
+---
+
 ### **August 25, 2025 - Code Quality & Performance Optimization**
 
 #### **Decision #015: Prettier Configuration Optimization**

@@ -1,6 +1,8 @@
 # 🤝 Contributing to NSBS Platform
 
-Thank you for your interest in contributing to the National Society of Business Sciences Certification Platform! This guide will help you get started with contributing to our project.
+Thank you for your interest in contributing to the National Society of Business
+Sciences Certification Platform! This guide will help you get started with
+contributing to our project.
 
 ## 📋 Table of Contents
 
@@ -39,17 +41,20 @@ Before contributing, ensure you have:
 
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
+
    ```bash
    git clone https://github.com/your-username/nsbs-platform.git
    cd nsbs-platform
    ```
 
 3. **Add upstream remote**:
+
    ```bash
    git remote add upstream https://github.com/AahPlexX/nsbs-platform.git
    ```
 
 4. **Install dependencies**:
+
    ```bash
    pnpm install
    ```
@@ -142,6 +147,7 @@ git commit -m "docs(readme): update installation instructions"
 ```
 
 **Commit Types:**
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -210,6 +216,7 @@ We use automated tooling for consistency:
 - **TypeScript** for type checking
 
 Run before committing:
+
 ```bash
 pnpm format      # Format code
 pnpm lint        # Check linting
@@ -314,4 +321,5 @@ Contributors will be:
 
 ---
 
-Thank you for contributing to the NSBS Platform! Your efforts help us deliver better business education technology. 🎓✨
+Thank you for contributing to the NSBS Platform! Your efforts help us deliver
+better business education technology. 🎓✨

@@ -1,9 +1,9 @@
 ---
 name: Bug Report
 about: Create a report to help us improve the NSBS Platform
-title: '[BUG] '
-labels: ['bug', 'needs-triage']
-assignees: ''
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+assignees: ""
 ---
 
 ## 🐛 Bug Description
@@ -28,11 +28,13 @@ assignees: ''
 ## 📱 Environment
 
 **Desktop:**
+
 - OS: [e.g. Windows 11, macOS 14]
 - Browser: [e.g. Chrome 120, Firefox 121]
 - Version: [e.g. 1.0.0]
 
 **Mobile:**
+
 - Device: [e.g. iPhone 15, Samsung Galaxy S24]
 - OS: [e.g. iOS 17.1, Android 14]
 - Browser: [e.g. Safari, Chrome]

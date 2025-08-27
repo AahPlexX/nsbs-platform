@@ -1,14 +1,15 @@
 ---
 name: Security Issue
 about: Report a security vulnerability (Private reporting recommended)
-title: '[SECURITY] '
-labels: ['security', 'critical']
-assignees: ''
+title: "[SECURITY] "
+labels: ["security", "critical"]
+assignees: ""
 ---
 
 ## ⚠️ Security Notice
 
-**Please consider reporting security issues privately through GitHub's private vulnerability reporting feature or by emailing security@nsbs.edu**
+**Please consider reporting security issues privately through GitHub's private
+vulnerability reporting feature or by emailing security@nsbs.edu**
 
 ## 🔒 Vulnerability Type
 
@@ -21,7 +22,7 @@ assignees: ''
 - [ ] Cryptographic weaknesses
 - [ ] Configuration issues
 - [ ] Dependency vulnerabilities
-- [ ] Other: _______________
+- [ ] Other: ******\_\_\_******
 
 ## 📋 Vulnerability Description
 
@@ -38,15 +39,15 @@ assignees: ''
 - [ ] File uploads
 - [ ] User data handling
 - [ ] Admin functions
-- [ ] Other: _______________
+- [ ] Other: ******\_\_\_******
 
 ## 🔄 Steps to Reproduce
 
 **Provide steps to reproduce the vulnerability (if safe to share)**
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## 💥 Impact Assessment
 
@@ -58,7 +59,7 @@ assignees: ''
 - [ ] Denial of service
 - [ ] Financial impact
 - [ ] Compliance violations
-- [ ] Other: _______________
+- [ ] Other: ******\_\_\_******
 
 ## 🛡️ Suggested Mitigation
 
@@ -68,8 +69,8 @@ assignees: ''
 
 **If you can assess the CVSS score, please provide it**
 
-- Base Score: ___/10
-- Vector: _______________
+- Base Score: \_\_\_/10
+- Vector: ******\_\_\_******
 
 ## 🔍 Additional Information
 
@@ -85,4 +86,5 @@ assignees: ''
 - [ ] I understand this will be handled confidentially
 - [ ] I have considered responsible disclosure timelines
 
-**Note: Security issues will be handled with priority and confidentiality. Please allow time for investigation and remediation before public disclosure.**
+**Note: Security issues will be handled with priority and confidentiality.
+Please allow time for investigation and remediation before public disclosure.**

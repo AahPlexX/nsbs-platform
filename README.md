@@ -2,7 +2,9 @@
 
 **National Society of Business Sciences Certification Platform**
 
-A next-generation enterprise-grade professional certification platform delivering immersive business education through rigorous courses, comprehensive examinations, and verified digital credentials.
+A next-generation enterprise-grade professional certification platform
+delivering immersive business education through rigorous courses, comprehensive
+examinations, and verified digital credentials.
 
 ![NSBS Platform](https://img.shields.io/badge/Version-1.0.0-success)
 ![Next.js](https://img.shields.io/badge/Next.js-15.5.0-black)
@@ -12,39 +14,53 @@ A next-generation enterprise-grade professional certification platform deliverin
 
 ## 🌟 Overview
 
-The NSBS Platform revolutionizes professional certification by combining cutting-edge technology with rigorous academic standards. Built for modern learners and organizations seeking validated business competencies.
+The NSBS Platform revolutionizes professional certification by combining
+cutting-edge technology with rigorous academic standards. Built for modern
+learners and organizations seeking validated business competencies.
 
 ### 🎯 Key Features
 
-- **📚 Interactive Learning System** - Immersive course content with MDX-powered rich media
-- **🔐 Secure Examinations** - Proctored testing environment with advanced anti-cheating measures  
-- **🏆 Digital Credentials** - Blockchain-verifiable certificates with PDF generation
-- **💳 Payment Processing** - Integrated Stripe payments with subscription management
-- **👤 User Management** - Role-based access control with Supabase authentication
-- **📊 Analytics Dashboard** - Comprehensive learning analytics and progress tracking
-- **🔒 Enterprise Security** - Row-level security, rate limiting, and audit trails
+- **📚 Interactive Learning System** - Immersive course content with MDX-powered
+  rich media
+- **🔐 Secure Examinations** - Proctored testing environment with advanced
+  anti-cheating measures
+- **🏆 Digital Credentials** - Blockchain-verifiable certificates with PDF
+  generation
+- **💳 Payment Processing** - Integrated Stripe payments with subscription
+  management
+- **👤 User Management** - Role-based access control with Supabase
+  authentication
+- **📊 Analytics Dashboard** - Comprehensive learning analytics and progress
+  tracking
+- **🔒 Enterprise Security** - Row-level security, rate limiting, and audit
+  trails
 
 ## 🚀 Technology Stack
 
 ### Core Framework
+
 - **Next.js 15.5.0** - React framework with App Router
 - **React 19.1.1** - Latest React with concurrent features
 - **TypeScript 5.9.2** - Full type safety with strict configuration
 
 ### Styling & UI
-- **TailwindCSS 4.1.12** - CSS-first configuration with custom NSBS brand palette
+
+- **TailwindCSS 4.1.12** - CSS-first configuration with custom NSBS brand
+  palette
 - **Radix UI** - Accessible component primitives
 - **HeroUI** - Advanced UI component library
-- **Framer Motion** - Smooth animations and interactions
+- **Motion** - Smooth animations and interactions (v12.23.12)
 - **Lucide React** - Beautiful icon system
 
 ### Backend & Database
+
 - **Supabase** - PostgreSQL database with real-time subscriptions
 - **Enhanced RLS** - Row-level security policies for data protection
 - **Stripe** - Payment processing and subscription management
 - **Resend** - Transactional email service
 
 ### Development Tools
+
 - **Jest** - Unit testing framework
 - **Prettier** - Code formatting
 - **ESLint** - Code linting
@@ -52,14 +68,15 @@ The NSBS Platform revolutionizes professional certification by combining cutting
 
 ## 🎨 NSBS Brand System
 
-Our platform features a carefully crafted color palette that reflects professionalism and warmth:
+Our platform features a carefully crafted color palette that reflects
+professionalism and warmth:
 
 ```css
 /* NSBS Color Palette */
---mocha-mousse: #d4c7b8;  /* Primary background - warm, inviting */
---evergreen: #20634a;     /* Primary actions - professional, trustworthy */
---mint-sage: #8fb8a3;     /* Accents - fresh, calming */
---sage: #9aab9a;          /* Secondary elements - balanced, natural */
+--mocha-mousse: #d4c7b8; /* Primary background - warm, inviting */
+--evergreen: #20634a; /* Primary actions - professional, trustworthy */
+--mint-sage: #8fb8a3; /* Accents - fresh, calming */
+--sage: #9aab9a; /* Secondary elements - balanced, natural */
 ```
 
 ## 📁 Project Structure
@@ -122,47 +139,53 @@ nsbs0820/
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/AahPlexX/nsbs-platform.git
    cd nsbs-platform
    ```
 
 2. **Install dependencies**
+
    ```bash
    pnpm install
    ```
 
 3. **Environment setup**
+
    ```bash
    cp .env.example .env.local
    ```
-   
+
    Configure your environment variables:
+
    ```env
    # Supabase
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-   
+
    # Stripe
    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
    STRIPE_SECRET_KEY=your_stripe_secret_key
    STRIPE_WEBHOOK_SECRET=your_webhook_secret
-   
+
    # Resend
    RESEND_API_KEY=your_resend_api_key
    ```
 
 4. **Database setup**
+
    ```bash
    # Run database migrations
    pnpm run db:migrate
-   
+
    # Seed initial data
    pnpm run db:seed
    ```
 
 5. **Start development server**
+
    ```bash
    pnpm dev
    ```
@@ -222,7 +245,7 @@ sequenceDiagram
     participant A as App
     participant S as Supabase
     participant E as Email
-    
+
     U->>A: Sign up/Sign in
     A->>S: Authenticate user
     S->>E: Send verification email
@@ -241,7 +264,7 @@ sequenceDiagram
     participant A as App
     participant S as Stripe
     participant D as Database
-    
+
     U->>A: Select course/exam
     A->>S: Create checkout session
     S->>U: Redirect to payment
@@ -273,6 +296,7 @@ sequenceDiagram
 ### Vercel (Recommended)
 
 1. **Connect repository**
+
    ```bash
    # Deploy to Vercel
    vercel --prod
@@ -298,7 +322,9 @@ sequenceDiagram
 
 ## 🤝 Contributing
 
-We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+We welcome contributions! Please read our
+[Contributing Guide](./CONTRIBUTING.md) for details on our code of conduct and
+the process for submitting pull requests.
 
 ### Development Workflow
 
@@ -311,13 +337,15 @@ We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md
 
 ## 📄 License
 
-This project is proprietary software. All rights reserved by the National Society of Business Sciences.
+This project is proprietary software. All rights reserved by the National
+Society of Business Sciences.
 
 ## 🆘 Support
 
 - **Documentation**: [docs.nsbs.edu](https://docs.nsbs.edu)
 - **Email Support**: support@nsbs.edu
-- **Issue Tracker**: [GitHub Issues](https://github.com/AahPlexX/nsbs-platform/issues)
+- **Issue Tracker**:
+  [GitHub Issues](https://github.com/AahPlexX/nsbs-platform/issues)
 - **Community Forum**: [community.nsbs.edu](https://community.nsbs.edu)
 
 ## 👥 Team

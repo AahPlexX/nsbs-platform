@@ -6,7 +6,25 @@
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "warn",
     "prefer-const": "error",
-    "no-var": "error"
+    "no-var": "error",
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "JSXAttribute[name.name='className'] > Literal",
+        "message": "Use cn(...) (clsx + twMerge) instead of raw string literals for className."
+      },
+      {
+        "selector": "JSXAttribute[name.name='className'] JSXExpressionContainer > BinaryExpression[operator='+']",
+        "message": "Do not concatenate className strings. Use cn(...)."
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      { "paths": [{ "name": "classnames", "message": "Use clsx + twMerge (cn helper) instead." }] }
+    ]
   },
+  "overrides": [
+    { "files": ["**/*.{ts,tsx,jsx}"], "rules": { "max-len": ["warn", { "code": 140, "ignoreTemplateLiterals": true, "ignoreStrings": false }] } }
+  ],
   "ignorePatterns": ["node_modules/", ".next/", "out/"]
 }

@@ -2,10 +2,8 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
@@ -14,6 +12,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Search, X } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useState } from "react"
+import { cn } from "@/lib/utils"
 
 interface SearchAndFilterProps {
   categories: string[]
@@ -32,7 +33,7 @@ export function SearchAndFilter({ categories }: SearchAndFilterProps) {
     if (newCategory) params.set("category", newCategory)
 
     const queryString = params.toString()
-    router.push(`/coursecatalog${queryString ? `?${queryString}` : ""}` as any)
+    router.push(`/coursecatalog${queryString ? `?${queryString}` : ""}`)
   }
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -90,7 +91,7 @@ export function SearchAndFilter({ categories }: SearchAndFilterProps) {
             type="button"
             variant="outline"
             onClick={clearFilters}
-            className="sm:w-auto bg-transparent"
+            className={cn("sm:w-auto bg-transparent")}
           >
             <X className="h-4 w-4 mr-2" />
             Clear
