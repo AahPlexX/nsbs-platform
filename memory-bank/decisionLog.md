@@ -49,6 +49,31 @@ flat config.
   components
 - **Documentation**: Updated README.md, website.md to reflect new package
 
+---
+
+#### **Decision #019: MDX Renderer Security Fix**
+
+**Status**: ✅ Implemented  
+**Impact**: Critical - Eliminates XSS vulnerability in content rendering
+
+**Decision**: Replaced dangerous `dangerouslySetInnerHTML` with secure MDX implementation
+
+- **Security Risk**: Removed `dangerouslySetInnerHTML` which bypassed React's XSS protections
+- **Implementation**: Full MDX renderer with `next-mdx-remote` and custom components
+- **Components**: Tailwind-styled MDX components for consistent UI/UX
+- **Error Handling**: Proper MDX serialization error handling and fallbacks
+- **Learning Features**: Custom components (LearningObjective, KeyConcept, Example)
+
+**Technical Implementation**:
+- `next-mdx-remote/rsc` for React Server Component support
+- Async serialization with proper error boundaries
+- Custom component mapping for enhanced educational content
+- Scope passing for course/lesson context
+
+**Rationale**: `dangerouslySetInnerHTML` creates serious XSS vulnerabilities and breaks React's security model. Proper MDX rendering provides security, better performance, and enhanced educational features.
+
+**Files Modified**: `components/course/mdx-renderer.tsx` (complete rewrite)
+
 **Rationale**: Motion package is the official evolution of Framer Motion with
 better React Server Component support and performance optimizations for Next.js
 App Router.
@@ -62,19 +87,24 @@ App Router.
 **Status**: ✅ Implemented  
 **Impact**: Medium - Improves code consistency and maintainability
 
-**Decision**: Applied consistent import organization and formatting across components
+**Decision**: Applied consistent import organization and formatting across
+components
 
-- **Import Order**: External packages → Type imports → Internal modules → Local imports
+- **Import Order**: External packages → Type imports → Internal modules → Local
+  imports
 - **Grouping**: UI components, utilities, types, icons, hooks grouped logically
 - **Auto-sorting**: ESLint rules enforce alphabetical sorting within groups
 - **Type Imports**: Consistent use of `import type` for TypeScript types
 
 **Implementation**:
+
 - Updated study-interface.tsx with proper import organization
 - Applied ESLint auto-formatting rules consistently
 - Maintained component functionality while improving readability
 
-**Rationale**: Consistent import organization improves code readability, reduces merge conflicts, and follows TypeScript ESLint best practices for maintainable codebases.
+**Rationale**: Consistent import organization improves code readability, reduces
+merge conflicts, and follows TypeScript ESLint best practices for maintainable
+codebases.
 
 **Files Modified**: `components/course/study-interface.tsx`
 
@@ -246,3 +276,17 @@ errors
 **Impact:** Development-only issue, does not affect production builds  
 **Solution:** Added favicon.svg/ico, documented webcomponents conflict as known
 issue
+
+### AD-019: Critical Security Fix - MDX Renderer
+
+**Date:** 2025-08-26  
+**Status:** APPROVED ✅  
+**Context:** MDX renderer was using dangerouslySetInnerHTML causing XSS vulnerability  
+**Decision:** Replace unsafe HTML rendering with proper MDX serialization using next-mdx-remote  
+**Rationale:** Eliminate security vulnerability and implement React-safe content rendering  
+**Impact:** Secure MDX content rendering with custom component support  
+**Implementation:** 
+  - Removed dangerouslySetInnerHTML completely
+  - Implemented proper MDX serialization with next-mdx-remote/serialize
+  - Added custom MDX components for enhanced learning content
+  - Maintained all props for backward compatibility

@@ -50,10 +50,12 @@ export function InteractiveExamInterface() {
   components
 
 **Import Organization Standards**:
+
 - **Order**: External packages → Type imports → Internal modules
 - **Grouping**: UI components, utilities, types, icons, hooks, local imports
 - **Formatting**: Alphabetical sorting within groups, consistent naming
 - **Example Pattern**:
+
 ```typescript
 // ✅ STANDARD: Import organization with ESLint auto-sorting
 import { Badge } from "@/components/ui/badge"
@@ -267,6 +269,46 @@ nsbs:api:endpoint-key:v1.0
 - **User-based limits:** Prevent account-based abuse
 - **Endpoint-specific:** Tailored protection for sensitive operations
 - **Bypass mechanisms:** Admin override with logging
+
+#### Content Security (MDX Rendering)
+
+**NEVER USE `dangerouslySetInnerHTML`** - Creates XSS vulnerabilities
+
+```typescript
+// ❌ DANGEROUS: Bypasses React's XSS protection
+<div dangerouslySetInnerHTML={{ __html: content }} />
+
+// ✅ SECURE: Proper MDX rendering with next-mdx-remote
+import { MDXRemote } from "next-mdx-remote/rsc"
+import { serialize } from "next-mdx-remote/serialize"
+
+const mdxComponents = {
+  h1: ({ children }) => <h1 className="text-3xl font-bold">{children}</h1>,
+  // Custom educational components
+  LearningObjective: ({ children }) => (
+    <Card className="border-primary/20">
+      <Badge variant="default">Learning Objective</Badge>
+      {children}
+    </Card>
+  ),
+}
+
+export default function MDXRenderer({ content }) {
+  const serializedContent = useMemo(async () => {
+    return await serialize(content, {
+      mdxOptions: { development: process.env.NODE_ENV === 'development' }
+    })
+  }, [content])
+  
+  return <MDXRemote {...serializedContent} components={mdxComponents} />
+}
+```
+
+**Security Benefits**:
+- No XSS vulnerabilities through content injection
+- React's built-in sanitization and escaping
+- Type-safe component mapping
+- Proper error boundaries and fallbacks
 
 ### Bundle Optimization Patterns
 
