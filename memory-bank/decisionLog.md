@@ -157,3 +157,11 @@ Mousse/Evergreen
 **Decision:** 2 attempts maximum, 85% pass score, timed sessions  
 **Rationale:** Educational standards and certification integrity  
 **Impact:** Strict exam enforcement, attempt tracking required
+
+### AD-007: Development Environment Error Handling
+
+**Date:** 2025-08-26  
+**Decision:** Document and ignore browser extension conflicts (mce-autosize-textarea)  
+**Rationale:** External browser extensions causing custom element redefinition errors  
+**Impact:** Development-only issue, does not affect production builds  
+**Solution:** Added favicon.svg/ico, documented webcomponents conflict as known issue

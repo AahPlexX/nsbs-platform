@@ -6,6 +6,12 @@ import "./globals.css"
 export const metadata: Metadata = {
   title: "National Society of Business Sciences",
   description: "Professional business certification platform",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+  },
 }
 
 export default function RootLayout({

@@ -21,6 +21,34 @@ export function InteractiveExamInterface() {
 }
 ```
 
+#### **Development Environment Issues & Solutions**
+
+##### **Issue: Custom Element Already Defined (webcomponents-ce.js)**
+```
+Error: A custom element with name 'mce-autosize-textarea' has already been defined.
+```
+
+**Root Cause**: Browser extension (likely TinyMCE-related) or external script defining custom elements multiple times during hot reload.
+
+**Solutions**:
+1. **Browser Extension Conflict**: Disable browser extensions during development
+2. **External Scripts**: Check for TinyMCE or rich text editor scripts in browser network tab
+3. **Development Only**: This error doesn't affect production builds
+4. **Ignore in Development**: Add to known development issues list
+
+**Prevention**:
+```javascript
+// If using custom elements, wrap in conditional
+if (!customElements.get('my-element')) {
+  customElements.define('my-element', MyElement);
+}
+```
+
+##### **Issue: Missing Favicon (404)**
+**Solution**: Added favicon.svg and favicon.ico to /public directory
+- Favicon.svg: NSBS-branded SVG with evergreen/mint-sage colors
+- Favicon.ico: Fallback for older browsers
+
 #### **TypeScript Maximum Strictness**
 
 ```json
