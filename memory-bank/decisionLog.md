@@ -9,23 +9,29 @@
 **Status**: ✅ Implemented  
 **Impact**: High - Modernizes linting infrastructure with type-aware rules
 
-**Decision**: Migrated from legacy ESLint configuration to TypeScript ESLint flat config
+**Decision**: Migrated from legacy ESLint configuration to TypeScript ESLint
+flat config
 
 - **Package**: `typescript-eslint@8.41.0` (exact version pin per SSOT)
 - **Config Format**: Legacy `.eslintrc.js` → Flat `eslint.config.js`
 - **Type Awareness**: Enabled projectService for type-aware linting
 - **File Separation**: Separate configs for TypeScript and JavaScript files
-- **Exclusions**: Config files excluded from type checking to prevent parsing errors
+- **Exclusions**: Config files excluded from type checking to prevent parsing
+  errors
 
 **Technical Implementation**:
+
 - Project Service integration for editor alignment
 - Custom className enforcement rules preserved
 - Strict TypeScript typing with consistent import patterns
 - JavaScript files get basic linting without type checking
 
-**Rationale**: TypeScript ESLint 8.41.0 provides better performance, editor integration, and type-aware linting while following current best practices for flat config.
+**Rationale**: TypeScript ESLint 8.41.0 provides better performance, editor
+integration, and type-aware linting while following current best practices for
+flat config.
 
-**Files Modified**: `eslint.config.js` (new), `package.json`, removed `.eslintrc.js`
+**Files Modified**: `eslint.config.js` (new), `package.json`, removed
+`.eslintrc.js`
 
 ---
 
@@ -37,13 +43,40 @@
 **Decision**: Migrated from Framer Motion to Motion package v12.23.12
 
 - **Package Change**: `framer-motion@12.23.12` → `motion@12.23.12`
-- **Import Pattern**: `import { motion } from "motion/react"` for client components
-- **RSC Support**: `import * as motion from "motion/react-client"` for server components
+- **Import Pattern**: `import { motion } from "motion/react"` for client
+  components
+- **RSC Support**: `import * as motion from "motion/react-client"` for server
+  components
 - **Documentation**: Updated README.md, website.md to reflect new package
 
-**Rationale**: Motion package is the official evolution of Framer Motion with better React Server Component support and performance optimizations for Next.js App Router.
+**Rationale**: Motion package is the official evolution of Framer Motion with
+better React Server Component support and performance optimizations for Next.js
+App Router.
 
 **Files Modified**: `package.json`, `README.md`, `website.md`
+
+---
+
+#### **Decision #018: Import Organization & Code Formatting Standards**
+
+**Status**: ✅ Implemented  
+**Impact**: Medium - Improves code consistency and maintainability
+
+**Decision**: Applied consistent import organization and formatting across components
+
+- **Import Order**: External packages → Type imports → Internal modules → Local imports
+- **Grouping**: UI components, utilities, types, icons, hooks grouped logically
+- **Auto-sorting**: ESLint rules enforce alphabetical sorting within groups
+- **Type Imports**: Consistent use of `import type` for TypeScript types
+
+**Implementation**:
+- Updated study-interface.tsx with proper import organization
+- Applied ESLint auto-formatting rules consistently
+- Maintained component functionality while improving readability
+
+**Rationale**: Consistent import organization improves code readability, reduces merge conflicts, and follows TypeScript ESLint best practices for maintainable codebases.
+
+**Files Modified**: `components/course/study-interface.tsx`
 
 ---
 

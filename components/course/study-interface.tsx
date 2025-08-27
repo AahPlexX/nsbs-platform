@@ -1,16 +1,16 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { ConfirmationModal } from "@/components/ui/confirmation-modal"
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { CheckCircle, Circle, BookOpen } from "lucide-react"
-import { MDXRenderer } from "./mdx-renderer"
-import { ConfirmationModal } from "@/components/ui/confirmation-modal"
 import type { Course, Lesson } from "@/lib/types"
+import { BookOpen, CheckCircle, Circle } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import MDXRenderer from "./mdx-renderer"
 
 interface StudyInterfaceProps {
   course: Course

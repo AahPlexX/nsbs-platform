@@ -26,12 +26,14 @@ export function InteractiveExamInterface() {
 ##### **TypeScript ESLint Integration (8.41.0)**
 
 **Configuration**: ESLint flat config with TypeScript ESLint meta package
+
 - **Package**: `typescript-eslint@8.41.0` (exact version)
 - **Configuration**: `eslint.config.js` (flat config format)
 - **Project Service**: Enabled for type-aware linting
 - **Ignores**: Config files excluded from type checking
 
 **Key Features**:
+
 - Type-aware linting with projectService: true
 - Strict TypeScript rules with consistent type imports
 - Custom className enforcement rules (cn() utility)
@@ -39,10 +41,29 @@ export function InteractiveExamInterface() {
 - Proper file exclusions for config files
 
 **Motion Package Migration**:
+
 - **Old**: `framer-motion@12.23.12`
 - **New**: `motion@12.23.12` (Motion package v12)
-- **Import Pattern**: `import { motion } from "motion/react"` for client components
-- **RSC Pattern**: `import * as motion from "motion/react-client"` for server components
+- **Import Pattern**: `import { motion } from "motion/react"` for client
+  components
+- **RSC Pattern**: `import * as motion from "motion/react-client"` for server
+  components
+
+**Import Organization Standards**:
+- **Order**: External packages → Type imports → Internal modules
+- **Grouping**: UI components, utilities, types, icons, hooks, local imports
+- **Formatting**: Alphabetical sorting within groups, consistent naming
+- **Example Pattern**:
+```typescript
+// ✅ STANDARD: Import organization with ESLint auto-sorting
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import type { Course, Lesson } from "@/lib/types"
+import { BookOpen, CheckCircle } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import MDXRenderer from "./mdx-renderer"
+```
 
 ##### **Issue: Custom Element Already Defined (webcomponents-ce.js)**
 
