@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/lib/supabase-client"
 import { signInSchema } from "@/lib/validation"
 import { Loader2, Mail } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { useState } from "react"
 
 interface SignInFormProps {
@@ -20,7 +20,6 @@ export function SignInForm({ isSignUp = false }: SignInFormProps) {
   const [email, setEmail] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [magicLinkSent, setMagicLinkSent] = useState(false)
-  const _router = useRouter() // Reserved for future navigation logic
   const searchParams = useSearchParams()
   const { toast } = useToast()
   const redirectTo = searchParams.get("redirectTo")
@@ -104,7 +103,9 @@ export function SignInForm({ isSignUp = false }: SignInFormProps) {
         </div>
         <Button
           variant="outline"
-          onClick={() => setMagicLinkSent(false)}
+          onClick={() => {
+            setMagicLinkSent(false)
+          }}
           className="border-mint-sage/20 text-mint-sage hover:bg-mint-sage/5"
         >
           Try a different email
@@ -116,7 +117,9 @@ export function SignInForm({ isSignUp = false }: SignInFormProps) {
   return (
     <div className="space-y-4">
       <Button
-        onClick={handleGoogleSignIn}
+        onClick={() => {
+          void handleGoogleSignIn()
+        }}
         disabled={isLoading}
         className="w-full h-12 bg-white border-2 border-gray-300 hover:border-gray-400 text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-3 font-medium"
         style={{
@@ -127,7 +130,9 @@ export function SignInForm({ isSignUp = false }: SignInFormProps) {
         }}
         size="lg"
         type="button"
-        onMouseEnter={() => console.log("[v0] Google button hovered")}
+        onMouseEnter={() => {
+          console.log("[v0] Google button hovered")
+        }}
       >
         {isLoading ? (
           <Loader2 className="h-5 w-5 animate-spin" />
@@ -165,7 +170,9 @@ export function SignInForm({ isSignUp = false }: SignInFormProps) {
         </div>
       </div>
 
-      <form onSubmit={handleMagicLinkSignIn} className="space-y-4">
+      <form onSubmit={(e) => {
+        void handleMagicLinkSignIn(e)
+      }} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email" className="text-evergreen">
             Email address
@@ -175,7 +182,9 @@ export function SignInForm({ isSignUp = false }: SignInFormProps) {
             type="email"
             placeholder="Enter your email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value)
+            }}
             required
             className="border-mint-sage/20 focus:border-mint-sage focus:ring-mint-sage/20"
           />

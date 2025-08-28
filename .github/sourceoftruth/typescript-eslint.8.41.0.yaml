@@ -53,7 +53,7 @@ ssot:
       - settings
       - languageOptions   # { parser, ecmaVersion, sourceType, parserOptions, globals }
       - linterOptions     # { noInlineConfig, reportUnusedDisableDirectives, reportUnusedInlineConfigs }
-      citations:
+    citations:
         - "https://typescript-eslint.io/getting-started/"
         - "https://eslint.org/docs/latest/use/configure/configuration-files"
   forbidden_and_outdated:
@@ -62,7 +62,7 @@ ssot:
     - "Mixing mismatched versions of @typescript-eslint/parser / eslint-plugin when the meta package is installed."
     - "Relying on v9-only ESLint flat-config features (stick to v8-safe patterns)."
     - "Using `@typescript-eslint/eslint-plugin-tslint` (migration bridge; not needed here)."
-    citations:
+  citations:
       - "https://eslint.org/docs/latest/use/configure/migration-guide"
       - "https://typescript-eslint.io/troubleshooting/typed-linting/"
       - "https://typescript-eslint.io/packages/eslint-plugin-tslint"
@@ -224,5 +224,5 @@ ssot:
   operational_notes:
     - "Run `pnpm lint:tseslint-ssot` in CI and locally to catch config drift."
     - "If you must disable type-aware rules for a pattern (e.g., plain JS), apply `...tseslint.configs.disableTypeChecked` to a matching config object."
-    citations:
+    citations2:
       - "https://typescript-eslint.io/troubleshooting/typed-linting/"

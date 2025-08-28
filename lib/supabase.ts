@@ -27,7 +27,11 @@ export const supabase = createSupabaseClient(supabaseUrl, supabaseAnonKey, {
 export async function createClient() {
   const cookieStore = await cookies()
 
-  return createServerClient(supabaseUrl!, supabaseAnonKey!, {
+  // Values are guaranteed to be defined due to validation checks above
+  const url = supabaseUrl as string
+  const key = supabaseAnonKey as string
+
+  return createServerClient(url, key, {
     cookies: {
       getAll() {
         return cookieStore.getAll()

@@ -1,12 +1,9 @@
-"use client"
-
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import { serialize } from "next-mdx-remote/serialize"
 import type React from "react"
-import { useMemo } from "react"
 
 interface MDXRendererProps {
   content: string
@@ -85,24 +82,24 @@ const mdxComponents = {
   ),
 }
 
-export default function MDXRenderer({ content, courseSlug, lessonSlug }: MDXRendererProps) {
-  const serializedContent = useMemo(async () => {
-    try {
-      return await serialize(content, {
-        mdxOptions: {
-          remarkPlugins: [],
-          rehypePlugins: [],
-          development: process.env.NODE_ENV === "development",
-        },
-        scope: { courseSlug, lessonSlug },
-      })
-    } catch (error) {
-      console.error("MDX serialization error:", error)
-      return null
-    }
-  }, [content, courseSlug, lessonSlug])
+export default async function MDXRenderer({ content, courseSlug, lessonSlug }: MDXRendererProps) {
+  try {
+    const serializedContent = await serialize(content, {
+      mdxOptions: {
+        remarkPlugins: [],
+        rehypePlugins: [],
+        development: process.env.NODE_ENV === "development",
+      },
+      scope: { courseSlug, lessonSlug },
+    })
 
-  if (!serializedContent) {
+    return (
+      <div className="prose prose-neutral max-w-none">
+        <MDXRemote source={serializedContent} components={mdxComponents} />
+      </div>
+    )
+  } catch (error) {
+    console.error("MDX serialization error:", error)
     return (
       <div className="prose prose-neutral max-w-none">
         <div className="text-muted-foreground italic">
@@ -111,10 +108,4 @@ export default function MDXRenderer({ content, courseSlug, lessonSlug }: MDXRend
       </div>
     )
   }
-
-  return (
-    <div className="prose prose-neutral max-w-none">
-      <MDXRemote {...serializedContent} components={mdxComponents} />
-    </div>
-  )
 }
