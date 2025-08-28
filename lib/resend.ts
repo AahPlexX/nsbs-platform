@@ -1,6 +1,5 @@
-import { Resend } from "resend"
-import * as z from "zod" // Using v4 import pattern
-import { rateLimit } from "./rate-limiting"
+import { Resend } from "resend";
+import * as z from "zod"; // Using v4 import pattern
 
 if (!process.env.RESEND_API_KEY) {
   throw new Error("RESEND_API_KEY is not set")
@@ -8,12 +7,12 @@ if (!process.env.RESEND_API_KEY) {
 
 export const resend = new Resend(process.env.RESEND_API_KEY)
 
-// Rate limiting for email service (5 emails per minute per IP)
-const emailRateLimit = rateLimit({
-  maxRequests: 5,
-  windowMs: 60 * 1000, // 1 minute
-  message: "Email rate limit exceeded. Please try again later.",
-})
+// Rate limiting for email service (5 emails per minute per IP) - Reserved for future use
+// const _emailRateLimit = rateLimit({
+//   maxRequests: 5,
+//   windowMs: 60 * 1000, // 1 minute
+//   message: "Email rate limit exceeded. Please try again later.",
+// })
 
 // Enhanced email validation schema with v4 patterns
 export const emailValidationSchema = z.strictObject({
@@ -78,7 +77,7 @@ export async function sendEmailWithRetry(
 
         const result = await resend.emails.send(emailOptions)
 
-        console.log(`[Resend] Email sent successfully: ${result.data?.id}`)
+        console.log(`[Resend] Email sent successfully: ${result.data?.id ?? 'unknown'}`)
         return {
           success: true,
           messageId: result.data?.id || undefined,
@@ -90,7 +89,7 @@ export async function sendEmailWithRetry(
           message?: string
         }
         const error = emailError as EmailError
-        console.error(`[Resend] Attempt ${attempt}/${retries} failed:`, error)
+        console.error(`[Resend] Attempt ${attempt.toString()}/${retries.toString()} failed:`, error)
 
         // Don't retry on client errors (4xx)
         if (error.statusCode && error.statusCode >= 400 && error.statusCode < 500) {
@@ -111,7 +110,7 @@ export async function sendEmailWithRetry(
         return {
           success: false,
           messageId: undefined,
-          error: `Email sending failed after ${retries} attempts: ${
+          error: `Email sending failed after ${retries.toString()} attempts: ${
             error.message || "Unknown error"
           }`,
         }

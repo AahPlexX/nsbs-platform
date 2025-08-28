@@ -103,7 +103,7 @@ export function StudyInterface({
                     key={lesson.id}
                     variant={isCurrent ? "default" : "ghost"}
                     className="w-full justify-start h-auto p-3"
-                    onClick={() => handleLessonSelect(lesson.id)}
+                    onClick={() => { handleLessonSelect(lesson.id); }}
                   >
                     <div className="flex items-center gap-3 w-full">
                       {isCompleted ? (
@@ -156,7 +156,7 @@ export function StudyInterface({
                   {currentIndex > 0 && (
                     <Button
                       variant="outline"
-                      onClick={() => handleLessonSelect(lessons[currentIndex - 1]?.id || '')}
+                      onClick={() => { handleLessonSelect(lessons[currentIndex - 1]?.id || ''); }}
                     >
                       Previous Lesson
                     </Button>
@@ -164,7 +164,7 @@ export function StudyInterface({
                   {currentIndex < lessons.length - 1 && (
                     <Button
                       variant="outline"
-                      onClick={() => handleLessonSelect(lessons[currentIndex + 1]?.id || '')}
+                      onClick={() => { handleLessonSelect(lessons[currentIndex + 1]?.id || ''); }}
                     >
                       Next Lesson
                     </Button>
@@ -172,7 +172,7 @@ export function StudyInterface({
                 </div>
 
                 {!isCurrentCompleted && (
-                  <Button onClick={() => setShowConfirmation(true)} disabled={isCompleting}>
+                  <Button onClick={() => { setShowConfirmation(true); }} disabled={isCompleting}>
                     {isCompleting ? "Marking Complete..." : "Mark Complete"}
                   </Button>
                 )}
@@ -185,8 +185,10 @@ export function StudyInterface({
       {/* Completion Confirmation Modal */}
       <ConfirmationModal
         isOpen={showConfirmation}
-        onClose={() => setShowConfirmation(false)}
-        onConfirm={handleMarkComplete}
+        onClose={() => { setShowConfirmation(false); }}
+        onConfirm={() => {
+          void handleMarkComplete()
+        }}
         title="Mark Lesson Complete"
         description={`Are you sure you want to mark "${currentLesson.title}" as complete? This action will be recorded in your learning progress.`}
         confirmText="Mark Complete"

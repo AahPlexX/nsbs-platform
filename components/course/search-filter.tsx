@@ -11,10 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { cn } from "@/lib/utils"
 import { Search, X } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
-import { cn } from "@/lib/utils"
 
 interface SearchAndFilterProps {
   categories: string[]
@@ -63,7 +63,7 @@ export function SearchAndFilter({ categories }: SearchAndFilterProps) {
             type="text"
             placeholder="Search courses..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); }}
             className="pl-10"
           />
         </div>

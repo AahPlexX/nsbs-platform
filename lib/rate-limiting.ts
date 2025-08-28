@@ -12,11 +12,12 @@ interface RateLimitConfig {
 // In-memory rate limit store (use Redis in production)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
 
-// Default key generator using IP address
+// Default key generator using IP address with Next.js 15 compatibility
 function defaultKeyGenerator(req: NextRequest): string {
   const forwarded = req.headers.get("x-forwarded-for")
-  const ip = forwarded ? forwarded.split(",")[0] : req.ip
-  return `rate_limit:${ip || "unknown"}`
+  const realIp = req.headers.get("x-real-ip")
+  const ip = forwarded ? forwarded.split(",")[0]?.trim() ?? "unknown" : realIp ?? "unknown"
+  return `rate_limit:${ip}`
 }
 
 // Rate limiter function
@@ -127,8 +128,8 @@ export const rateLimiters = {
 
 // Validation middleware with rate limiting
 export function createApiMiddleware<TBody = unknown, TQuery = unknown>(options: {
-  bodySchema?: z.ZodSchema<TBody>
-  querySchema?: z.ZodSchema<TQuery>
+  bodySchema?: z.ZodType<TBody>
+  querySchema?: z.ZodType<TQuery>
   rateLimiter?: (req: NextRequest) => NextResponse | null
   requireAuth?: boolean
 }) {
@@ -187,7 +188,11 @@ export function createApiMiddleware<TBody = unknown, TQuery = unknown>(options: 
       }
 
       // Call the handler with validated data
-      return await handler({ body, query, req })
+      return await handler({ 
+        ...(body !== undefined && { body }), 
+        ...(query !== undefined && { query }), 
+        req 
+      })
     } catch (error) {
       console.error("[Rate Limiting Middleware] Error:", error)
       return NextResponse.json({ error: "Internal server error" }, { status: 500 })

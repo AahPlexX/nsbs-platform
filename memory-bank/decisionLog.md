@@ -2,6 +2,49 @@
 
 ## NSBS Platform Technical Decisions
 
+### **August 28, 2025 - TypeScript ESLint Strict Compliance & Next.js 15 Compatibility**
+
+#### **Decision #020: TypeScript ESLint Strict Error Resolution**
+
+**Status**: ✅ Implemented  
+**Impact**: High - Ensures type safety and Next.js 15 compatibility
+
+**Decision**: Systematically resolved all TypeScript ESLint strict mode violations across codebase
+
+**Critical Fixes Applied**:
+
+1. **NextRequest API Compatibility**: Fixed `NextRequest.ip` access in rate-limiting.ts
+   - **Issue**: Next.js 15 removed direct `.ip` property access
+   - **Solution**: Use `x-forwarded-for` and `x-real-ip` headers with fallback
+   - **Impact**: Prevents runtime failures in production
+
+2. **Promise Handling**: Fixed async function misuse in study-interface.tsx
+   - **Issue**: Promise-returning function provided where void expected
+   - **Solution**: Wrapped async calls with `void` operator
+   - **Impact**: Proper error handling and type safety
+
+3. **Template Literal Safety**: Fixed string interpolation in resend.ts
+   - **Issue**: Unsafe template expressions with undefined/number types
+   - **Solution**: Explicit string conversion and null coalescing
+   - **Impact**: Prevents runtime template errors
+
+4. **Dead Code Cleanup**: Removed unused emailRateLimit variable
+   - **Issue**: Variable declared but never used
+   - **Solution**: Commented out for future use
+   - **Impact**: Cleaner codebase and reduced bundle size
+
+**Technical Details**:
+- Rate limiting now uses header-based IP extraction for Next.js 15
+- All template literals use explicit type conversion
+- Async event handlers properly wrapped with void operator
+- Optional property handling with exactOptionalPropertyTypes compliance
+
+**Verification**: All files now pass strict TypeScript ESLint rules without violations
+
+**Files Modified**: `lib/rate-limiting.ts`, `lib/resend.ts`, `components/course/study-interface.tsx`
+
+---
+
 ### **August 27, 2025 - TypeScript ESLint Integration & Motion Package Migration**
 
 #### **Decision #016: TypeScript ESLint 8.41.0 Migration**

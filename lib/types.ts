@@ -116,7 +116,7 @@ export interface ExamAttempt {
   attempt_number: number
   score: number
   passed: boolean
-  answers: Record<string, any>
+  answers: Record<string, unknown>
   started_at: string
   completed_at?: string
   time_taken_minutes?: number
@@ -162,7 +162,7 @@ export interface Payment {
 }
 
 // API response types
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean
   data?: T
   error?: string
@@ -207,7 +207,7 @@ export interface EmailTemplate {
     | "exam_passed"
     | "exam_failed"
     | "certificate_issued"
-  data: Record<string, any>
+  data: Record<string, unknown>
 }
 
 // Admin types

@@ -238,7 +238,7 @@ export async function warmCache() {
     await Promise.all(
       popularCourses.map((course) =>
         getCourseData(course.slug).catch((error) =>
-          console.error(`[Cache] Failed to warm cache for ${course.slug}:`, error)
+          { console.error(`[Cache] Failed to warm cache for ${course.slug}:`, error); }
         )
       )
     )
