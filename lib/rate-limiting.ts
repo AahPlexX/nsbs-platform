@@ -150,7 +150,7 @@ export function createApiMiddleware<TBody = unknown, TQuery = unknown>(options: 
       let body: TBody | undefined
       if (options.bodySchema && req.method !== "GET") {
         try {
-          const rawBody = await req.json()
+          const rawBody: unknown = await req.json()
           const result = options.bodySchema.safeParse(rawBody)
           if (!result.success) {
             const errorTree = z.treeifyError(result.error)
@@ -160,7 +160,7 @@ export function createApiMiddleware<TBody = unknown, TQuery = unknown>(options: 
             )
           }
           body = result.data
-        } catch (e) {
+        } catch (_e) {
           return NextResponse.json({ error: "Invalid JSON in request body" }, { status: 400 })
         }
       }
@@ -188,10 +188,10 @@ export function createApiMiddleware<TBody = unknown, TQuery = unknown>(options: 
       }
 
       // Call the handler with validated data
-      return await handler({ 
-        ...(body !== undefined && { body }), 
-        ...(query !== undefined && { query }), 
-        req 
+      return await handler({
+        ...(body !== undefined && { body }),
+        ...(query !== undefined && { query }),
+        req
       })
     } catch (error) {
       console.error("[Rate Limiting Middleware] Error:", error)

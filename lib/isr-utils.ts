@@ -76,7 +76,11 @@ export async function generateCourseMetadata(slug: string): Promise<Metadata> {
 }
 
 // Course progress fetching with user-specific caching
-export async function getUserCourseProgress(userId: string, courseSlug: string) {
+export async function getUserCourseProgress(userId: string, courseSlug: string): Promise<{
+  lessonsCompleted: string[]
+  progressPercentage: number
+  completedAt?: string
+} | null> {
   const supabase = await createClient()
 
   // Use cache for user progress
@@ -84,16 +88,27 @@ export async function getUserCourseProgress(userId: string, courseSlug: string) 
   const cached = await cache.get(cacheKey)
 
   if (cached) {
-    return cached
+    return cached as {
+      lessonsCompleted: string[]
+      progressPercentage: number
+      completedAt?: string
+    } | null
   }
 
   // Fetch from database if not cached
-  const { data, error } = await supabase
+  const response = await supabase
     .from("course_progress")
     .select("*")
     .eq("user_id", userId)
     .eq("course_slug", courseSlug)
     .single()
+  
+  const data = response.data as {
+    lessonsCompleted: string[]
+    progressPercentage: number
+    completedAt?: string
+  } | null
+  const error = response.error
 
   if (error && error.code !== "PGRST116") {
     // Not found is OK
@@ -104,7 +119,11 @@ export async function getUserCourseProgress(userId: string, courseSlug: string) 
   // Cache the result
   await cache.set(cacheKey, data, CACHE_PRESETS.USER_PROGRESS.ttl)
 
-  return data
+  return data as {
+    lessonsCompleted: string[]
+    progressPercentage: number
+    completedAt?: string
+  } | null
 }
 
 // Purchase verification with caching
@@ -153,12 +172,12 @@ export async function invalidateUserProgressCache(userId: string, courseSlug?: s
 }
 
 // Preload critical course data for better performance
-export async function preloadCourseData(slug: string) {
+export function preloadCourseData(slug: string): void {
   // Preload in background, don't await
   Promise.all([
     getCourseData(slug),
     // Add other preloading as needed
-  ]).catch((error) => {
+  ]).catch((error: unknown) => {
     console.error("Error preloading course data:", error)
   })
 }
@@ -200,10 +219,12 @@ export async function getCoursePageData(slug: string, userId?: string): Promise<
   let hasPurchase = false
 
   if (userId) {
-    const [progressData, purchaseData] = await Promise.all([
+    const results = await Promise.all([
       getUserCourseProgress(userId, slug),
       verifyCoursePurchase(userId, slug),
     ])
+    const progressData = results[0]
+    const purchaseData = results[1]
     userProgress = progressData
     hasPurchase = Boolean(purchaseData)
   }
@@ -218,11 +239,11 @@ export async function getCoursePageData(slug: string, userId?: string): Promise<
 // Performance monitoring helpers
 export function trackCachePerformance(operation: string, startTime: number) {
   const duration = Date.now() - startTime
-  console.log(`[Cache Performance] ${operation}: ${duration}ms`)
+  console.log(`[Cache Performance] ${operation}: ${String(duration)}ms`)
 
   // In production, you might want to send this to your analytics service
   if (process.env.NODE_ENV === "production" && duration > 1000) {
-    console.warn(`[Cache Performance] Slow operation detected: ${operation} took ${duration}ms`)
+    console.warn(`[Cache Performance] Slow operation detected: ${operation} took ${String(duration)}ms`)
   }
 }
 
@@ -237,20 +258,19 @@ export async function warmCache() {
 
     await Promise.all(
       popularCourses.map((course) =>
-        getCourseData(course.slug).catch((error) =>
-          { console.error(`[Cache] Failed to warm cache for ${course.slug}:`, error); }
+        getCourseData(course.slug).catch((error: unknown) => { console.error(`[Cache] Failed to warm cache for ${course.slug}:`, error); }
         )
       )
     )
 
-    console.log(`[Cache] Warmed cache for ${popularCourses.length} courses`)
-  } catch (error) {
+    console.log(`[Cache] Warmed cache for ${String(popularCourses.length)} courses`)
+  } catch (error: unknown) {
     console.error("[Cache] Cache warming failed:", error)
   }
 }
 
 // Cache statistics for monitoring
-export async function getCacheStats() {
+export function getCacheStats() {
   // This is a placeholder - in a real implementation, you'd track these metrics
   return {
     hitRate: 0.85, // 85% cache hit rate

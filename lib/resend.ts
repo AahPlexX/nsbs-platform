@@ -110,9 +110,8 @@ export async function sendEmailWithRetry(
         return {
           success: false,
           messageId: undefined,
-          error: `Email sending failed after ${retries.toString()} attempts: ${
-            error.message || "Unknown error"
-          }`,
+          error: `Email sending failed after ${retries.toString()} attempts: ${error.message || "Unknown error"
+            }`,
         }
       }
     }
