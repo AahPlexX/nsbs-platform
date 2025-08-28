@@ -299,12 +299,13 @@ export default function MDXRenderer({ content }) {
       mdxOptions: { development: process.env.NODE_ENV === 'development' }
     })
   }, [content])
-  
+
   return <MDXRemote {...serializedContent} components={mdxComponents} />
 }
 ```
 
 **Security Benefits**:
+
 - No XSS vulnerabilities through content injection
 - React's built-in sanitization and escaping
 - Type-safe component mapping

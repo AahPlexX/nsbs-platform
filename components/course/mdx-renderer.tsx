@@ -92,12 +92,12 @@ export default function MDXRenderer({ content, courseSlug, lessonSlug }: MDXRend
         mdxOptions: {
           remarkPlugins: [],
           rehypePlugins: [],
-          development: process.env.NODE_ENV === 'development',
+          development: process.env.NODE_ENV === "development",
         },
         scope: { courseSlug, lessonSlug },
       })
     } catch (error) {
-      console.error('MDX serialization error:', error)
+      console.error("MDX serialization error:", error)
       return null
     }
   }, [content, courseSlug, lessonSlug])

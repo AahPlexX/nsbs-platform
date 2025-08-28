@@ -56,21 +56,28 @@ flat config.
 **Status**: ✅ Implemented  
 **Impact**: Critical - Eliminates XSS vulnerability in content rendering
 
-**Decision**: Replaced dangerous `dangerouslySetInnerHTML` with secure MDX implementation
+**Decision**: Replaced dangerous `dangerouslySetInnerHTML` with secure MDX
+implementation
 
-- **Security Risk**: Removed `dangerouslySetInnerHTML` which bypassed React's XSS protections
-- **Implementation**: Full MDX renderer with `next-mdx-remote` and custom components
+- **Security Risk**: Removed `dangerouslySetInnerHTML` which bypassed React's
+  XSS protections
+- **Implementation**: Full MDX renderer with `next-mdx-remote` and custom
+  components
 - **Components**: Tailwind-styled MDX components for consistent UI/UX
 - **Error Handling**: Proper MDX serialization error handling and fallbacks
-- **Learning Features**: Custom components (LearningObjective, KeyConcept, Example)
+- **Learning Features**: Custom components (LearningObjective, KeyConcept,
+  Example)
 
 **Technical Implementation**:
+
 - `next-mdx-remote/rsc` for React Server Component support
 - Async serialization with proper error boundaries
 - Custom component mapping for enhanced educational content
 - Scope passing for course/lesson context
 
-**Rationale**: `dangerouslySetInnerHTML` creates serious XSS vulnerabilities and breaks React's security model. Proper MDX rendering provides security, better performance, and enhanced educational features.
+**Rationale**: `dangerouslySetInnerHTML` creates serious XSS vulnerabilities and
+breaks React's security model. Proper MDX rendering provides security, better
+performance, and enhanced educational features.
 
 **Files Modified**: `components/course/mdx-renderer.tsx` (complete rewrite)
 
@@ -281,12 +288,16 @@ issue
 
 **Date:** 2025-08-26  
 **Status:** APPROVED ✅  
-**Context:** MDX renderer was using dangerouslySetInnerHTML causing XSS vulnerability  
-**Decision:** Replace unsafe HTML rendering with proper MDX serialization using next-mdx-remote  
-**Rationale:** Eliminate security vulnerability and implement React-safe content rendering  
+**Context:** MDX renderer was using dangerouslySetInnerHTML causing XSS
+vulnerability  
+**Decision:** Replace unsafe HTML rendering with proper MDX serialization using
+next-mdx-remote  
+**Rationale:** Eliminate security vulnerability and implement React-safe content
+rendering  
 **Impact:** Secure MDX content rendering with custom component support  
-**Implementation:** 
-  - Removed dangerouslySetInnerHTML completely
-  - Implemented proper MDX serialization with next-mdx-remote/serialize
-  - Added custom MDX components for enhanced learning content
-  - Maintained all props for backward compatibility
+**Implementation:**
+
+- Removed dangerouslySetInnerHTML completely
+- Implemented proper MDX serialization with next-mdx-remote/serialize
+- Added custom MDX components for enhanced learning content
+- Maintained all props for backward compatibility
