@@ -1,0 +1,22 @@
+﻿{
+  "id": "data-analytics-for-business-intelligence-dabip",
+  "title": "Data Analytics for Business Intelligence Professional",
+  "subtitle": "Advanced data analytics and business intelligence",
+  "description": "Professional certification course in data analytics for business intelligence professional covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Data Analytics",
+  "tags": [],
+  "certification": {
+    "name": "Data Analytics for Business Intelligence Professional (DABIP)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in data analytics for business intelligence professional",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

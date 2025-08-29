@@ -5,11 +5,11 @@ supported_tailwind_versions:
   exact_range: ">=4.0.0 <4.2.0"
   notes: |
     The library explicitly supports Tailwind CSS v4.0–v4.1. Use tailwind-merge v2.6.x if you ever target Tailwind v3.
-    (Your project targets Tailwind 4.1.x — ✅ compatible.) :contentReference[oaicite:1]{index=1}
+    (Your project targets Tailwind 4.1.x — ✅ compatible.)
 
 sources:
   npm: "tailwind-merge@3.3.1"   # install via pnpm add tailwind-merge@3.3.1 -E
-  repository: "https://github.com/dcastil/tailwind-merge" # docs/readme + release notes (v3 line) :contentReference[oaicite:2]{index=2}
+  repository: "https://github.com/dcastil/tailwind-merge" # docs/readme + release notes (v3 line)
 
 installation:
   pnpm: "pnpm add tailwind-merge@3.3.1 -E"
@@ -19,11 +19,11 @@ installation:
 purpose_and_behavior:
   what_it_does: |
     Produces a single, conflict-free Tailwind class string where the “last conflicting class wins”, following Tailwind’s rules
-    for variants/modifiers. Non-conflicting classes are preserved. Results are cached for perf. :contentReference[oaicite:3]{index=3}
+    for variants/modifiers. Non-conflicting classes are preserved. Results are cached for perf.
   critical_guarantees:
-    - Conflict resolution across the same “class group” (e.g., spacing, bg, text, etc.). Last occurrence wins. :contentReference[oaicite:4]{index=4}
-    - Fully typed; zero runtime deps; modern Node/browsers supported. :contentReference[oaicite:5]{index=5}
-    - Tracks Tailwind v4 spec details more strictly than v2 line (per v3 release). :contentReference[oaicite:6]{index=6}
+    - "Conflict resolution across the same class group (e.g., spacing, bg, text, etc.). Last occurrence wins."
+    - "Fully typed; zero runtime deps; modern Node/browsers supported."
+    - "Tracks Tailwind v4 spec details more strictly than v2 line (per v3 release)."
 
 api_surface_v3_3_1:
   # The package exports these stable entry points in the v3 line
@@ -42,7 +42,7 @@ api_surface_v3_3_1:
         import clsx from 'clsx';
         const cn = (...inputs: ClassValue[]) => twMerge(clsx(...inputs));
         // cn('p-2', { 'p-4': true }, ['text-sm', false]) -> 'p-4 text-sm'
-      refs: ["npm readme quickstart"] # :contentReference[oaicite:7]{index=7}
+      refs: ["npm readme quickstart"]
     - name: extendTailwindMerge
       signature_ts: |
         // Adds to default config (class groups / theme / conflicting groups)
@@ -61,7 +61,7 @@ api_surface_v3_3_1:
             },
           },
         });
-      refs: ["docs: configuration / class groups & recipes"] # :contentReference[oaicite:8]{index=8}
+      refs: ["docs: configuration / class groups & recipes"]
     - name: createTailwindMerge
       signature_ts: |
         // Build a fully custom twMerge using your own config generator
@@ -69,15 +69,15 @@ api_surface_v3_3_1:
           configFactory: () => TwMergeCompleteConfig
         ): typeof twMerge;
       purpose: "Use when you want to replace the default config entirely (tree-shake defaults)."
-      refs: ["docs: configuration / API reference"] # :contentReference[oaicite:9]{index=9}
+      refs: ["docs: configuration / API reference"]
   config_shapes_core_concepts:
     class_groups: |
       Arrays (and nested “prefix maps”) of mutually exclusive utilities that target the same CSS property.
-      Example: one of 'p-2' | 'p-3' | 'p-4' survives; others in the group are removed. :contentReference[oaicite:10]{index=10}
+      "Example: one of 'p-2' | 'p-3' | 'p-4' survives; others in the group are removed."
     conflicting_class_groups: |
-      Explicit cross-group conflicts (e.g., setting that X conflicts with Y) when default rules aren’t enough. :contentReference[oaicite:11]{index=11}
+      "Explicit cross-group conflicts (e.g., setting that X conflicts with Y) when default rules aren't enough."
     theme_mapping: |
-      Map Tailwind v4 theme variable namespaces to validators so arbitrary/theme values (like colors, spacing) are recognized. :contentReference[oaicite:12]{index=12}
+      "Map Tailwind v4 theme variable namespaces to validators so arbitrary/theme values (like colors, spacing) are recognized."
   tailwind_v4_specifics_v3_line:
     breaking_from_v2_line:
       - "Drops Tailwind v3 support; v3.x is Tailwind v4-only." :contentReference[oaicite:13]{index=13}

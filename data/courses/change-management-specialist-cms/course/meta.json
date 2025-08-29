@@ -1,0 +1,22 @@
+{
+  "id": "change-management-specialist-cms",
+  "title": "Change Management Specialist",
+  "subtitle": "Organizational transformation and change leadership",
+  "description": "Master organizational change management including change strategy, stakeholder engagement, communication planning, and transformation leadership for successful organizational change initiatives.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Organizational Development",
+  "tags": ["change management", "organizational transformation", "change leadership", "stakeholder engagement", "communication planning"],
+  "certification": {
+    "name": "Change Management Specialist (CMS)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Develop comprehensive change management strategies",
+    "Lead organizational transformation initiatives",
+    "Engage stakeholders effectively during change",
+    "Create change communication plans",
+    "Implement change management best practices"
+  ]
+}

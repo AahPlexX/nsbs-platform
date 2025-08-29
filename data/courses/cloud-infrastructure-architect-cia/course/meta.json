@@ -1,0 +1,22 @@
+﻿{
+  "id": "cloud-infrastructure-architect-cia",
+  "title": "Cloud Infrastructure Architect",
+  "subtitle": "Enterprise cloud architecture and infrastructure design",
+  "description": "Professional certification course in cloud infrastructure architect covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Cloud Computing",
+  "tags": [],
+  "certification": {
+    "name": "Cloud Infrastructure Architect (CIA)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in cloud infrastructure architect",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

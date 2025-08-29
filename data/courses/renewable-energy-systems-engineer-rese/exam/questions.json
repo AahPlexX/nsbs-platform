@@ -1,0 +1,36 @@
+{
+  "examTitle": "Renewable Energy Systems Engineer Certification Exam",
+  "examCode": "RESE-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "calculation", "system-design"],
+  "categories": [
+    {
+      "name": "System Design & Integration",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Solar & Wind Technologies",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Energy Storage & Grid Integration",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Performance Optimization",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Project Management & Economics",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

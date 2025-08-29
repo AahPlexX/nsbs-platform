@@ -1,0 +1,22 @@
+﻿{
+  "id": "sales-process-optimization-engineer-spoe",
+  "title": "Sales Process Optimization Engineer",
+  "subtitle": "Sales process improvement and optimization",
+  "description": "Professional certification course in sales process optimization engineer covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Sales Management",
+  "tags": [],
+  "certification": {
+    "name": "Sales Process Optimization Engineer (SPOE)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in sales process optimization engineer",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

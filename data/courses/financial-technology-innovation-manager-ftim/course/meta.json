@@ -1,0 +1,22 @@
+﻿{
+  "id": "financial-technology-innovation-manager-ftim",
+  "title": "Financial Technology Innovation Manager",
+  "subtitle": "FinTech innovation and financial technology management",
+  "description": "Professional certification course in financial technology innovation manager covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Financial Technology",
+  "tags": [],
+  "certification": {
+    "name": "Financial Technology Innovation Manager (FTIM)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in financial technology innovation manager",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

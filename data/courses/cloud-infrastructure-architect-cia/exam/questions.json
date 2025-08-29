@@ -1,0 +1,36 @@
+{
+  "examTitle": "Cloud Infrastructure Architect Certification Exam",
+  "examCode": "CIA-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "architecture-design", "technical-simulation", "cloud-optimization"],
+  "categories": [
+    {
+      "name": "Cloud Architecture Design & Strategy",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Containerization & Microservices",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Cloud Security & Compliance",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "DevOps & Performance Optimization",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Cost Management & Governance",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

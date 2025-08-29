@@ -1,0 +1,36 @@
+{
+  "examTitle": "Brand Strategy & Positioning Expert Certification Exam",
+  "examCode": "BSPE-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "case-study", "strategy-design"],
+  "categories": [
+    {
+      "name": "Brand Strategy & Positioning",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Brand Research & Consumer Insights",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Brand Identity & Communication",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Brand Equity & Performance",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Brand Architecture & Portfolio",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

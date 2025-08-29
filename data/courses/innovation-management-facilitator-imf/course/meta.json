@@ -1,0 +1,22 @@
+﻿{
+  "id": "innovation-management-facilitator-imf",
+  "title": "Innovation Management Facilitator",
+  "subtitle": "Innovation strategy and organizational innovation",
+  "description": "Professional certification course in innovation management facilitator covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Innovation Management",
+  "tags": [],
+  "certification": {
+    "name": "Innovation Management Facilitator (IMF)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in innovation management facilitator",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

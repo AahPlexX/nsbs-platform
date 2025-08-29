@@ -1,0 +1,22 @@
+{
+  "id": "supply-chain-resilience-manager-scrm",
+  "title": "Supply Chain Resilience Manager",
+  "subtitle": "Building adaptive supply chain networks for business continuity",
+  "description": "Master supply chain resilience strategies including risk assessment, supplier diversification, contingency planning, and recovery protocols for maintaining operational continuity during disruptions.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "supply-chain",
+  "tags": ["supply-chain", "resilience", "risk-management", "business-continuity", "supplier-management"],
+  "certification": {
+    "name": "Supply Chain Resilience Manager (SCRM)",
+    "authority": "NSBS"
+  },
+  "learningOutcomes": [
+    "Design resilient supply chain architectures",
+    "Conduct comprehensive supply chain risk assessments", 
+    "Develop crisis management and recovery protocols",
+    "Implement supplier diversification strategies",
+    "Execute business continuity planning"
+  ]
+}

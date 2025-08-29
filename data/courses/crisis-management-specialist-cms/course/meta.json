@@ -1,0 +1,22 @@
+﻿{
+  "id": "crisis-management-specialist-cms",
+  "title": "Crisis Management Specialist",
+  "subtitle": "Emergency response and business continuity planning",
+  "description": "Professional certification course in crisis management specialist covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Risk Management",
+  "tags": [],
+  "certification": {
+    "name": "Crisis Management Specialist (CMS)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in crisis management specialist",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

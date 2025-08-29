@@ -1,0 +1,22 @@
+{
+  "id": "agile-project-management-professional-apmp",
+  "title": "Agile Project Management Professional",
+  "subtitle": "Mastering agile methodologies and iterative project delivery",
+  "description": "Master agile project management including Scrum framework implementation, sprint planning, team collaboration, continuous improvement, and agile transformation for successful iterative project delivery.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Project Management",
+  "tags": ["agile-methodology", "scrum", "sprint-planning", "team-collaboration", "iterative-delivery"],
+  "certification": {
+    "name": "Agile Project Management Professional (APMP)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Implement comprehensive agile project management frameworks",
+    "Lead Scrum teams and sprint planning sessions",
+    "Facilitate agile ceremonies and continuous improvement",
+    "Manage stakeholder collaboration in agile environments",
+    "Drive organizational agile transformation initiatives"
+  ]
+}

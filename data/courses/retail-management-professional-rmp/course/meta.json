@@ -1,0 +1,22 @@
+﻿{
+  "id": "retail-management-professional-rmp",
+  "title": "Retail Management Professional",
+  "subtitle": "Retail operations and customer experience management",
+  "description": "Professional certification course in retail management professional covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Retail Management",
+  "tags": [],
+  "certification": {
+    "name": "Retail Management Professional (RMP)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in retail management professional",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

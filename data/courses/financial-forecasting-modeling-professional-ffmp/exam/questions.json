@@ -1,0 +1,36 @@
+{
+  "examTitle": "Financial Forecasting & Modeling Professional Certification Exam",
+  "examCode": "FFMP-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "calculation", "model-analysis"],
+  "categories": [
+    {
+      "name": "Financial Modeling & Valuation",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Forecasting & Predictive Analytics",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Risk Modeling & Scenario Analysis",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Budgeting & Performance Analysis",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Advanced Applications & Tools",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

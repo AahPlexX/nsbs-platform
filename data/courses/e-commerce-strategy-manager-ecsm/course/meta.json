@@ -1,0 +1,25 @@
+{
+  "id": "e-commerce-strategy-manager-ecsm",
+  "title": "E-commerce Strategy Manager",
+  "subtitle": "Digital Commerce Strategy and Online Business Growth",
+  "description": "Master e-commerce strategy, digital marketing, customer experience optimization, and online business management. Learn marketplace strategies, conversion optimization, customer acquisition, and digital commerce technologies.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "E-commerce and Digital Marketing",
+  "tags": ["E-commerce", "Digital Marketing", "Online Business", "Customer Experience", "Conversion Optimization"],
+  "certification": {
+    "name": "E-commerce Strategy Manager (ECSM)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Develop comprehensive e-commerce strategies",
+    "Optimize customer acquisition and retention",
+    "Implement conversion rate optimization techniques",
+    "Manage digital marketing campaigns",
+    "Analyze e-commerce analytics and KPIs",
+    "Design customer experience journeys",
+    "Implement marketplace strategies",
+    "Manage online inventory and fulfillment"
+  ]
+}

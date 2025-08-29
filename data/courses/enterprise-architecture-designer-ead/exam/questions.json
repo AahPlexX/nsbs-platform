@@ -1,0 +1,36 @@
+{
+  "examTitle": "Enterprise Architecture Designer Certification Exam",
+  "examCode": "EAD-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "architecture-design", "framework-modeling", "governance-planning"],
+  "categories": [
+    {
+      "name": "Enterprise Architecture Frameworks & Design",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Business & Technology Architecture Modeling",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Integration Strategy & Interoperability",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Security Architecture & Risk Management",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Architecture Governance & Standards",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

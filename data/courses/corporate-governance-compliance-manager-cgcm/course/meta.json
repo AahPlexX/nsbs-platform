@@ -1,0 +1,22 @@
+﻿{
+  "id": "corporate-governance-compliance-manager-cgcm",
+  "title": "Corporate Governance & Compliance Manager",
+  "subtitle": "Corporate governance and regulatory compliance",
+  "description": "Professional certification course in corporate governance & compliance manager covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Corporate Governance",
+  "tags": [],
+  "certification": {
+    "name": "Corporate Governance & Compliance Manager (CGCM)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in corporate governance & compliance manager",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

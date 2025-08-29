@@ -1,0 +1,22 @@
+﻿{
+  "id": "supply-chain-optimization-practitioner-scop",
+  "title": "Supply Chain Optimization Practitioner",
+  "subtitle": "Supply chain optimization and logistics management",
+  "description": "Professional certification course in supply chain optimization practitioner covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Supply Chain Management",
+  "tags": [],
+  "certification": {
+    "name": "Supply Chain Optimization Practitioner (SCOP)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in supply chain optimization practitioner",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

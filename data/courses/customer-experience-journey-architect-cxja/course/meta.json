@@ -1,0 +1,22 @@
+﻿{
+  "id": "customer-experience-journey-architect-cxja",
+  "title": "Customer Experience Journey Architect",
+  "subtitle": "Customer experience design and journey optimization",
+  "description": "Professional certification course in customer experience journey architect covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Customer Experience",
+  "tags": [],
+  "certification": {
+    "name": "Customer Experience Journey Architect (CXJA)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in customer experience journey architect",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "examTitle": "Digital Marketing Ecosystem Specialist Certification Exam",
+  "examCode": "DMES-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "case-study", "campaign-analysis"],
+  "categories": [
+    {
+      "name": "SEO & SEM Mastery",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Social Media & Content Marketing",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Email Marketing & Automation",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Analytics & Attribution Modeling",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Omnichannel Integration & ROI",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

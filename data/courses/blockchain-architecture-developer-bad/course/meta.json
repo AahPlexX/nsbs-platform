@@ -1,0 +1,22 @@
+{
+  "id": "blockchain-architecture-developer-bad",
+  "title": "Blockchain Architecture Developer",
+  "subtitle": "Advanced blockchain development and architecture design",
+  "description": "Master blockchain architecture design, smart contract development, decentralized application building, and distributed ledger technologies for enterprise blockchain solutions.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Blockchain and Cryptocurrency",
+  "tags": ["blockchain", "smart contracts", "decentralized applications", "distributed ledger", "cryptocurrency", "DeFi"],
+  "certification": {
+    "name": "Blockchain Architecture Developer (BAD)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Design comprehensive blockchain architectures",
+    "Develop smart contracts and decentralized applications",
+    "Implement distributed ledger technologies",
+    "Create secure blockchain solutions",
+    "Build enterprise blockchain systems"
+  ]
+}

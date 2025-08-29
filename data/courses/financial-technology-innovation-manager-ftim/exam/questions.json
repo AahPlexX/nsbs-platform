@@ -1,0 +1,36 @@
+{
+  "examTitle": "Financial Technology Innovation Manager Certification Exam",
+  "examCode": "FTIM-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "case-study", "regulatory-analysis"],
+  "categories": [
+    {
+      "name": "Fintech Innovation Strategy",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Emerging Technologies & Implementation",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Regulatory Compliance & Risk",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Digital Transformation Leadership",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Cybersecurity & Data Protection",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

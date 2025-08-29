@@ -1,0 +1,36 @@
+{
+  "examTitle": "Product Lifecycle Management Specialist Certification Exam",
+  "examCode": "PLMS-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "case-study", "process-mapping"],
+  "categories": [
+    {
+      "name": "PLM Strategy & Implementation",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Stage-Gate Process Management",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Product Data Management",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Cross-Functional Coordination",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "PLM Systems & Technology",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

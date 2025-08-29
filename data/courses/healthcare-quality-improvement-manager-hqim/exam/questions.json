@@ -1,0 +1,36 @@
+{
+  "examTitle": "Healthcare Quality Improvement Manager Certification Exam",
+  "examCode": "HQIM-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "case-study", "data-analysis"],
+  "categories": [
+    {
+      "name": "Quality Improvement Methodologies",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Patient Safety & Risk Management",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Healthcare Data Analytics & Metrics",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Regulatory Compliance & Standards",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Leadership & Change Management",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

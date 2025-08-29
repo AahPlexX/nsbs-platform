@@ -1,0 +1,22 @@
+﻿{
+  "id": "product-lifecycle-management-specialist-plms",
+  "title": "Product Lifecycle Management Specialist",
+  "subtitle": "Product development and lifecycle management",
+  "description": "Professional certification course in product lifecycle management specialist covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Product Management",
+  "tags": [],
+  "certification": {
+    "name": "Product Lifecycle Management Specialist (PLMS)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in product lifecycle management specialist",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

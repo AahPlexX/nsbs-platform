@@ -1,0 +1,22 @@
+﻿{
+  "id": "enterprise-architecture-designer-ead",
+  "title": "Enterprise Architecture Designer",
+  "subtitle": "Enterprise architecture design and technology strategy",
+  "description": "Professional certification course in enterprise architecture designer covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Enterprise Architecture",
+  "tags": [],
+  "certification": {
+    "name": "Enterprise Architecture Designer (EAD)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in enterprise architecture designer",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

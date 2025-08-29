@@ -1,25 +1,22 @@
-{
+﻿{
+  "id": "ethical-compliance-expert-ece",
   "title": "Ethical Compliance Expert",
-  "slug": "ethical-compliance-expert-ece",
-  "description": "Comprehensive program developing mastery in designing, implementing, and sustaining robust compliance and ethical frameworks that safeguard organizational integrity, ensure regulatory adherence, and cultivate a culture of trust and responsible conduct.",
-  "price": 549,
+  "subtitle": "Business ethics and regulatory compliance",
+  "description": "Professional certification course in ethical compliance expert covering essential skills and knowledge for career advancement.",
+  "price": 298,
   "currency": "USD",
-  "category": "Compliance & Ethics",
-  "tags": ["compliance", "ethics", "risk management", "corporate governance", "regulatory affairs"],
-  "thumbnail": "/images/courses/ethical-compliance-expert.jpg",
-  "learningObjectives": [
-    "Design comprehensive compliance program architectures",
-    "Develop ethical culture and decision-making frameworks",
-    "Master risk assessment and mitigation strategies",
-    "Implement effective policy and procedure development",
-    "Create robust internal investigation and reporting systems"
-  ],
+  "language": "en",
+  "category": "Ethics & Compliance",
+  "tags": [],
   "certification": {
-    "name": "Ethical Compliance Expert",
-    "code": "ECE",
-    "validityPeriod": "Lifetime"
+    "name": "Ethical Compliance Expert (ECE)",
+    "authority": "The National Society of Business Sciences"
   },
-  "duration": "68 lessons",
-  "level": "Expert",
-  "prerequisites": ["Business fundamentals", "Legal basics", "Risk management awareness"]
+  "learningOutcomes": [
+    "Master core competencies in ethical compliance expert",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
 }

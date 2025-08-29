@@ -1,0 +1,36 @@
+{
+  "examTitle": "Human Capital Analytics Professional Certification Exam",
+  "examCode": "HCAP-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "data-analysis", "case-study"],
+  "categories": [
+    {
+      "name": "People Analytics & Workforce Intelligence",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Talent Management & Performance Analytics",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Employee Engagement & Retention",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Compensation & Workforce Planning",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Advanced Analytics & Predictive Modeling",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

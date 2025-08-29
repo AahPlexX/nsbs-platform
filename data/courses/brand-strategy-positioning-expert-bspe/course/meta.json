@@ -1,0 +1,22 @@
+﻿{
+  "id": "brand-strategy-positioning-expert-bspe",
+  "title": "Brand Strategy & Positioning Expert",
+  "subtitle": "Strategic brand positioning and market differentiation",
+  "description": "Professional certification course in brand strategy & positioning expert covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Marketing & Brand Management",
+  "tags": [],
+  "certification": {
+    "name": "Brand Strategy & Positioning Expert (BSPE)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in brand strategy & positioning expert",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

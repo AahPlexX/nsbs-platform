@@ -1,0 +1,22 @@
+{
+  "id": "ai-ethics-governance-specialist-aegs",
+  "title": "AI Ethics & Governance Specialist",
+  "subtitle": "Ethical AI development and governance frameworks for responsible technology",
+  "description": "Master AI ethics principles, governance frameworks, algorithmic bias detection, privacy protection, and regulatory compliance for responsible artificial intelligence development and deployment.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "artificial-intelligence",
+  "tags": ["ai-ethics", "governance", "algorithmic-bias", "privacy", "compliance"],
+  "certification": {
+    "name": "Certified AI Ethics & Governance Specialist (AEGS)",
+    "authority": "NSBS"
+  },
+  "learningOutcomes": [
+    "Implement ethical AI development practices",
+    "Design AI governance frameworks and policies",
+    "Detect and mitigate algorithmic bias and discrimination",
+    "Ensure privacy protection in AI systems",
+    "Navigate AI regulatory compliance requirements"
+  ]
+}

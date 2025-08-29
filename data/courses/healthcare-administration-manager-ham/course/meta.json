@@ -1,0 +1,25 @@
+{
+  "id": "healthcare-administration-manager-ham",
+  "title": "Healthcare Administration Manager",
+  "subtitle": "Healthcare Operations, Compliance, and Management Excellence",
+  "description": "Master healthcare administration, regulatory compliance, operations management, and healthcare quality improvement. Learn healthcare finance, patient services, staff management, and healthcare technology implementation.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Healthcare and Medical Administration",
+  "tags": ["Healthcare Administration", "Medical Management", "Healthcare Compliance", "Patient Services", "Healthcare Operations"],
+  "certification": {
+    "name": "Healthcare Administration Manager (HAM)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Manage healthcare operations and services",
+    "Ensure regulatory compliance and quality standards",
+    "Implement healthcare financial management",
+    "Lead healthcare teams and staff development",
+    "Optimize patient experience and satisfaction",
+    "Manage healthcare information systems",
+    "Develop healthcare policies and procedures",
+    "Coordinate healthcare quality improvement initiatives"
+  ]
+}

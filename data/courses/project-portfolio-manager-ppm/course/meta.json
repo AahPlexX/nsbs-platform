@@ -1,0 +1,22 @@
+﻿{
+  "id": "project-portfolio-manager-ppm",
+  "title": "Project Portfolio Manager",
+  "subtitle": "Strategic project portfolio management",
+  "description": "Professional certification course in project portfolio manager covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Project Management",
+  "tags": [],
+  "certification": {
+    "name": "Project Portfolio Manager (PPM)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in project portfolio manager",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

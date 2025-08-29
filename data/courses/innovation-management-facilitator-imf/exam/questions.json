@@ -1,0 +1,36 @@
+{
+  "examTitle": "Innovation Management Facilitator Certification Exam",
+  "examCode": "IMF-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "innovation-design", "facilitation-simulation"],
+  "categories": [
+    {
+      "name": "Innovation Strategy & Frameworks",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Design Thinking & Ideation",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Innovation Culture & Leadership",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Innovation Portfolio Management",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Innovation Measurement & Implementation",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

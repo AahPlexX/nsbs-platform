@@ -1,0 +1,22 @@
+{
+  "id": "business-contract-analyst-bca",
+  "title": "Business Contract Analyst",
+  "subtitle": "Contract analysis, negotiation, and risk management excellence",
+  "description": "Master business contract analysis including contract review, risk assessment, negotiation strategies, compliance monitoring, and vendor relationship management for effective contract lifecycle management.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "contract-management",
+  "tags": ["contract-analysis", "negotiation", "risk-assessment", "compliance", "vendor-management"],
+  "certification": {
+    "name": "Certified Business Contract Analyst (BCA)",
+    "authority": "NSBS"
+  },
+  "learningOutcomes": [
+    "Analyze and review complex business contracts",
+    "Assess contract risks and develop mitigation strategies",
+    "Negotiate favorable contract terms and conditions",
+    "Monitor contract compliance and performance",
+    "Manage vendor relationships and contract renewals"
+  ]
+}

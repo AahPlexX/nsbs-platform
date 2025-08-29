@@ -1,0 +1,22 @@
+﻿{
+  "id": "cybersecurity-threat-intelligence-analyst-ctia",
+  "title": "Cybersecurity Threat Intelligence Analyst",
+  "subtitle": "Threat intelligence and cybersecurity analysis",
+  "description": "Professional certification course in cybersecurity threat intelligence analyst covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Cybersecurity",
+  "tags": [],
+  "certification": {
+    "name": "Cybersecurity Threat Intelligence Analyst (CTIA)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in cybersecurity threat intelligence analyst",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

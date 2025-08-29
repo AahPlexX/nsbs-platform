@@ -1,0 +1,25 @@
+{
+  "id": "workplace-diversity-inclusion-manager-wdim",
+  "title": "Workplace Diversity & Inclusion Manager",
+  "subtitle": "Building Inclusive Organizations and Equitable Workplaces",
+  "description": "Master diversity, equity, inclusion, and belonging (DEIB) strategies, organizational culture transformation, bias mitigation, and inclusive leadership. Learn to develop inclusive policies, manage diverse teams, and create equitable workplace environments.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Human Resources and Organizational Development",
+  "tags": ["Diversity", "Inclusion", "Equity", "DEIB", "Organizational Culture", "Inclusive Leadership"],
+  "certification": {
+    "name": "Workplace Diversity & Inclusion Manager (WDIM)",
+    "authority": "NSBS"
+  },
+  "learningOutcomes": [
+    "Develop comprehensive DEIB strategies and programs",
+    "Implement inclusive recruitment and retention practices",
+    "Conduct bias training and awareness programs",
+    "Create equitable policies and procedures",
+    "Measure and analyze diversity metrics",
+    "Foster inclusive team dynamics and collaboration",
+    "Manage cultural change and transformation",
+    "Lead inclusive leadership development initiatives"
+  ]
+}

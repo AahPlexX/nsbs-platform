@@ -1,0 +1,36 @@
+{
+  "examTitle": "Blockchain Architecture Developer Certification Exam",
+  "examCode": "BAD-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "code-analysis", "architecture-design"],
+  "categories": [
+    {
+      "name": "Blockchain Architecture & Design",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Smart Contract Development",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "DApp Development & Integration",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Security & Best Practices",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Scalability & Performance",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

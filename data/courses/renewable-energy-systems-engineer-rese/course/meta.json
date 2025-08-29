@@ -1,0 +1,22 @@
+﻿{
+  "id": "renewable-energy-systems-engineer-rese",
+  "title": "Renewable Energy Systems Engineer",
+  "subtitle": "Renewable energy technology and sustainability",
+  "description": "Professional certification course in renewable energy systems engineer covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Energy & Environment",
+  "tags": [],
+  "certification": {
+    "name": "Renewable Energy Systems Engineer (RESE)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in renewable energy systems engineer",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

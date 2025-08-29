@@ -1,0 +1,36 @@
+{
+  "examTitle": "Supply Chain Resilience Manager Certification Exam",
+  "examCode": "SCRM-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "case-study", "crisis-simulation"],
+  "categories": [
+    {
+      "name": "Risk Assessment & Analysis",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Crisis Management & Recovery",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Supplier Diversification & Management",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Business Continuity Planning",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Technology & Digital Integration",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

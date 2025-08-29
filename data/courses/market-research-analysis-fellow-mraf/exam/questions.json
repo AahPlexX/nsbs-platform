@@ -1,0 +1,36 @@
+{
+  "examTitle": "Market Research Analysis Fellow Certification Exam",
+  "examCode": "MRAF-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "data-analysis", "research-design", "statistical-interpretation"],
+  "categories": [
+    {
+      "name": "Research Methodology & Design",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Data Collection & Sampling",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Statistical Analysis & Interpretation",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Market Insights & Reporting",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Consumer Behavior & Market Trends",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

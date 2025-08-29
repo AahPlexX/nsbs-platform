@@ -1,0 +1,22 @@
+﻿{
+  "id": "operational-efficiency-specialist-oes",
+  "title": "Operational Efficiency Specialist",
+  "subtitle": "Process optimization and operational excellence",
+  "description": "Professional certification course in operational efficiency specialist covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Operations Management",
+  "tags": [],
+  "certification": {
+    "name": "Operational Efficiency Specialist (OES)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in operational efficiency specialist",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "information-security-manager-ism",
+  "title": "Information Security Manager",
+  "subtitle": "Cybersecurity Leadership and Risk Management",
+  "description": "Master information security management, cybersecurity frameworks, risk assessment, and security governance. Learn incident response, security compliance, threat management, and organizational security strategy.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Information Technology and Cybersecurity",
+  "tags": ["Information Security", "Cybersecurity", "Risk Management", "Security Governance", "Incident Response"],
+  "certification": {
+    "name": "Information Security Manager (ISM)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Develop information security strategies and policies",
+    "Implement cybersecurity frameworks and controls",
+    "Conduct security risk assessments and management",
+    "Lead incident response and crisis management",
+    "Ensure regulatory compliance and governance",
+    "Manage security awareness and training programs",
+    "Coordinate security audits and assessments",
+    "Build and lead security teams"
+  ]
+}

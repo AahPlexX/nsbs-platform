@@ -1,0 +1,36 @@
+{
+  "examTitle": "Content Marketing Strategy Consultant Certification Exam",
+  "examCode": "CMSC-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "strategy-design", "campaign-analysis"],
+  "categories": [
+    {
+      "name": "Content Strategy & Planning",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Audience Research & Brand Storytelling",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Content Creation & Production",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Distribution & Performance Analytics",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Editorial Management & Optimization",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

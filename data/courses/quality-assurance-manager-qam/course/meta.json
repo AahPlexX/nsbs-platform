@@ -1,0 +1,22 @@
+﻿{
+  "id": "quality-assurance-manager-qam",
+  "title": "Quality Assurance Manager",
+  "subtitle": "Quality management and process improvement",
+  "description": "Professional certification course in quality assurance manager covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Quality Management",
+  "tags": [],
+  "certification": {
+    "name": "Quality Assurance Manager (QAM)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in quality assurance manager",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

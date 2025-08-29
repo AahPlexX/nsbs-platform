@@ -1,0 +1,36 @@
+{
+  "examTitle": "Customer Experience Journey Architect Certification Exam",
+  "examCode": "CXJA-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "case-study", "journey-mapping"],
+  "categories": [
+    {
+      "name": "Customer Journey Mapping & Analysis",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Service Design & Touchpoint Optimization",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Emotional Intelligence & Sentiment Analysis",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Feedback Systems & Metrics",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Technology Integration & Personalization",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

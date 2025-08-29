@@ -1,0 +1,36 @@
+{
+  "examTitle": "Corporate Governance & Compliance Manager Certification Exam",
+  "examCode": "CGCM-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "compliance-scenario", "governance-framework", "risk-assessment"],
+  "categories": [
+    {
+      "name": "Corporate Governance Frameworks",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Regulatory Compliance & Management",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Risk Assessment & Mitigation",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Ethics & Integrity Programs",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Crisis Management & Response",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

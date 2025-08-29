@@ -1,0 +1,22 @@
+﻿{
+  "id": "social-media-marketing-strategist-smms",
+  "title": "Social Media Marketing Strategist",
+  "subtitle": "Social media strategy and digital engagement",
+  "description": "Professional certification course in social media marketing strategist covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Social Media Marketing",
+  "tags": [],
+  "certification": {
+    "name": "Social Media Marketing Strategist (SMMS)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in social media marketing strategist",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

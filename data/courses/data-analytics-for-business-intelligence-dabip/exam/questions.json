@@ -1,0 +1,36 @@
+{
+  "examTitle": "Data Analytics for Business Intelligence Professional Certification Exam",
+  "examCode": "DABIP-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "data-analysis", "visualization-design"],
+  "categories": [
+    {
+      "name": "Data Mining & Statistical Analysis",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Predictive Modeling & Machine Learning",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Data Visualization & Dashboard Development",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Business Intelligence Architecture",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Big Data & Advanced Analytics",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

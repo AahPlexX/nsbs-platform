@@ -1,0 +1,22 @@
+{
+  "id": "business-intelligence-analyst-bia",
+  "title": "Business Intelligence Analyst",
+  "subtitle": "Data-driven insights and business intelligence",
+  "description": "Master business intelligence including data warehousing, reporting, analytics dashboards, and strategic business insights for data-driven decision making.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Business Intelligence",
+  "tags": ["business intelligence", "data warehousing", "analytics dashboards", "reporting", "data insights"],
+  "certification": {
+    "name": "Business Intelligence Analyst (BIA)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Design business intelligence solutions",
+    "Create analytics dashboards and reports",
+    "Implement data warehousing strategies",
+    "Generate strategic business insights",
+    "Support data-driven decision making"
+  ]
+}

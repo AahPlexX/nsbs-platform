@@ -1,0 +1,36 @@
+{
+  "examTitle": "Operational Efficiency Specialist Certification Exam",
+  "examCode": "OES-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "process-analysis", "efficiency-calculation", "lean-methodology"],
+  "categories": [
+    {
+      "name": "Lean Operations & Process Optimization",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Six Sigma & Quality Management",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Performance Metrics & Analytics",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Change Management & Implementation",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Operational Technology & Automation",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

@@ -1,28 +1,22 @@
 {
-  "title": "Business Analytics Fundamentals",
-  "slug": "business-analytics",
-  "description": "Master the essential skills of business analytics including data interpretation, statistical analysis, and strategic decision-making for modern business environments.",
-  "category": "Analytics",
-  "price": 299,
+  "id": "business-analytics",
+  "title": "Business Analytics Professional",
+  "subtitle": "Data-driven business intelligence and analytics",
+  "description": "Master business analytics including data analysis, statistical modeling, business intelligence, and data-driven decision making for strategic business insights.",
+  "price": 298,
   "currency": "USD",
-  "tags": ["analytics", "data", "business intelligence", "statistics"],
-  "thumbnail": "/images/courses/business-analytics.jpg",
-  "learningObjectives": [
-    "Understand fundamental business analytics concepts and methodologies",
-    "Apply statistical analysis techniques to real business problems",
-    "Create data-driven recommendations for strategic decision making",
-    "Use analytics tools and software for business intelligence"
-  ],
+  "language": "en",
+  "category": "Business Analytics",
+  "tags": ["business analytics", "data analysis", "business intelligence", "statistical modeling", "data visualization"],
   "certification": {
-    "name": "Certified Business Analytics Professional",
-    "code": "CBAP",
-    "validityPeriod": "Lifetime"
+    "name": "Business Analytics Professional (BAP)",
+    "authority": "The National Society of Business Sciences"
   },
-  "exam": {
-    "duration": 90,
-    "passingScore": 85,
-    "maxAttempts": 2,
-    "questionCount": 50
-  },
-  "lessons": []
+  "learningOutcomes": [
+    "Perform comprehensive business data analysis",
+    "Create statistical models for business insights",
+    "Develop business intelligence dashboards",
+    "Make data-driven strategic decisions",
+    "Implement analytics solutions for business problems"
+  ]
 }

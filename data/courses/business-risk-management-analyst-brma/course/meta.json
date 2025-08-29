@@ -1,0 +1,22 @@
+{
+  "id": "business-risk-management-analyst-brma",
+  "title": "Business Risk Management Analyst",
+  "subtitle": "Enterprise risk assessment and management",
+  "description": "Master business risk management including risk assessment, mitigation strategies, compliance management, and enterprise risk frameworks for comprehensive organizational risk management.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Risk Management",
+  "tags": ["risk management", "risk assessment", "compliance", "enterprise risk", "risk mitigation"],
+  "certification": {
+    "name": "Business Risk Management Analyst (BRMA)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Conduct comprehensive risk assessments",
+    "Develop risk mitigation strategies",
+    "Implement enterprise risk frameworks",
+    "Ensure regulatory compliance",
+    "Manage organizational risk portfolios"
+  ]
+}

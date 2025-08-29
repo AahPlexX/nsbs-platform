@@ -1,0 +1,36 @@
+{
+  "examTitle": "Cybersecurity Threat Intelligence Analyst Certification Exam",
+  "examCode": "CTIA-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "threat-analysis", "incident-response"],
+  "categories": [
+    {
+      "name": "Threat Analysis & Attribution",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Malware Analysis & Threat Hunting",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Incident Response & Containment",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Intelligence Collection & Sharing",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Security Operations & Tools",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

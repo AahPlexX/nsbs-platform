@@ -1,0 +1,36 @@
+{
+  "examTitle": "Environmental Sustainability Manager Certification Exam",
+  "examCode": "ESM-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-analysis", "sustainability-assessment", "ESG-framework"],
+  "categories": [
+    {
+      "name": "Environmental Strategy & ESG Frameworks",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Carbon Management & Climate Action",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Renewable Energy & Resource Management",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Sustainable Supply Chain Development",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Environmental Reporting & Compliance",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

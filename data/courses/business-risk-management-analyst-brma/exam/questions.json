@@ -1,0 +1,36 @@
+{
+  "examTitle": "Business Risk Management Analyst Certification Exam",
+  "examCode": "BRMA-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "risk-assessment", "case-study"],
+  "categories": [
+    {
+      "name": "Enterprise Risk Management & Assessment",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Financial & Operational Risk",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Regulatory Compliance & Governance",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Business Continuity & Crisis Management",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Risk Monitoring & Reporting",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

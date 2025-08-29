@@ -1,0 +1,36 @@
+{
+  "examTitle": "User Experience Research Specialist Certification Exam",
+  "examCode": "UXRS-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "case-study", "research-design"],
+  "categories": [
+    {
+      "name": "Research Methodology & Design",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Data Collection & Analysis",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Usability Testing & User Behavior",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Research Synthesis & Insights",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Communication & Presentation",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

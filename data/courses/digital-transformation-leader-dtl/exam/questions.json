@@ -1,0 +1,36 @@
+{
+  "examTitle": "Digital Transformation Leader Certification Exam",
+  "examCode": "DTL-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "transformation-strategy", "change-management", "innovation-planning"],
+  "categories": [
+    {
+      "name": "Digital Strategy & Vision Development",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Organizational Change & Technology Adoption",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Innovation Management & Digital Culture",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Data-Driven Decision Making & Analytics",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Customer Experience & Digital Operations",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

@@ -1,0 +1,22 @@
+﻿{
+  "id": "content-marketing-strategy-consultant-cmsc",
+  "title": "Content Marketing Strategy Consultant",
+  "subtitle": "Strategic content marketing and brand storytelling",
+  "description": "Professional certification course in content marketing strategy consultant covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Digital Marketing",
+  "tags": [],
+  "certification": {
+    "name": "Content Marketing Strategy Consultant (CMSC)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in content marketing strategy consultant",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

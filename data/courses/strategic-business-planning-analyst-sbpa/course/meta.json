@@ -1,0 +1,22 @@
+﻿{
+  "id": "strategic-business-planning-analyst-sbpa",
+  "title": "Strategic Business Planning Analyst",
+  "subtitle": "Strategic planning and business analysis",
+  "description": "Professional certification course in strategic business planning analyst covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Strategic Planning",
+  "tags": [],
+  "certification": {
+    "name": "Strategic Business Planning Analyst (SBPA)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in strategic business planning analyst",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

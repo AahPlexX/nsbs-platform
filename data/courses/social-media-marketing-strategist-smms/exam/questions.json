@@ -1,0 +1,36 @@
+{
+  "examTitle": "Social Media Marketing Strategist Certification Exam",
+  "examCode": "SMMS-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "campaign-strategy", "content-analysis", "platform-optimization"],
+  "categories": [
+    {
+      "name": "Social Media Strategy & Planning",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Content Creation & Curation",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Platform-Specific Marketing",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Analytics & Performance Measurement",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Influencer & Community Management",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

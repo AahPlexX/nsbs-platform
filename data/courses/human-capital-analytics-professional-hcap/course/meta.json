@@ -1,0 +1,22 @@
+﻿{
+  "id": "human-capital-analytics-professional-hcap",
+  "title": "Human Capital Analytics Professional",
+  "subtitle": "HR analytics and workforce data analysis",
+  "description": "Professional certification course in human capital analytics professional covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Human Resources",
+  "tags": [],
+  "certification": {
+    "name": "Human Capital Analytics Professional (HCAP)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in human capital analytics professional",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

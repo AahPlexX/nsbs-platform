@@ -1,0 +1,36 @@
+{
+  "examTitle": "Strategic Business Planning Analyst Certification Exam",
+  "examCode": "SBPA-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "case-study", "analytical"],
+  "categories": [
+    {
+      "name": "Market Analysis & Competitive Intelligence",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Strategic Positioning & Frameworks",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Financial Forecasting & Modeling",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Resource Allocation & KPIs",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Strategic Implementation & Evaluation",
+      "weight": 15,
+      "questions": 15
+    }
+  ],
+  "questions": []
+}

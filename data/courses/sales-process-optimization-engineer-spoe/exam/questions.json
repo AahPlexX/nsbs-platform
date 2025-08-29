@@ -1,0 +1,36 @@
+{
+  "examTitle": "Sales Process Optimization Engineer Certification Exam",
+  "examCode": "SPOE-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "process-analysis", "optimization-design"],
+  "categories": [
+    {
+      "name": "Sales Process Engineering & Design",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "CRM Systems & Automation",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Sales Analytics & Performance Metrics",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Funnel Optimization & Lead Management",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Technology Integration & Continuous Improvement",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

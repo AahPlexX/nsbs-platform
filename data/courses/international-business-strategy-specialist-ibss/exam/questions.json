@@ -1,0 +1,36 @@
+{
+  "examTitle": "International Business Strategy Specialist Certification Exam",
+  "examCode": "IBSS-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "global-strategy", "cross-cultural-analysis", "market-entry-planning"],
+  "categories": [
+    {
+      "name": "Global Market Analysis & Entry Strategy",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Cross-Cultural Management & Communication",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "International Trade & Regulations",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Foreign Investment & Risk Management",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Global Supply Chain & Operations",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

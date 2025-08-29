@@ -1,0 +1,22 @@
+﻿{
+  "id": "digital-transformation-leader-dtl",
+  "title": "Digital Transformation Leader",
+  "subtitle": "Leading organizational digital transformation",
+  "description": "Professional certification course in digital transformation leader covering essential skills and knowledge for career advancement.",
+  "price": 298,
+  "currency": "USD",
+  "language": "en",
+  "category": "Digital Strategy",
+  "tags": [],
+  "certification": {
+    "name": "Digital Transformation Leader (DTL)",
+    "authority": "The National Society of Business Sciences"
+  },
+  "learningOutcomes": [
+    "Master core competencies in digital transformation leader",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
+}

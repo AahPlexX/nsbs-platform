@@ -1,0 +1,36 @@
+{
+  "examTitle": "Project Portfolio Manager Certification Exam",
+  "examCode": "PPM-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "portfolio-strategy", "resource-optimization", "governance-framework"],
+  "categories": [
+    {
+      "name": "Portfolio Strategy & Project Selection",
+      "weight": 30,
+      "questions": 30
+    },
+    {
+      "name": "Resource Management & Optimization",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Portfolio Governance & Oversight",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Risk & Dependency Management",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Performance Measurement & Stakeholder Management",
+      "weight": 10,
+      "questions": 10
+    }
+  ],
+  "questions": []
+}

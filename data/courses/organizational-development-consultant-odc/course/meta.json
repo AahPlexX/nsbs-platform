@@ -1,25 +1,22 @@
-{
+﻿{
+  "id": "organizational-development-consultant-odc",
   "title": "Organizational Development Consultant",
-  "slug": "organizational-development-consultant-odc",
-  "description": "Comprehensive program developing mastery in diagnosing organizational challenges, designing systemic interventions, and facilitating large-scale transformation that enhances organizational effectiveness, culture, and sustainable performance.",
-  "price": 549,
+  "subtitle": "Organizational development and culture transformation",
+  "description": "Professional certification course in organizational development consultant covering essential skills and knowledge for career advancement.",
+  "price": 298,
   "currency": "USD",
+  "language": "en",
   "category": "Organizational Development",
-  "tags": ["organizational development", "change management", "systems thinking", "transformation", "culture"],
-  "thumbnail": "/images/courses/organizational-development-consultant.jpg",
-  "learningObjectives": [
-    "Master organizational diagnosis and systems thinking methodologies",
-    "Design effective intervention strategies for organizational challenges",
-    "Facilitate large-scale transformation and change initiatives",
-    "Develop organizational culture and leadership capabilities",
-    "Create sustainable performance and measurement frameworks"
-  ],
+  "tags": [],
   "certification": {
-    "name": "Organizational Development Consultant",
-    "code": "ODC",
-    "validityPeriod": "Lifetime"
+    "name": "Organizational Development Consultant (ODC)",
+    "authority": "The National Society of Business Sciences"
   },
-  "duration": "74 lessons",
-  "level": "Consultant",
-  "prerequisites": ["Management fundamentals", "Psychology basics", "Systems thinking awareness"]
+  "learningOutcomes": [
+    "Master core competencies in organizational development consultant",
+    "Apply professional best practices",
+    "Develop strategic thinking capabilities",
+    "Implement effective solutions",
+    "Lead successful initiatives"
+  ]
 }
