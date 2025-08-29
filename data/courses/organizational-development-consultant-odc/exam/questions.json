@@ -1,0 +1,36 @@
+{
+  "examTitle": "Organizational Development Consultant Certification Exam",
+  "examCode": "ODC-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "case-study", "intervention-design"],
+  "categories": [
+    {
+      "name": "Organizational Diagnosis & Systems Thinking",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Intervention Design & Implementation",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Change Facilitation & Transformation",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Culture & Leadership Development",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Performance Systems & Measurement",
+      "weight": 15,
+      "questions": 15
+    }
+  ],
+  "questions": []
+}
