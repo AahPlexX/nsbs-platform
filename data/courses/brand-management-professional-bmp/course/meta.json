@@ -1,0 +1,25 @@
+{
+  "title": "Brand Management Professional",
+  "slug": "brand-management-professional-bmp",
+  "description": "Comprehensive program developing mastery in building, managing, and evolving brand ecosystems that create sustainable competitive advantage through strategic positioning, authentic storytelling, and integrated customer experience orchestration.",
+  "price": 599,
+  "currency": "USD",
+  "category": "Marketing & Brand Management",
+  "tags": ["brand management", "marketing strategy", "brand positioning", "brand identity", "customer experience"],
+  "thumbnail": "/images/courses/brand-management-professional.jpg",
+  "learningObjectives": [
+    "Master brand strategy architecture and positioning frameworks",
+    "Develop comprehensive brand identity and messaging systems",
+    "Create integrated customer experience and brand orchestration strategies",
+    "Design effective brand portfolio management approaches",
+    "Implement brand measurement and valuation methodologies"
+  ],
+  "certification": {
+    "name": "Brand Management Professional",
+    "code": "BMP",
+    "validityPeriod": "Lifetime"
+  },
+  "duration": "89 lessons",
+  "level": "Professional",
+  "prerequisites": ["Basic marketing knowledge", "Business fundamentals"]
+}

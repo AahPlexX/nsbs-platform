@@ -1,0 +1,25 @@
+{
+  "title": "Organizational Development Consultant",
+  "slug": "organizational-development-consultant-odc",
+  "description": "Comprehensive program developing mastery in diagnosing organizational challenges, designing systemic interventions, and facilitating large-scale transformation that enhances organizational effectiveness, culture, and sustainable performance.",
+  "price": 549,
+  "currency": "USD",
+  "category": "Organizational Development",
+  "tags": ["organizational development", "change management", "systems thinking", "transformation", "culture"],
+  "thumbnail": "/images/courses/organizational-development-consultant.jpg",
+  "learningObjectives": [
+    "Master organizational diagnosis and systems thinking methodologies",
+    "Design effective intervention strategies for organizational challenges",
+    "Facilitate large-scale transformation and change initiatives",
+    "Develop organizational culture and leadership capabilities",
+    "Create sustainable performance and measurement frameworks"
+  ],
+  "certification": {
+    "name": "Organizational Development Consultant",
+    "code": "ODC",
+    "validityPeriod": "Lifetime"
+  },
+  "duration": "74 lessons",
+  "level": "Consultant",
+  "prerequisites": ["Management fundamentals", "Psychology basics", "Systems thinking awareness"]
+}

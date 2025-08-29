@@ -1,0 +1,36 @@
+{
+  "examTitle": "Ethical Compliance Expert Certification Exam",
+  "examCode": "ECE-EXAM",
+  "timeLimit": 180,
+  "passingScore": 75,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "case-study", "regulatory-analysis"],
+  "categories": [
+    {
+      "name": "Compliance Program Architecture",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Ethical Culture & Decision-Making",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Risk Assessment & Mitigation",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Policy Development & Implementation",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Investigations & Reporting",
+      "weight": 20,
+      "questions": 20
+    }
+  ],
+  "questions": []
+}

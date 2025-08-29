@@ -1,0 +1,36 @@
+{
+  "examTitle": "Brand Management Professional Certification Exam",
+  "examCode": "BMP-EXAM",
+  "timeLimit": 180,
+  "passingScore": 70,
+  "totalQuestions": 100,
+  "questionTypes": ["multiple-choice", "scenario-based", "case-study"],
+  "categories": [
+    {
+      "name": "Brand Strategy & Architecture",
+      "weight": 25,
+      "questions": 25
+    },
+    {
+      "name": "Brand Identity & Positioning",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Customer Experience & Brand Orchestration",
+      "weight": 20,
+      "questions": 20
+    },
+    {
+      "name": "Brand Portfolio Management",
+      "weight": 15,
+      "questions": 15
+    },
+    {
+      "name": "Brand Measurement & Valuation",
+      "weight": 20,
+      "questions": 20
+    }
+  ],
+  "questions": []
+}
