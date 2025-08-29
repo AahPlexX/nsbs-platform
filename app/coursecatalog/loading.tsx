@@ -1,6 +1,6 @@
-import { memo } from 'react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
+import { memo } from 'react'
 
 /**
  * Loading component for the course catalog page.

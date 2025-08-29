@@ -1,13 +1,13 @@
-import { createServerSupabaseClient } from "@/lib/supabase"
-import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { createServerSupabaseClient } from "@/lib/supabase"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
 export default async function UsersManagement() {
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
 
   const { data: users } = await supabase
     .from("user_profiles")

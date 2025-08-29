@@ -102,7 +102,7 @@ export async function getUserCourseProgress(userId: string, courseSlug: string):
     .eq("user_id", userId)
     .eq("course_slug", courseSlug)
     .single()
-  
+
   const data = response.data as {
     lessonsCompleted: string[]
     progressPercentage: number

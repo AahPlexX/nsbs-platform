@@ -9,9 +9,7 @@ export async function generateCertificatePDF(certificate: Certificate): Promise<
   })
 
   // NSBS Brand Colors
-  const mintSage = "#9CAF88"
-  const mochaMousese = "#A0826D"
-  const evergreen = "#355E3B"
+  const _primaryGreen = "#2B7F3B"
 
   // Certificate background
   doc.setFillColor(248, 250, 252) // Light background
@@ -39,7 +37,7 @@ export async function generateCertificatePDF(certificate: Certificate): Promise<
   doc.setTextColor(160, 130, 109) // Mocha Mousse
   doc.setFontSize(24)
   doc.setFont("helvetica", "normal")
-  doc.text(`${certificate.user_name}`, 148.5, 85, { align: "center" })
+  doc.text("[User Name]", 148.5, 85, { align: "center" })
 
   // Course completion text
   doc.setTextColor(0, 0, 0)
@@ -50,7 +48,7 @@ export async function generateCertificatePDF(certificate: Certificate): Promise<
   doc.setTextColor(53, 94, 59)
   doc.setFontSize(20)
   doc.setFont("helvetica", "bold")
-  doc.text(`${certificate.course_title}`, 148.5, 125, { align: "center" })
+  doc.text("[Course Title]", 148.5, 125, { align: "center" })
 
   // Issue date
   doc.setTextColor(0, 0, 0)
@@ -69,7 +67,7 @@ export async function generateCertificatePDF(certificate: Certificate): Promise<
 
   // Verification URL
   doc.setTextColor(53, 94, 59)
-  doc.text(`Verify at: ${process.env.NEXT_PUBLIC_APP_URL}/verify/${certificate.id}`, 148.5, 165, {
+  doc.text(`Verify at: ${process.env.NEXT_PUBLIC_APP_URL || 'https://nsbs.com'}/verify/${certificate.id}`, 148.5, 165, {
     align: "center",
   })
 

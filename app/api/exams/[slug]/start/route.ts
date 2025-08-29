@@ -1,8 +1,8 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { getCourseExamQuestions, getCourseMetadata } from "@/lib/fs-data"
 import { createClient } from "@/lib/supabase"
-import { getCourseMetadata, getCourseExamQuestions } from "@/lib/fs-data"
+import { type NextRequest, NextResponse } from "next/server"
 
-export async function POST(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function POST(_request: NextRequest, { params }: { params: { slug: string } }) {
   try {
     const supabase = await createClient()
     const {

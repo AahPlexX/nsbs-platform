@@ -2,7 +2,7 @@ import { createServerSupabaseClient } from "@/lib/supabase"
 import { NextResponse } from "next/server"
 
 export async function POST() {
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
 
   const { error } = await supabase.auth.signOut()
 
@@ -10,5 +10,5 @@ export async function POST() {
     return NextResponse.json({ error: error.message }, { status: 400 })
   }
 
-  return NextResponse.redirect(new URL("/", process.env.NEXT_PUBLIC_APP_URL!))
+  return NextResponse.redirect(new URL("/", process.env.NEXT_PUBLIC_APP_URL))
 }

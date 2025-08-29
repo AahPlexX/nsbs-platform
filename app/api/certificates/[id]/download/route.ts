@@ -1,8 +1,9 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase"
 import { generateCertificatePDF } from "@/lib/pdf-generator"
+import { createClient } from "@/lib/supabase"
+import type { Certificate } from "@/lib/types"
+import { type NextRequest, NextResponse } from "next/server"
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const supabase = await createClient()
 
@@ -32,10 +33,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     const pdfBuffer = await generateCertificatePDF(certificate)
 
     // Return PDF response
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(pdfBuffer as BodyInit, {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="NSBS-Certificate-${certificate.certificate_number}.pdf"`,
+        "Content-Disposition": `attachment; filename="NSBS-Certificate-${(certificate as Certificate).certificate_number}.pdf"`,
       },
     })
   } catch (error) {
