@@ -1,8 +1,8 @@
-import { Suspense } from "react"
-import { notFound, redirect } from "next/navigation"
-import { createServerSupabaseClient } from "@/lib/supabase"
-import { getCourseMetadata } from "@/lib/fs-data"
 import { ExamResults } from "@/components/exam/exam-results"
+import { getCourseMetadata } from "@/lib/fs-data"
+import { createServerSupabaseClient } from "@/lib/supabase"
+import { notFound, redirect } from "next/navigation"
+import { Suspense } from "react"
 
 interface ExamResultPageProps {
   params: { slug: string }
@@ -10,7 +10,7 @@ interface ExamResultPageProps {
 }
 
 async function ExamResultPage({ params, searchParams }: ExamResultPageProps) {
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()

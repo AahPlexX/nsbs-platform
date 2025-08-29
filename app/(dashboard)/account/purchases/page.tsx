@@ -1,13 +1,13 @@
-import { createServerSupabaseClient } from "@/lib/supabase"
-import { redirect } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { CreditCard, ArrowLeft, BookOpen } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { createServerSupabaseClient } from "@/lib/supabase"
+import { ArrowLeft, BookOpen, CreditCard } from "lucide-react"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
 export default async function PurchasesPage() {
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
 
   const {
     data: { user },

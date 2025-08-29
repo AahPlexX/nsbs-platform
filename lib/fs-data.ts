@@ -1,6 +1,6 @@
 import { readdir, readFile } from "fs/promises"
 import { join } from "path"
-import type { CourseMetadata, Lesson, ExamQuestion } from "./types"
+import type { CourseMetadata, ExamQuestion, Lesson } from "./types"
 import { courseMetadataSchema, examQuestionFileSchema } from "./validation"
 
 const COURSES_DIR = join(process.cwd(), "data", "courses")
@@ -38,7 +38,7 @@ export async function getCourseMetadata(slug: string): Promise<CourseMetadata | 
     return {
       ...validatedMeta,
       slug,
-      updatedAt: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     }
   } catch (error) {
     console.error(`Error loading course metadata for ${slug}:`, error)
@@ -56,6 +56,8 @@ export async function getCourseLessons(slug: string): Promise<Lesson[]> {
 
     for (let i = 0; i < mdxFiles.length; i++) {
       const file = mdxFiles[i]
+      if (!file) continue
+
       const content = await readFile(join(lessonsDir, file), "utf-8")
 
       // Extract title from filename or frontmatter
@@ -63,11 +65,14 @@ export async function getCourseLessons(slug: string): Promise<Lesson[]> {
 
       lessons.push({
         id: `${slug}-lesson-${i + 1}`,
-        courseSlug: slug,
-        order: i + 1,
+        course_id: slug,
         title,
-        content,
         slug: file.replace(".mdx", ""),
+        content_path: join(lessonsDir, file),
+        order_index: i + 1,
+        is_published: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       })
     }
 
@@ -120,14 +125,14 @@ export async function getFeaturedCourses(): Promise<CourseMetadata[]> {
 function extractLessonTitle(content: string, filename: string): string {
   // Try to extract title from frontmatter
   const frontmatterMatch = content.match(/^---\s*\n(.*?)\n---/s)
-  if (frontmatterMatch) {
+  if (frontmatterMatch?.[1]) {
     const titleMatch = frontmatterMatch[1].match(/title:\s*["']?([^"'\n]+)["']?/)
-    if (titleMatch) return titleMatch[1]
+    if (titleMatch?.[1]) return titleMatch[1]
   }
 
   // Try to extract from first heading
   const headingMatch = content.match(/^#\s+(.+)$/m)
-  if (headingMatch) return headingMatch[1]
+  if (headingMatch?.[1]) return headingMatch[1]
 
   // Fallback to filename
   return filename.replace(/^\d+-/, "").replace(".mdx", "").replace(/-/g, " ")
@@ -142,7 +147,7 @@ export async function searchCourses(query: string): Promise<CourseMetadata[]> {
       course.title.toLowerCase().includes(searchTerm) ||
       course.description.toLowerCase().includes(searchTerm) ||
       course.category.toLowerCase().includes(searchTerm) ||
-      course.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
+      course.tags?.some((tag) => tag.toLowerCase().includes(searchTerm))
   )
 }
 

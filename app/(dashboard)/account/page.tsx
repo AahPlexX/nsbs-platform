@@ -1,15 +1,15 @@
-import { createServerSupabaseClient } from "@/lib/supabase"
-import { redirect } from "next/navigation"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { Download, ExternalLink, BookOpen, Award, CreditCard, ArrowLeft } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { createServerSupabaseClient } from "@/lib/supabase"
+import { ArrowLeft, Award, BookOpen, CreditCard, Download, ExternalLink } from "lucide-react"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
 export default async function AccountDashboard() {
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
 
   const {
     data: { user },
@@ -172,7 +172,7 @@ export default async function AccountDashboard() {
                   const progressPercentage = Math.round(
                     (courseProgress.completed_lessons /
                       (courseProgress.courses?.lesson_count || 1)) *
-                      100
+                    100
                   )
 
                   return (

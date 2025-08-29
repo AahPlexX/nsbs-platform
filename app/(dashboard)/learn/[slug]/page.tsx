@@ -1,7 +1,8 @@
-import { notFound } from "next/navigation"
+import { StudyInterface } from "@/components/course/study-interface"
 import { getCourseBySlug, getCourseLessons } from "@/lib/fs-data"
 import { createClient } from "@/lib/supabase"
-import { StudyInterface } from "@/components/course/study-interface"
+import type { Course } from "@/lib/types"
+import { notFound } from "next/navigation"
 
 interface LearnPageProps {
   params: { slug: string }
@@ -54,7 +55,7 @@ export default async function LearnPage({ params, searchParams }: LearnPageProps
 
   return (
     <StudyInterface
-      course={course}
+      course={course as Course}
       lessons={lessons}
       completedLessons={completedLessons}
       currentLessonId={currentLessonId}

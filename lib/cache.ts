@@ -266,7 +266,7 @@ export const courseCacheUtils = {
 
   // Cache individual course data
   getCourse: withCache(
-    async (slug: string): Promise<CourseData | null> => {
+    async (_slug: string): Promise<CourseData | null> => {
       // This would normally fetch from your data source
       return null
     },
@@ -288,7 +288,7 @@ export const courseCacheUtils = {
 export const userCacheUtils = {
   // Cache user progress
   getUserProgress: withCache(
-    async (userId: string, courseSlug: string): Promise<UserProgress | null> => {
+    async (_userId: string, _courseSlug: string): Promise<UserProgress | null> => {
       // This would normally fetch from Supabase
       return null
     },
