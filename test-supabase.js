@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // Simple Node.js script to test Supabase connection
-const { createClient } = require('@supabase/supabase-js')
+import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = 'https://ckdadactgselrtcgwkqi.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNrZGFkYWN0Z3NlbHJ0Y2d3a3FpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0MDg4NzMsImV4cCI6MjA2Mzk4NDg3M30.L4cjRQmimaZhqcjiL_n5nKst-zf2J_oIcltuQdHoPPA'
