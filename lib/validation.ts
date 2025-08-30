@@ -1,8 +1,8 @@
-import * as z from "zod" // Using v4 import pattern
+import * as z from "zod"; // Using v4 import pattern
 
 // User validation schemas with v4 patterns
 export const userSchema = z.strictObject({
-  id: z.string().uuid(),
+  id: z.uuid(),
   email: z.email(), // Using top-level z.email() instead of z.string().email()
   full_name: z.string().optional(),
   avatar_url: z.url().optional(), // Using top-level z.url() instead of z.string().url()
@@ -25,7 +25,7 @@ export const profileUpdateSchema = z.strictObject({
 
 // Course validation schemas with v4 patterns
 export const courseSchema = z.strictObject({
-  id: z.string().uuid(),
+  id: z.uuid(),
   slug: z.string().min(1, { error: "Course slug is required" }),
   title: z
     .string()
@@ -60,8 +60,8 @@ export const courseFiltersSchema = z.strictObject({
 
 // Lesson validation schemas with v4 patterns
 export const lessonSchema = z.strictObject({
-  id: z.string().uuid(),
-  course_id: z.string().uuid(),
+  id: z.uuid(),
+  course_id: z.uuid(),
   title: z
     .string()
     .min(1, { error: "Lesson title is required" })
@@ -75,14 +75,14 @@ export const lessonSchema = z.strictObject({
 })
 
 export const lessonCompletionSchema = z.strictObject({
-  lessonId: z.string().uuid({ error: "Invalid lesson ID" }),
-  courseId: z.string().uuid({ error: "Invalid course ID" }),
+  lessonId: z.uuid({ message: "Invalid lesson ID" }),
+  courseId: z.uuid({ message: "Invalid course ID" }),
 })
 
 // Exam validation schemas with v4 patterns
 export const examSchema = z.strictObject({
-  id: z.string().uuid(),
-  course_id: z.string().uuid(),
+  id: z.uuid(),
+  course_id: z.uuid(),
   title: z
     .string()
     .min(1, { error: "Exam title is required" })
@@ -106,8 +106,8 @@ export const examSchema = z.strictObject({
 })
 
 export const examQuestionSchema = z.strictObject({
-  id: z.string().uuid(),
-  exam_id: z.string().uuid(),
+  id: z.uuid(),
+  exam_id: z.uuid(),
   question: z.string().min(1, { error: "Question text is required" }),
   options: z.array(z.string()).min(2, { error: "Must have at least 2 options" }),
   correct_answer: z.number().min(0, { error: "Correct answer index must be valid" }),
@@ -118,23 +118,23 @@ export const examQuestionSchema = z.strictObject({
 })
 
 export const examSubmissionSchema = z.strictObject({
-  examId: z.string().uuid({ error: "Invalid exam ID" }),
+  examId: z.uuid({ message: "Invalid exam ID" }),
   answers: z.record(z.string(), z.number()),
   timeSpent: z.number().min(0, { error: "Time spent cannot be negative" }).optional(),
 })
 
 export const examStartSchema = z.strictObject({
-  examId: z.string().uuid({ error: "Invalid exam ID" }),
-  courseId: z.string().uuid({ error: "Invalid course ID" }),
+  examId: z.uuid({ message: "Invalid exam ID" }),
+  courseId: z.uuid({ message: "Invalid course ID" }),
 })
 
 // Certificate validation schemas with v4 patterns
 export const certificateSchema = z.strictObject({
-  id: z.string().uuid(),
+  id: z.uuid(),
   certificate_number: z.string().min(1, { error: "Certificate number is required" }),
-  user_id: z.string().uuid(),
-  course_id: z.string().uuid(),
-  exam_attempt_id: z.string().uuid(),
+  user_id: z.uuid(),
+  course_id: z.uuid(),
+  exam_attempt_id: z.uuid(),
   full_name: z.string().min(1, { error: "Full name is required" }),
   course_title: z.string().min(1, { error: "Course title is required" }),
   completion_date: z.string(),
@@ -152,15 +152,15 @@ export const certificateVerificationSchema = z.strictObject({
 })
 
 export const certificateRevocationSchema = z.strictObject({
-  certificateId: z.string().uuid({ error: "Invalid certificate ID" }),
+  certificateId: z.uuid({ message: "Invalid certificate ID" }),
   reason: z.string().min(1, { error: "Revocation reason is required" }),
 })
 
 // Order and payment validation schemas with v4 patterns
 export const orderSchema = z.strictObject({
-  id: z.string().uuid(),
-  user_id: z.string().uuid(),
-  course_id: z.string().uuid(),
+  id: z.uuid(),
+  user_id: z.uuid(),
+  course_id: z.uuid(),
   amount: z.number().min(0, { error: "Amount must be positive" }),
   currency: z.string().length(3, { error: "Currency must be 3 characters" }),
   status: z.enum(["pending", "completed", "failed", "cancelled"]),
@@ -170,7 +170,7 @@ export const orderSchema = z.strictObject({
 })
 
 export const checkoutSchema = z.strictObject({
-  courseId: z.string().uuid({ error: "Invalid course ID" }),
+  courseId: z.uuid({ message: "Invalid course ID" }),
   successUrl: z.url({ error: "Invalid success URL" }),
   cancelUrl: z.url({ error: "Invalid cancel URL" }),
 })
@@ -202,7 +202,7 @@ export const adminCourseCreateSchema = z.strictObject({
 })
 
 export const adminUserUpdateSchema = z.strictObject({
-  userId: z.string().uuid({ error: "Invalid user ID" }),
+  userId: z.uuid({ message: "Invalid user ID" }),
   role: z.enum(["student", "admin"]),
   full_name: z
     .string()
@@ -321,7 +321,7 @@ export const examQuestionFileSchema = z.strictObject({
 })
 
 // Validation helper function with v4 patterns
-export function validateData<T>(schema: z.ZodSchema<T>, data: unknown): T {
+export function validateData<T>(schema: z.z.ZodType<T>, data: unknown): T {
   const result = schema.safeParse(data)
   if (!result.success) {
     const errorTree = z.treeifyError(result.error) // Using v4 treeifyError

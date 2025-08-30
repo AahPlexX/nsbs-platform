@@ -54,7 +54,7 @@ export function VerificationForm() {
               type="text"
               placeholder="Enter certificate number (e.g., NSBS-2024-001234)"
               value={certificateNumber}
-              onChange={(e) => setCertificateNumber(e.target.value)}
+              onChange={(e) => { setCertificateNumber(e.target.value); }}
               className="border-mint-sage/30 focus:border-evergreen"
               required
             />

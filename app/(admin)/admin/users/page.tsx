@@ -2,12 +2,13 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { createServerSupabaseClient } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/server"
+import { type UserWithDetails } from "@/lib/types"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
 export default async function UsersManagement() {
-  const supabase = await createServerSupabaseClient()
+  const supabase = await createClient()
 
   const { data: users } = await supabase
     .from("user_profiles")
@@ -21,6 +22,8 @@ export default async function UsersManagement() {
     )
     .order("created_at", { ascending: false })
     .limit(50)
+
+  const typedUsers = (users || []) as UserWithDetails[]
 
   return (
     <div className="space-y-8">
@@ -42,7 +45,7 @@ export default async function UsersManagement() {
       </div>
 
       <div className="grid gap-4">
-        {users?.map((user) => (
+        {typedUsers.map((user) => (
           <Card key={user.id}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
@@ -56,9 +59,9 @@ export default async function UsersManagement() {
                   <p className="text-sm text-muted-foreground">{user.email}</p>
                   <div className="flex items-center gap-6 text-xs text-muted-foreground">
                     <span>Joined: {new Date(user.created_at).toLocaleDateString()}</span>
-                    <span>Purchases: {user.purchases?.length || 0}</span>
-                    <span>Certificates: {user.certificates?.length || 0}</span>
-                    <span>Active Courses: {user.course_progress?.length || 0}</span>
+                    <span>Purchases: {user.purchases.length}</span>
+                    <span>Certificates: {user.certificates.length}</span>
+                    <span>Active Courses: {user.course_progress.length}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -77,7 +80,10 @@ export default async function UsersManagement() {
               </div>
             </CardContent>
           </Card>
-        )) || <p className="text-muted-foreground">No users found</p>}
+        ))}
+        {typedUsers.length === 0 && (
+          <p className="text-muted-foreground">No users found</p>
+        )}
       </div>
     </div>
   )

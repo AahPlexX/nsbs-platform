@@ -1,9 +1,9 @@
-import { Suspense } from "react"
-import { notFound, redirect } from "next/navigation"
-import { createClient } from "@/lib/supabase"
-import { getCourseMetadata, getCourseExamQuestions } from "@/lib/fs-data"
 import { ExamInterface } from "@/components/exam/exam-interface"
 import { ExamPreflight } from "@/components/exam/exam-preflight"
+import { getCourseExamQuestions, getCourseMetadata } from "@/lib/fs-data"
+import { createClient } from "@/utils/supabase/server"
+import { notFound, redirect } from "next/navigation"
+import { Suspense } from "react"
 
 interface ExamPageProps {
   params: { slug: string }

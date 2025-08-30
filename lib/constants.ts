@@ -32,7 +32,7 @@ export const COLORS = {
 
 // Application Constants
 export const APP_CONFIG = {
-  name: "National Society of Business Sciences",
+  name: "The National Society of Business Sciences", // Source of truth: "author" always = "The National Society of Business Sciences"
   shortName: "NSBS",
   description: "Professional certification platform for business sciences",
   url:
@@ -45,7 +45,7 @@ export const APP_CONFIG = {
 // Exam Configuration
 export const EXAM_CONFIG = {
   maxAttempts: 2,
-  passingScore: 85,
+  passingScore: 80, // Source of truth: pass = >=80/100 MCQs
   timeLimit: 90, // minutes
   questionsPerExam: 50,
 } as const

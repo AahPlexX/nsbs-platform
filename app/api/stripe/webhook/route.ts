@@ -1,6 +1,6 @@
-import { type NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
-import { createClient } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/server"
+import { type NextRequest, NextResponse } from "next/server"
 import type Stripe from "stripe"
 
 export async function POST(request: NextRequest) {
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
   try {
     switch (event.type) {
       case "checkout.session.completed": {
-        const session = event.data.object as Stripe.Checkout.Session
+        const session = event.data.object
         const { courseSlug, userId } = session.metadata!
 
         // Create purchase record

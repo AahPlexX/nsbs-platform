@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
-import { supabase } from "@/lib/supabase-client"
 import { signInSchema } from "@/lib/validation"
+import { createClient } from "@/utils/supabase/client"
 import { Loader2, Mail } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { useState } from "react"
@@ -23,6 +23,7 @@ export function SignInForm({ isSignUp = false }: SignInFormProps) {
   const searchParams = useSearchParams()
   const { toast } = useToast()
   const redirectTo = searchParams.get("redirectTo")
+  const supabase = createClient()
 
   const getRedirectUrl = () => {
     const baseUrl = typeof window !== "undefined" ? window.location.origin : ""

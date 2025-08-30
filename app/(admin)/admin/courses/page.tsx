@@ -1,12 +1,13 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { createServerSupabaseClient } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/server"
+import { type CourseWithDetails } from "@/lib/types"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
 export default async function CoursesManagement() {
-  const supabase = await createServerSupabaseClient()
+  const supabase = await createClient()
 
   const { data: courses } = await supabase
     .from("courses")
@@ -18,6 +19,8 @@ export default async function CoursesManagement() {
     `
     )
     .order("created_at", { ascending: false })
+
+  const typedCourses = (courses || []) as CourseWithDetails[]
 
   return (
     <div className="space-y-8">
@@ -36,7 +39,7 @@ export default async function CoursesManagement() {
       </div>
 
       <div className="grid gap-6">
-        {courses?.map((course) => (
+        {typedCourses.map((course) => (
           <Card key={course.id}>
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -45,8 +48,8 @@ export default async function CoursesManagement() {
                   <CardDescription className="mt-2">{course.description}</CardDescription>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Badge variant={course.status === "published" ? "success" : "secondary"}>
-                    {course.status}
+                  <Badge variant={course.is_published ? "success" : "secondary"}>
+                    {course.is_published ? "published" : "draft"}
                   </Badge>
                   <Button variant="outline" size="sm">
                     Edit
@@ -64,18 +67,21 @@ export default async function CoursesManagement() {
                 </div>
                 <div>
                   <p className="text-sm font-medium">Enrollments</p>
-                  <p className="text-2xl font-bold text-primary">{course.purchases?.length || 0}</p>
+                  <p className="text-2xl font-bold text-primary">{course.purchases.length}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium">Certificates</p>
                   <p className="text-2xl font-bold text-primary">
-                    {course.certificates?.length || 0}
+                    {course.certificates.length}
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-        )) || <p className="text-muted-foreground">No courses found</p>}
+        ))}
+        {typedCourses.length === 0 && (
+          <p className="text-muted-foreground">No courses found</p>
+        )}
       </div>
     </div>
   )

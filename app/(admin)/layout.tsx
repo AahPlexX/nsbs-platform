@@ -1,7 +1,7 @@
-import type React from "react"
-import { redirect } from "next/navigation"
-import { createClient } from "@/lib/supabase"
 import { AuthGuard } from "@/components/auth/auth-guard"
+import { createClient } from "@/utils/supabase/server"
+import { redirect } from "next/navigation"
+import type React from "react"
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()

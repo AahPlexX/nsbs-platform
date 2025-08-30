@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { CheckCircle, Clock, AlertTriangle, FileText } from "lucide-react"
+import { AlertTriangle, CheckCircle, Clock, FileText } from "lucide-react"
 import { EXAM_CONFIG } from "@/lib/constants"
 import type { ExamAttempt } from "@/lib/types"
 
@@ -183,7 +183,7 @@ export function ExamPreflight({
                 <input
                   type="checkbox"
                   checked={acknowledged}
-                  onChange={(e) => setAcknowledged(e.target.checked)}
+                  onChange={(e) => { setAcknowledged(e.target.checked); }}
                   className="mt-1 h-4 w-4 text-primary focus:ring-primary border-input rounded"
                 />
                 <span className="text-sm text-foreground">

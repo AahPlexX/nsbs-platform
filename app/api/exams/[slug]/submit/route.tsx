@@ -1,7 +1,7 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase"
 import { getCourseExamQuestions } from "@/lib/fs-data"
 import { resend } from "@/lib/resend"
+import { createClient } from "@/utils/supabase/server"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest, { params }: { params: { slug: string } }) {
   try {
@@ -126,10 +126,9 @@ export async function POST(request: NextRequest, { params }: { params: { slug: s
             <li><strong>Result:</strong> ${passed ? "PASSED" : "FAILED"}</li>
             <li><strong>Correct Answers:</strong> ${correctAnswers} of ${examQuestions.length}</li>
           </ul>
-          ${
-            passed
-              ? "<p>Congratulations! Your certificate will be available in your account dashboard.</p>"
-              : "<p>Unfortunately, you did not achieve the required 85% passing score. You may retake the exam if attempts remain.</p>"
+          ${passed
+            ? "<p>Congratulations! Your certificate will be available in your account dashboard.</p>"
+            : "<p>Unfortunately, you did not achieve the required 85% passing score. You may retake the exam if attempts remain.</p>"
           }
           <p>Best regards,<br>National Society of Business Sciences</p>
         `,

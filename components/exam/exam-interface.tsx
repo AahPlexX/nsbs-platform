@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -8,7 +8,7 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-import { Clock, AlertTriangle } from "lucide-react"
+import { AlertTriangle, Clock } from "lucide-react"
 import { EXAM_CONFIG } from "@/lib/constants"
 import type { ExamQuestion } from "@/lib/types"
 
@@ -45,7 +45,7 @@ export function ExamInterface({
       })
     }, 1000)
 
-    return () => clearInterval(timer)
+    return () => { clearInterval(timer); }
   }, [])
 
   const handleAnswerChange = (questionIndex: number, answer: string) => {
@@ -173,7 +173,7 @@ export function ExamInterface({
                       variant={currentQuestion === index ? "default" : "outline"}
                       size="sm"
                       className="h-8 w-8 p-0"
-                      onClick={() => setCurrentQuestion(index)}
+                      onClick={() => { setCurrentQuestion(index); }}
                     >
                       {index + 1}
                       {answers[index] && (
@@ -212,7 +212,7 @@ export function ExamInterface({
 
                 <RadioGroup
                   value={answers[currentQuestion] || ""}
-                  onValueChange={(value) => handleAnswerChange(currentQuestion, value)}
+                  onValueChange={(value) => { handleAnswerChange(currentQuestion, value); }}
                 >
                   {currentQ.options.map((option, index) => (
                     <div key={index} className="flex items-center space-x-2">
@@ -228,7 +228,7 @@ export function ExamInterface({
                 <div className="flex items-center justify-between pt-4 border-t">
                   <Button
                     variant="outline"
-                    onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
+                    onClick={() => { setCurrentQuestion(Math.max(0, currentQuestion - 1)); }}
                     disabled={currentQuestion === 0}
                   >
                     Previous
@@ -236,7 +236,7 @@ export function ExamInterface({
 
                   <div className="flex gap-2">
                     {currentQuestion < questions.length - 1 ? (
-                      <Button onClick={() => setCurrentQuestion(currentQuestion + 1)}>Next</Button>
+                      <Button onClick={() => { setCurrentQuestion(currentQuestion + 1); }}>Next</Button>
                     ) : (
                       <Button
                         onClick={handleSubmitExam}

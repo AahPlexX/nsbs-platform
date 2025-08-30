@@ -195,7 +195,7 @@ export function HeroUIExamples() {
                 label="Favorite Animal"
                 placeholder="Select an animal"
                 selectedKeys={[selectedValue]}
-                onSelectionChange={(keys) => setSelectedValue(Array.from(keys)[0] as string)}
+                onSelectionChange={(keys) => { setSelectedValue(Array.from(keys)[0] as string); }}
               >
                 {animals.map((animal) => (
                   <SelectItem key={animal.key}>{animal.label}</SelectItem>
@@ -217,7 +217,7 @@ export function HeroUIExamples() {
                   minValue={0}
                   defaultValue={50}
                   value={sliderValue}
-                  onChange={(value) => setSliderValue(value as number)}
+                  onChange={(value) => { setSliderValue(value as number); }}
                   className="max-w-md"
                 />
               </div>

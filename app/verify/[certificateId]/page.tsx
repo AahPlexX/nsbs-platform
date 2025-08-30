@@ -1,7 +1,7 @@
-import { notFound } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { VerificationResult } from "@/components/certificate/verification-result"
-import { createClient } from "@/lib/supabase"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { createClient } from "@/utils/supabase/server"
+import { notFound } from "next/navigation"
 
 interface Props {
   params: { certificateId: string }

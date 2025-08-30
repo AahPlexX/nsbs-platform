@@ -1,5 +1,5 @@
 import { cache, CACHE_PRESETS, courseCacheUtils } from "@/lib/cache"
-import { createClient } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/server"
 import type { Metadata } from "next"
 
 // ISR configuration for course pages

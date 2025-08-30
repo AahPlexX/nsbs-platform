@@ -1,6 +1,6 @@
 import { ExamResults } from "@/components/exam/exam-results"
 import { getCourseMetadata } from "@/lib/fs-data"
-import { createServerSupabaseClient } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/server"
 import { notFound, redirect } from "next/navigation"
 import { Suspense } from "react"
 
@@ -10,7 +10,7 @@ interface ExamResultPageProps {
 }
 
 async function ExamResultPage({ params, searchParams }: ExamResultPageProps) {
-  const supabase = await createServerSupabaseClient()
+  const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()

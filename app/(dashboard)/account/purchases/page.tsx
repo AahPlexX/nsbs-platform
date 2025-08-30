@@ -1,13 +1,13 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { createServerSupabaseClient } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/server"
 import { ArrowLeft, BookOpen, CreditCard } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
 export default async function PurchasesPage() {
-  const supabase = await createServerSupabaseClient()
+  const supabase = await createClient()
 
   const {
     data: { user },
@@ -34,6 +34,23 @@ export default async function PurchasesPage() {
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })
 
+  // Type the purchases data properly
+  type PurchaseWithCourse = {
+    id: string
+    user_id: string
+    course_id: string
+    amount: number
+    currency: string
+    status: "pending" | "completed" | "failed" | "refunded"
+    stripe_payment_intent_id?: string
+    stripe_session_id?: string
+    created_at: string
+    updated_at: string
+    courses: { slug: string; title: string; description: string; price: number } | null
+  }
+
+  const typedPurchases = purchases as PurchaseWithCourse[] | null
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-8">
@@ -50,7 +67,7 @@ export default async function PurchasesPage() {
       </div>
 
       <div className="space-y-4">
-        {purchases?.map((purchase) => (
+        {typedPurchases?.map((purchase) => (
           <Card key={purchase.id}>
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -86,7 +103,7 @@ export default async function PurchasesPage() {
 
                 {purchase.status === "completed" && (
                   <Button asChild>
-                    <Link href={`/learn/${purchase.courses?.slug}`}>
+                    <Link href={`/learn/${purchase.courses?.slug || ''}`}>
                       <BookOpen className="h-4 w-4 mr-2" />
                       Access Course
                     </Link>
@@ -97,7 +114,7 @@ export default async function PurchasesPage() {
           </Card>
         ))}
 
-        {(!purchases || purchases.length === 0) && (
+        {(!typedPurchases || typedPurchases.length === 0) && (
           <div className="text-center py-12">
             <CreditCard className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
             <h2 className="text-xl font-semibold text-foreground mb-2">No Purchases Yet</h2>

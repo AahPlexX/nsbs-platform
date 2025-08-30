@@ -1,7 +1,7 @@
 import { StudyInterface } from "@/components/course/study-interface"
 import { getCourseBySlug, getCourseLessons } from "@/lib/fs-data"
-import { createClient } from "@/lib/supabase"
 import type { Course } from "@/lib/types"
+import { createClient } from "@/utils/supabase/server"
 import { notFound } from "next/navigation"
 
 interface LearnPageProps {

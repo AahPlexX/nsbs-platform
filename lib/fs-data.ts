@@ -1,9 +1,24 @@
-import { readdir, readFile } from "fs/promises"
-import { join } from "path"
-import type { CourseMetadata, ExamQuestion, Lesson } from "./types"
-import { courseMetadataSchema, examQuestionFileSchema } from "./validation"
+import { join } from "path";
 
-const COURSES_DIR = join(process.cwd(), "data", "courses")
+import { readdir, readFile } from "fs/promises";
+import type { CourseMetadata, ExamQuestion, Lesson } from "./types";
+import { courseMetadataSchema, examQuestionFileSchema } from "./validation";
+
+function extractLessonTitle(content: string, filename: string): string {
+  // Try to extract title from frontmatter
+  const frontmatterMatch = content.match(/^---\s*\n(.*?)\n---/s)
+  if (frontmatterMatch?.[1]) {
+    const titleMatch = frontmatterMatch[1].match(/title:\s*["']?([^"'\n]+)["']?/)
+    if (titleMatch?.[1]) return titleMatch[1]
+  }
+
+  // Try to extract from first heading
+  const headingMatch = content.match(/^#\s+(.+)$/m)
+  if (headingMatch?.[1]) return headingMatch[1]
+
+  // Fallback to filename
+  return filename.replace(/^\d+-/, "").replace(".mdx", "").replace(/-/g, " ")
+}
 
 export async function getAllCourses(): Promise<CourseMetadata[]> {
   try {
@@ -26,23 +41,60 @@ export async function getAllCourses(): Promise<CourseMetadata[]> {
   }
 }
 
-export async function getCourseMetadata(slug: string): Promise<CourseMetadata | null> {
+export async function getCourseBySlug(slug: string): Promise<CourseMetadata | null> {
   try {
-    const metaPath = join(COURSES_DIR, slug, "course", "meta.json")
-    const metaContent = await readFile(metaPath, "utf-8")
-    const rawMeta = JSON.parse(metaContent)
+    const courseMetadata = await getCourseMetadata(slug)
+    if (!courseMetadata) return null
 
-    // Validate with Zod schema
-    const validatedMeta = courseMetadataSchema.parse(rawMeta)
+    // Get lessons for the course to include lesson count
+    const lessons = await getCourseLessons(slug)
 
     return {
-      ...validatedMeta,
-      slug,
-      updated_at: new Date().toISOString(),
+      ...courseMetadata,
+      lessons: lessons,
     }
   } catch (error) {
-    console.error(`Error loading course metadata for ${slug}:`, error)
+    console.error(`Error loading course by slug ${slug}:`, error)
     return null
+  }
+}
+
+export async function getCourseExamQuestions(slug: string): Promise<ExamQuestion[]> {
+  try {
+    const examPath = join(COURSES_DIR, slug, "exam", "questions.json")
+    const examContent = await readFile(examPath, "utf-8")
+    const rawQuestions: unknown = JSON.parse(examContent)
+
+    if (!Array.isArray(rawQuestions)) {
+      throw new Error("Questions file must contain an array")
+    }
+
+    const validatedQuestions = rawQuestions.map((q: unknown, index: number) => {
+      const questionData = q as Record<string, unknown>
+      const fileQuestion = examQuestionFileSchema.parse({
+        ...questionData,
+        id: questionData.id || `${slug}-q${String(index + 1)}`
+      })
+
+      // Transform file format to database format
+      const dbQuestion: ExamQuestion = {
+        id: fileQuestion.id || `${slug}-q${String(index + 1)}`,
+        exam_id: `${slug}-exam`, // Generate exam_id from slug
+        question_text: fileQuestion.question,
+        question_type: "multiple_choice", // Default type
+        options: fileQuestion.options,
+        correct_answer: String(fileQuestion.correctAnswer), // Convert to string
+        ...(fileQuestion.explanation !== undefined && { explanation: fileQuestion.explanation }),
+        order_index: index + 1
+      }
+
+      return dbQuestion
+    })
+
+    return validatedQuestions
+  } catch (error) {
+    console.error(`Error loading exam questions for course ${slug}:`, error)
+    return []
   }
 }
 
@@ -64,7 +116,7 @@ export async function getCourseLessons(slug: string): Promise<Lesson[]> {
       const title = extractLessonTitle(content, file)
 
       lessons.push({
-        id: `${slug}-lesson-${i + 1}`,
+        id: `${slug}-lesson-${String(i + 1)}`,
         course_id: slug,
         title,
         slug: file.replace(".mdx", ""),
@@ -83,20 +135,30 @@ export async function getCourseLessons(slug: string): Promise<Lesson[]> {
   }
 }
 
-export async function getCourseExamQuestions(slug: string): Promise<ExamQuestion[]> {
+export async function getCourseMetadata(slug: string): Promise<CourseMetadata | null> {
   try {
-    const examPath = join(COURSES_DIR, slug, "exam", "questions.json")
-    const examContent = await readFile(examPath, "utf-8")
-    const rawQuestions = JSON.parse(examContent)
+    const metaPath = join(COURSES_DIR, slug, "course", "meta.json")
+    const metaContent = await readFile(metaPath, "utf-8")
+    const rawMeta: unknown = JSON.parse(metaContent)
 
-    const validatedQuestions = rawQuestions.map((q: any, index: number) =>
-      examQuestionFileSchema.parse({ ...q, id: q.id || `${slug}-q${index + 1}` })
-    )
+    // Validate with Zod schema
+    const validatedMeta = courseMetadataSchema.parse(rawMeta)
 
-    return validatedQuestions
+    const { lessons: _, exam: __, ...metaWithoutLessonsAndExam } = validatedMeta
+
+    return {
+      ...metaWithoutLessonsAndExam,
+      id: slug, // Use slug as ID for file-based courses
+      slug,
+      short_description: validatedMeta.description.substring(0, 150), // Create short description from full description
+      is_featured: false, // Default to not featured
+      is_published: true, // File-based courses are considered published
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }
   } catch (error) {
-    console.error(`Error loading exam questions for course ${slug}:`, error)
-    return []
+    console.error(`Error loading course metadata for ${slug}:`, error)
+    return null
   }
 }
 
@@ -104,13 +166,19 @@ export async function getFeaturedCourses(): Promise<CourseMetadata[]> {
   try {
     const featuredPath = join(process.cwd(), "data", "featured.json")
     const featuredContent = await readFile(featuredPath, "utf-8")
-    const featuredSlugs = JSON.parse(featuredContent)
+    const featuredSlugs: unknown = JSON.parse(featuredContent)
+
+    if (!Array.isArray(featuredSlugs)) {
+      throw new Error("Featured courses file must contain an array")
+    }
 
     const featuredCourses: CourseMetadata[] = []
 
     for (const slug of featuredSlugs) {
-      const course = await getCourseMetadata(slug)
-      if (course) featuredCourses.push(course)
+      if (typeof slug === 'string') {
+        const course = await getCourseMetadata(slug)
+        if (course) featuredCourses.push(course)
+      }
     }
 
     return featuredCourses
@@ -120,22 +188,6 @@ export async function getFeaturedCourses(): Promise<CourseMetadata[]> {
     const allCourses = await getAllCourses()
     return allCourses.slice(0, 3)
   }
-}
-
-function extractLessonTitle(content: string, filename: string): string {
-  // Try to extract title from frontmatter
-  const frontmatterMatch = content.match(/^---\s*\n(.*?)\n---/s)
-  if (frontmatterMatch?.[1]) {
-    const titleMatch = frontmatterMatch[1].match(/title:\s*["']?([^"'\n]+)["']?/)
-    if (titleMatch?.[1]) return titleMatch[1]
-  }
-
-  // Try to extract from first heading
-  const headingMatch = content.match(/^#\s+(.+)$/m)
-  if (headingMatch?.[1]) return headingMatch[1]
-
-  // Fallback to filename
-  return filename.replace(/^\d+-/, "").replace(".mdx", "").replace(/-/g, " ")
 }
 
 export async function searchCourses(query: string): Promise<CourseMetadata[]> {
@@ -151,25 +203,4 @@ export async function searchCourses(query: string): Promise<CourseMetadata[]> {
   )
 }
 
-export async function getCourseBySlug(slug: string): Promise<CourseMetadata | null> {
-  try {
-    const courseMetadata = await getCourseMetadata(slug)
-    if (!courseMetadata) return null
-
-    // Get lessons for the course to include lesson count
-    const lessons = await getCourseLessons(slug)
-
-    return {
-      ...courseMetadata,
-      lessons: lessons.map((lesson) => ({
-        id: lesson.id,
-        title: lesson.title,
-        slug: lesson.slug,
-        order: lesson.order,
-      })),
-    }
-  } catch (error) {
-    console.error(`Error loading course by slug ${slug}:`, error)
-    return null
-  }
-}
+const COURSES_DIR = join(process.cwd(), "data", "courses");

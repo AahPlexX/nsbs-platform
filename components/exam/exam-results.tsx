@@ -1,11 +1,11 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle, XCircle, Award, Clock, RotateCcw, Home } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { EXAM_CONFIG } from "@/lib/constants"
 import type { ExamAttempt } from "@/lib/types"
+import { Award, CheckCircle, Clock, Home, RotateCcw, XCircle } from "lucide-react"
 import Link from "next/link"
 
 interface ExamResultsProps {

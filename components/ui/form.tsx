@@ -5,12 +5,12 @@ import * as LabelPrimitive from "@radix-ui/react-label"
 import { Slot } from "@radix-ui/react-slot"
 import {
   Controller,
-  FormProvider,
-  useFormContext,
-  useFormState,
   type ControllerProps,
   type FieldPath,
   type FieldValues,
+  FormProvider,
+  useFormContext,
+  useFormState,
 } from "react-hook-form"
 
 import { cn } from "@/lib/utils"
@@ -100,7 +100,7 @@ function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
     <Slot
       data-slot="form-control"
       id={formItemId}
-      aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
+      aria-describedby={!error ? formDescriptionId : `${formDescriptionId} ${formMessageId}`}
       aria-invalid={!!error}
       {...props}
     />

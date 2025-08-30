@@ -1,9 +1,10 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { createServerSupabaseClient } from "@/lib/supabase"
+import { type CertificateWithDetails, type PurchaseWithDetails } from "@/lib/types"
+import { createClient } from "@/utils/supabase/server"
 
 export default async function AdminDashboard() {
-  const supabase = await createServerSupabaseClient()
+  const supabase = await createClient()
 
   const [
     { count: totalUsers },
@@ -36,6 +37,9 @@ export default async function AdminDashboard() {
       .order("created_at", { ascending: false })
       .limit(5)
   ])
+
+  const typedRecentPurchases = (recentPurchases || []) as PurchaseWithDetails[]
+  const typedRecentCertificates = (recentCertificates || []) as CertificateWithDetails[]
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -91,7 +95,7 @@ export default async function AdminDashboard() {
             <CardDescription>Latest course enrollments</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {recentPurchases?.map((purchase: any) => (
+            {typedRecentPurchases.map((purchase) => (
               <div key={purchase.id} className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">{purchase.courses?.title}</p>
@@ -114,7 +118,7 @@ export default async function AdminDashboard() {
             <CardDescription>Latest certifications issued</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {recentCertificates?.map((certificate: any) => (
+            {typedRecentCertificates.map((certificate) => (
               <div key={certificate.id} className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">{certificate.courses?.title}</p>

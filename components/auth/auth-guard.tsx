@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { supabase } from "@/lib/supabase-client"
+import { createClient } from "@/utils/supabase/client"
 import type { User } from "@supabase/supabase-js"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -19,6 +19,7 @@ export function AuthGuard({ children, requireAdmin = false, fallback }: AuthGuar
   const [loading, setLoading] = useState(true)
   const [isAdmin, setIsAdmin] = useState(false)
   const router = useRouter()
+  const supabase = createClient()
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -60,7 +61,7 @@ export function AuthGuard({ children, requireAdmin = false, fallback }: AuthGuar
       }
     })
 
-    return () => subscription.unsubscribe()
+    return () => { subscription.unsubscribe(); }
   }, [router, requireAdmin])
 
   if (loading) {

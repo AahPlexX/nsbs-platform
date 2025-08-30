@@ -1,13 +1,13 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { createServerSupabaseClient } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/server"
 import { ArrowLeft, Award, Download, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
 export default async function CertificatesPage() {
-  const supabase = await createServerSupabaseClient()
+  const supabase = await createClient()
 
   const {
     data: { user },
@@ -33,6 +33,24 @@ export default async function CertificatesPage() {
     .eq("user_id", user.id)
     .order("issued_at", { ascending: false })
 
+  // Type the certificates data properly for this specific query
+  type CertificateWithCourse = {
+    id: string
+    certificate_number: string
+    user_id: string
+    course_id: string
+    exam_attempt_id: string
+    issued_at: string
+    is_revoked: boolean
+    revoked_at?: string
+    revoked_reason?: string
+    verification_url: string
+    final_score: number
+    courses: { slug: string; title: string; description: string } | null
+  }
+
+  const typedCertificates = certificates as CertificateWithCourse[] | null
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-8">
@@ -49,7 +67,7 @@ export default async function CertificatesPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {certificates?.map((certificate) => (
+        {typedCertificates?.map((certificate) => (
           <Card key={certificate.id} className="border-sage/20">
             <CardHeader>
               <div className="flex items-center justify-between">

@@ -1,5 +1,5 @@
 import { getCourseExamQuestions, getCourseMetadata } from "@/lib/fs-data"
-import { createClient } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/server"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(_request: NextRequest, { params }: { params: { slug: string } }) {

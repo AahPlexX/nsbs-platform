@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle, Calendar, User, BookOpen, Hash } from "lucide-react"
+import { BookOpen, Calendar, CheckCircle, Hash, User } from "lucide-react"
 import type { Certificate } from "@/lib/types"
 
 interface Props {

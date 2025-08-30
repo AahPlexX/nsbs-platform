@@ -42,8 +42,6 @@ export interface CourseMetadata {
   thumbnail_url?: string
   category: string
   tags?: string[]
-  duration_weeks?: number
-  difficulty_level?: "beginner" | "intermediate" | "advanced"
   lessons?: Lesson[]
   learningObjectives?: string[]
   exam?: Exam
@@ -80,10 +78,9 @@ export interface ExamQuestion {
   id: string
   exam_id: string
   question_text: string
-  question_type: "multiple_choice" | "true_false"
+  question_type: "multiple_choice"
   options: string[]
   correct_answer: string
-  explanation?: string
   order_index: number
 }
 
@@ -134,6 +131,36 @@ export interface Certificate {
   revoked_at?: string
   revoked_reason?: string
   verification_url: string
+}
+
+// Database joined types for admin views
+export interface CertificateWithDetails extends Certificate {
+  user_profiles: Pick<User, 'full_name' | 'email'> | null
+  users: Pick<User, 'email'> | null
+  courses: Pick<Course, 'title'> | null
+  exam_score: number
+  final_score: number
+}
+
+export interface CourseWithDetails extends Course {
+  purchases: { count: number }[]
+  certificates: { count: number }[]
+}
+
+export interface UserWithDetails extends User {
+  purchases: { count: number }[]
+  certificates: { count: number }[]
+  course_progress: { count: number }[]
+}
+
+export interface EnrollmentWithDetails extends Enrollment {
+  courses: Pick<Course, 'title'> | null
+  users: Pick<User, 'full_name' | 'email'> | null
+}
+
+export interface PurchaseWithDetails extends Order {
+  courses: Pick<Course, 'title'> | null
+  users: Pick<User, 'email'> | null
 }
 
 // Payment and order types
@@ -202,11 +229,11 @@ export interface EmailTemplate {
   to: string
   subject: string
   template:
-    | "welcome"
-    | "purchase_confirmation"
-    | "exam_passed"
-    | "exam_failed"
-    | "certificate_issued"
+  | "welcome"
+  | "purchase_confirmation"
+  | "exam_passed"
+  | "exam_failed"
+  | "certificate_issued"
   data: Record<string, unknown>
 }
 

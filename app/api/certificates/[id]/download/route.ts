@@ -1,7 +1,15 @@
 import { generateCertificatePDF } from "@/lib/pdf-generator"
-import { createClient } from "@/lib/supabase"
 import type { Certificate } from "@/lib/types"
+import { createClient } from "@/utils/supabase/server"
 import { type NextRequest, NextResponse } from "next/server"
+
+interface Profile {
+  full_name: string | null
+}
+
+interface Course {
+  title: string
+}
 
 export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -23,20 +31,37 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
       .eq("id", params.id)
       .eq("user_id", user.id)
       .eq("revoked", false)
-      .single()
+      .single() as { data: Certificate | null; error: unknown }
 
     if (error || !certificate) {
       return NextResponse.json({ error: "Certificate not found" }, { status: 404 })
     }
 
-    // Generate PDF
-    const pdfBuffer = await generateCertificatePDF(certificate)
+    // Get user profile for name
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("full_name")
+      .eq("id", user.id)
+      .single() as { data: Profile | null; error: unknown }
+
+    // Get course title
+    const { data: course } = await supabase
+      .from("courses")
+      .select("title, slug")
+      .eq("id", certificate.course_id)
+      .single() as { data: (Course & { slug: string }) | null; error: unknown }
+
+    const userName = profile?.full_name ?? "Certificate Recipient"
+    const courseTitle = course?.title ?? "Course"
+
+    // Generate PDF with actual user and course data
+    const pdfBuffer = generateCertificatePDF(certificate, userName, courseTitle)
 
     // Return PDF response
     return new NextResponse(pdfBuffer as BodyInit, {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="NSBS-Certificate-${(certificate as Certificate).certificate_number}.pdf"`,
+        "Content-Disposition": `attachment; filename="NSBS-Certificate-${certificate.certificate_number}.pdf"`,
       },
     })
   } catch (error) {

@@ -1,5 +1,5 @@
-import jest from "jest"
 import "@testing-library/jest-dom"
+import jest from "jest"
 
 // Mock Next.js router
 jest.mock("next/navigation", () => ({
@@ -16,8 +16,8 @@ jest.mock("next/navigation", () => ({
 }))
 
 // Mock Supabase
-jest.mock("@/lib/supabase", () => ({
-  supabase: {
+jest.mock("@/utils/supabase/client", () => ({
+  createClient: () => ({
     auth: {
       getUser: jest.fn(),
       signInWithOAuth: jest.fn(),
@@ -32,7 +32,10 @@ jest.mock("@/lib/supabase", () => ({
       eq: jest.fn().mockReturnThis(),
       single: jest.fn(),
     })),
-  },
+  })
+}))
+
+jest.mock("@/utils/supabase/server", () => ({
   createClient: jest.fn(),
 }))
 

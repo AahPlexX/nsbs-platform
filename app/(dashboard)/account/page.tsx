@@ -3,13 +3,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { createServerSupabaseClient } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/server"
 import { ArrowLeft, Award, BookOpen, CreditCard, Download, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
 export default async function AccountDashboard() {
-  const supabase = await createServerSupabaseClient()
+  const supabase = await createClient()
 
   const {
     data: { user },
@@ -36,6 +36,23 @@ export default async function AccountDashboard() {
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })
 
+  // Type the purchases data properly
+  type PurchaseWithCourse = {
+    id: string
+    user_id: string
+    course_id: string
+    amount: number
+    currency: string
+    status: "pending" | "completed" | "failed" | "refunded"
+    stripe_payment_intent_id?: string
+    stripe_session_id?: string
+    created_at: string
+    updated_at: string
+    courses: { slug: string; title: string; description: string; price: number } | null
+  }
+
+  const typedPurchases = purchases as PurchaseWithCourse[] | null
+
   // Fetch user's certificates
   const { data: certificates } = await supabase
     .from("certificates")
@@ -51,6 +68,24 @@ export default async function AccountDashboard() {
     .eq("user_id", user.id)
     .order("issued_at", { ascending: false })
 
+  // Type the certificates data properly for this specific query
+  type CertificateWithCourse = {
+    id: string
+    certificate_number: string
+    user_id: string
+    course_id: string
+    exam_attempt_id: string
+    issued_at: string
+    is_revoked: boolean
+    revoked_at?: string
+    revoked_reason?: string
+    verification_url: string
+    final_score: number
+    courses: { slug: string; title: string } | null
+  }
+
+  const typedCertificates = certificates as CertificateWithCourse[] | null
+
   // Fetch course progress
   const { data: progress } = await supabase
     .from("course_progress")
@@ -65,6 +100,20 @@ export default async function AccountDashboard() {
     `
     )
     .eq("user_id", user.id)
+
+  // Type the progress data properly
+  type CourseProgressWithCourse = {
+    id: string
+    user_id: string
+    course_id: string
+    completed_lessons: number
+    current_lesson_id?: string
+    created_at: string
+    updated_at: string
+    courses: { slug: string; title: string; lesson_count: number } | null
+  }
+
+  const typedProgress = progress as CourseProgressWithCourse[] | null
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -108,7 +157,7 @@ export default async function AccountDashboard() {
                 <Award className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{certificates?.length || 0}</div>
+                <div className="text-2xl font-bold">{typedCertificates?.length || 0}</div>
                 <p className="text-xs text-muted-foreground">Professional certifications</p>
               </CardContent>
             </Card>
@@ -119,7 +168,7 @@ export default async function AccountDashboard() {
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{purchases?.length || 0}</div>
+                <div className="text-2xl font-bold">{typedPurchases?.length || 0}</div>
                 <p className="text-xs text-muted-foreground">Course purchases</p>
               </CardContent>
             </Card>
@@ -133,7 +182,7 @@ export default async function AccountDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {certificates?.slice(0, 3).map((cert) => (
+                {typedCertificates?.slice(0, 3).map((cert) => (
                   <div key={cert.id} className="flex items-center space-x-4">
                     <div className="flex-shrink-0">
                       <Award className="h-8 w-8 text-sage" />
@@ -150,7 +199,7 @@ export default async function AccountDashboard() {
                   </div>
                 ))}
 
-                {(!certificates || certificates.length === 0) && (
+                {(!typedCertificates || typedCertificates.length === 0) && (
                   <p className="text-sm text-muted-foreground">
                     No recent activity. Start a course to see your progress here.
                   </p>
@@ -168,7 +217,7 @@ export default async function AccountDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                {progress?.map((courseProgress) => {
+                {typedProgress?.map((courseProgress) => {
                   const progressPercentage = Math.round(
                     (courseProgress.completed_lessons /
                       (courseProgress.courses?.lesson_count || 1)) *
@@ -192,7 +241,7 @@ export default async function AccountDashboard() {
                             {progressPercentage}% Complete
                           </Badge>
                           <Button asChild size="sm">
-                            <Link href={`/learn/${courseProgress.courses?.slug}`}>
+                            <Link href={`/learn/${courseProgress.courses?.slug || ''}`}>
                               Continue Learning
                             </Link>
                           </Button>
@@ -227,7 +276,7 @@ export default async function AccountDashboard() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2">
-                {certificates?.map((certificate) => (
+                {typedCertificates?.map((certificate) => (
                   <Card key={certificate.id} className="border-sage/20">
                     <CardHeader>
                       <div className="flex items-center justify-between">
@@ -266,7 +315,7 @@ export default async function AccountDashboard() {
                   </Card>
                 ))}
 
-                {(!certificates || certificates.length === 0) && (
+                {(!typedCertificates || typedCertificates.length === 0) && (
                   <div className="col-span-2 text-center py-8">
                     <Award className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <p className="text-muted-foreground mb-4">No certificates earned yet</p>
@@ -291,7 +340,7 @@ export default async function AccountDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {purchases?.map((purchase) => (
+                {typedPurchases?.map((purchase) => (
                   <div key={purchase.id} className="border rounded-lg p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
@@ -315,7 +364,7 @@ export default async function AccountDashboard() {
                   </div>
                 ))}
 
-                {(!purchases || purchases.length === 0) && (
+                {(!typedPurchases || typedPurchases.length === 0) && (
                   <div className="text-center py-8">
                     <CreditCard className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <p className="text-muted-foreground mb-4">No purchases yet</p>

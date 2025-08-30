@@ -1,8 +1,8 @@
+import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
-import { createServerSupabaseClient } from "./supabase"
 
 export async function getUser() {
-  const supabase = await createServerSupabaseClient()
+  const supabase = await createClient()
 
   const {
     data: { user },
@@ -28,7 +28,7 @@ export async function requireAuth() {
 
 export async function requireAdmin() {
   const user = await requireAuth()
-  const supabase = await createServerSupabaseClient()
+  const supabase = await createClient()
 
   const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).single()
 
@@ -40,7 +40,7 @@ export async function requireAdmin() {
 }
 
 export async function signOut() {
-  const supabase = await createServerSupabaseClient()
+  const supabase = await createClient()
   await supabase.auth.signOut()
   redirect("/")
 }

@@ -1,7 +1,7 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase"
-import { stripe } from "@/lib/stripe"
 import { getCourseMetadata } from "@/lib/fs-data"
+import { stripe } from "@/lib/stripe"
+import { createClient } from "@/utils/supabase/server"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
   try {

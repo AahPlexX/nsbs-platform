@@ -20,12 +20,42 @@ const nextConfig = {
 
   // Experimental features for performance
   experimental: {
-    optimizePackageImports: ["@/components/ui", "lucide-react", "framer-motion", "recharts"],
-    webpackBuildWorker: true,
+    // optimizePackageImports: ["@/components/ui", "lucide-react", "framer-motion"],
+    // webpackBuildWorker: true,
   },
 
   // Webpack optimizations
-  webpack: (config, { dev, isServer }) => {
+  webpack: (config, { dev, isServer, webpack }) => {
+    // Handle client-side dependencies on server
+    if (isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+        crypto: false,
+        stream: false,
+        url: false,
+        zlib: false,
+        http: false,
+        https: false,
+        assert: false,
+        os: false,
+        path: false,
+      }
+    }
+
+    // Global polyfills for all environments
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        'typeof self': '"undefined"',
+        'typeof window': isServer ? '"undefined"' : '"object"',
+        'typeof document': isServer ? '"undefined"' : '"object"',
+        'typeof navigator': isServer ? '"undefined"' : '"object"',
+        'typeof location': isServer ? '"undefined"' : '"object"',
+      })
+    )
+
     if (!dev) {
       // Production optimizations
       config.optimization = {

@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@/components/theme-provider"
+import "@/lib/polyfills"
 import type { Metadata } from "next"
 import { Inter, JetBrains_Mono } from "next/font/google"
 import type React from "react"
