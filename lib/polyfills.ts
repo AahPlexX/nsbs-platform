@@ -15,7 +15,28 @@ if (typeof globalThis !== 'undefined') {
 
     // Polyfill for 'window' in server environment
     if (typeof globalThis.window === 'undefined') {
-        globalThis.window = globalThis;
+        globalThis.window = {
+            ...globalThis,
+            location: {
+                href: '',
+                origin: '',
+                protocol: 'https:',
+                host: '',
+                hostname: '',
+                port: '',
+                pathname: '/',
+                search: '',
+                hash: '',
+            },
+            matchMedia: () => ({
+                matches: false,
+                media: '',
+                addEventListener: () => { },
+                removeEventListener: () => { },
+            }),
+            innerWidth: 1024,
+            innerHeight: 768,
+        };
     }
 
     // Polyfill for 'document' in server environment (basic)
@@ -24,6 +45,14 @@ if (typeof globalThis !== 'undefined') {
             createElement: () => ({}),
             addEventListener: () => { },
             removeEventListener: () => { },
+            querySelector: () => null,
+            querySelectorAll: () => [],
+            getElementById: () => null,
+            getElementsByClassName: () => [],
+            getElementsByTagName: () => [],
+            body: {},
+            head: {},
+            documentElement: {},
         };
     }
 }
