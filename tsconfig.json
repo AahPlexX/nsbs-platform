@@ -41,10 +41,12 @@
     "app/**/*.tsx",
     "components/**/*.ts",
     "components/**/*.tsx",
+    "hooks/**/*.ts",
     "lib/**/*.ts",
     "lib/**/*.tsx",
     "next-env.d.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "utils/**/*.ts"
   ],
   "exclude": ["node_modules", ".next", "dist", "coverage"]
 }

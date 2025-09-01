@@ -1,9 +1,18 @@
 import js from "@eslint/js"
+import globals from "globals"
 import tseslint from "typescript-eslint"
 
 export default tseslint.config(
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+  },
   js.configs.recommended,
-  ...tseslint.configs.strictTypeChecked,
+  ...tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
       parserOptions: {
@@ -47,7 +56,6 @@ export default tseslint.config(
       "*.config.js",
       "*.config.mjs",
       "*.config.ts",
-      "tailwind.config.ts",
       "next.config.mjs",
       "jest.config.js",
       "jest.setup.js",

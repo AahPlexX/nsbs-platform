@@ -3,14 +3,15 @@
 // @ts-nocheck
 
 // Immediate polyfill injection
-(globalThis as any).self = globalThis;
-(global as any).self = globalThis;
-
-// Also set on the 'global' object for backwards compatibility
 if (typeof globalThis !== 'undefined') {
     // Polyfill for 'self' in server environment
     if (typeof globalThis.self === 'undefined') {
-        globalThis.self = globalThis;
+        Object.defineProperty(globalThis, 'self', {
+            value: globalThis,
+            writable: false,
+            enumerable: true,
+            configurable: false
+        });
     }
 
     // Polyfill for 'window' in server environment
@@ -54,5 +55,12 @@ if (typeof globalThis !== 'undefined') {
             head: {},
             documentElement: {},
         };
+    }
+}
+
+// Also set on the 'global' object for backwards compatibility
+if (typeof global !== 'undefined') {
+    if (typeof global.self === 'undefined') {
+        global.self = global;
     }
 }
