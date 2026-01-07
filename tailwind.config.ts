@@ -4,7 +4,6 @@ const config: Config = {
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './content/**/*.{md,mdx}',
   ],
   theme: {
     extend: {
@@ -16,6 +15,12 @@ const config: Config = {
           600: '#0284c7',
           700: '#0369a1',
         },
+        success: '#10b981',
+        error: '#ef4444',
+        warning: '#f59e0b',
+      },
+      fontFamily: {
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
       },
     },
   },

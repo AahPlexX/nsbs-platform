@@ -2,7 +2,9 @@
   "name": "national-society-business-sciences",
   "version": "1.0.0",
   "private": true,
-  "description": "Production website for The National Society of Business Sciences (NSBS)",
+  "description": "Professional certification platform for The National Society of Business Sciences (NSBS)",
+  "author": "NSBS",
+  "license": "UNLICENSED",
   "packageManager": "pnpm@9.0.0",
   "scripts": {
     "dev": "next dev",

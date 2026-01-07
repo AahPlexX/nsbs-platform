@@ -23,8 +23,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Vercel
-.vercel
+# Koyeb
+.koyeb
 
 # TypeScript
 *.tsbuildinfo
@@ -40,7 +40,3 @@ next-env.d.ts
 *.swp
 *.swo
 *~
-
-# Lock files (keep pnpm only)
-package-lock.json
-yarn.lock
