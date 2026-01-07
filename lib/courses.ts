@@ -18,8 +18,6 @@ export const courses: CourseMetadata[] = [
     title: 'Business Analytics Professional',
     description:
       'Master business analytics including data analysis, statistical modeling, business intelligence, and data-driven decision making for strategic business insights.',
-    level: 'Graduate',
-    estimatedHours: 40,
     topics: [
       'Data Analysis',
       'Statistical Modeling',
@@ -40,8 +38,6 @@ export const courses: CourseMetadata[] = [
     title: 'Strategic Business Planning Analyst',
     description:
       'Develop expertise in strategic planning, business analysis, competitive strategy, and long-term organizational planning for sustainable business growth.',
-    level: 'Advanced',
-    estimatedHours: 35,
     topics: [
       'Strategic Planning',
       'Business Analysis',
@@ -62,8 +58,6 @@ export const courses: CourseMetadata[] = [
     title: 'Digital Transformation Leader',
     description:
       'Lead organizational digital transformation initiatives with expertise in technology adoption, change management, and digital strategy implementation.',
-    level: 'Executive',
-    estimatedHours: 45,
     topics: [
       'Digital Strategy',
       'Change Management',
@@ -84,8 +78,6 @@ export const courses: CourseMetadata[] = [
     title: 'Agile Project Management Professional',
     description:
       'Master agile methodologies, project planning, team leadership, and delivery management for successful project execution in dynamic environments.',
-    level: 'Intermediate',
-    estimatedHours: 38,
     topics: [
       'Agile Methodology',
       'Scrum Framework',
@@ -106,8 +98,6 @@ export const courses: CourseMetadata[] = [
     title: 'Financial Forecasting & Modeling Professional',
     description:
       'Develop advanced skills in financial forecasting, modeling, analysis, and strategic financial planning for informed business decisions.',
-    level: 'Advanced',
-    estimatedHours: 42,
     topics: [
       'Financial Modeling',
       'Forecasting Techniques',
@@ -128,8 +118,6 @@ export const courses: CourseMetadata[] = [
     title: 'Change Management Specialist',
     description:
       'Lead organizational change initiatives with proven methodologies, stakeholder management, and transformation strategies for successful change adoption.',
-    level: 'Intermediate',
-    estimatedHours: 32,
     topics: [
       'Change Models',
       'Stakeholder Management',
