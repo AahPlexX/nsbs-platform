@@ -1,15 +1,16 @@
 # The National Society of Business Sciences (NSBS)
 
-Production website for NSBS built with Next.js 15, Supabase authentication, and deployed on Koyeb.
+Production website for NSBS using Next.js 15, Supabase auth with RBAC, and deployable to Koyeb.
 
 ## Tech Stack
 
 - **Framework**: Next.js 15.1 (App Router)
-- **Auth**: Supabase (Magic Link + Google OAuth)
+- **Language**: TypeScript 5.7
 - **Styling**: Tailwind CSS 4.0
-- **Package Manager**: PNPM
+- **Authentication**: Supabase Auth
+- **Database**: Supabase (PostgreSQL) - Auth & user profiles only
+- **Package Manager**: PNPM 9.x
 - **Deployment**: Koyeb
-- **Database**: Supabase (users/profiles only, no course content)
 
 ## Prerequisites
 
@@ -31,13 +32,15 @@ cd nsbs-platform
 pnpm install
 ```
 
-3. Create `.env.local`:
+3. Set up environment variables:
 ```bash
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+cp .env.example .env.local
 ```
+
+Fill in your Supabase credentials in `.env.local`:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
 
 4. Run development server:
 ```bash
@@ -46,64 +49,61 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000)
 
-## Database Setup
+## Development
 
-1. Run the SQL schema in Supabase dashboard (`database/schema.sql`)
-2. Configure Google OAuth provider in Supabase Auth settings
-3. Enable Magic Link in Supabase Auth settings
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm lint` - Run ESLint
+- `pnpm format` - Format code with Prettier
+- `pnpm type-check` - Check TypeScript types
 
 ## Deployment to Koyeb
 
-1. Connect GitHub repository to Koyeb
-2. Set build command: `pnpm build`
-3. Set start command: `pnpm start`
-4. Add environment variables in Koyeb dashboard
-5. Deploy
+1. Connect your GitHub repository to Koyeb
+2. Configure build settings:
+   - **Build command**: `pnpm build`
+   - **Run command**: `pnpm start`
+   - **Port**: 3000
+3. Add environment variables in Koyeb dashboard:
+   - `NEXT_PUBLIC_SITE_URL`
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+4. Deploy
 
-## Environment Variables
+### Koyeb IPv6 Direct Connection
 
-- `NEXT_PUBLIC_SITE_URL`: Your production URL
-- `NEXT_PUBLIC_SUPABASE_URL`: Supabase project URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase anon key
-- `SUPABASE_SERVICE_ROLE_KEY`: Supabase service role key (server-side only)
+Koyeb supports direct IPv6 connections to Supabase without additional configuration.
+
+## RBAC (Role-Based Access Control)
+
+- **user**: Standard user role (default)
+- **admin**: Administrator with free access to all course content
+
+Admin users are automatically granted access without payment.
 
 ## Project Structure
 
 ```
 nsbs-platform/
-├── app/                    # Next.js 15 App Router
-│   ├── (auth)/            # Authentication routes
-│   ├── (courses)/         # Course routes
+├── app/                    # Next.js App Router
+│   ├── (auth)/            # Authentication pages
+│   ├── (content)/         # Public content pages
 │   ├── dashboard/         # User dashboard
-│   └── api/               # API routes
+│   ├── api/               # API routes
+│   ├── layout.tsx         # Root layout
+│   └── page.tsx           # Homepage
 ├── components/            # React components
-├── content/               # Static course content (MDX)
-├── lib/                   # Utility functions
-├── types/                 # TypeScript types
-├── database/              # SQL schema
-└── public/                # Static assets
+├── lib/                   # Utilities and helpers
+│   ├── supabase/         # Supabase clients
+│   └── rbac.ts           # RBAC utilities
+├── content/              # Static course content (MDX/Markdown)
+├── types/                # TypeScript type definitions
+├── public/               # Static assets
+└── database/             # Database schema
 ```
-
-## Authentication
-
-- **Magic Link**: Passwordless email authentication
-- **Google OAuth**: Social sign-in via Google
-- No password-based authentication
-
-## RBAC
-
-- **user**: Standard user with paid course access
-- **admin**: Free access to all courses, no special UI
-
-## Adding Course Content
-
-Course content is stored as MDX files in `/content/courses/`. To add new content:
-
-1. Create MDX file in `/content/courses/<slug>.mdx`
-2. Add metadata and content
-3. Commit and push to GitHub
-4. Koyeb auto-deploys
 
 ## License
 
-Private - All Rights Reserved
+Private - All rights reserved

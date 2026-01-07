@@ -2,7 +2,7 @@
   "name": "national-society-business-sciences",
   "version": "1.0.0",
   "private": true,
-  "description": "Professional certification platform for The National Society of Business Sciences (NSBS)",
+  "description": "Production website for The National Society of Business Sciences (NSBS) with Supabase auth and RBAC",
   "author": "NSBS",
   "license": "UNLICENSED",
   "packageManager": "pnpm@9.0.0",
@@ -12,7 +12,8 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "db:generate-types": "supabase gen types typescript --project-id yourproject > types/database.types.ts"
   },
   "dependencies": {
     "next": "^15.1.0",
