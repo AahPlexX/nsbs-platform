@@ -9,8 +9,7 @@
   "category": "Business Analytics",
   "tags": ["business analytics", "data analysis", "business intelligence", "statistical modeling", "data visualization"],
   "certification": {
-    "name": "Business Analytics Professional (BAP)",
-    "authority": "The National Society of Business Sciences"
+    "name": "Business Analytics Professional (BAP)"
   },
   "learningOutcomes": [
     "Perform comprehensive business data analysis",
