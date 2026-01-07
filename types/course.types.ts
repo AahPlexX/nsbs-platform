@@ -1,24 +1,30 @@
-export type Course = {
+export interface CourseMetadata {
   slug: string
   title: string
   description: string
-  level: 'Graduate' | 'Professional' | 'Executive'
+  level: 'Undergraduate' | 'Intermediate' | 'Graduate' | 'Advanced' | 'Executive'
   estimatedHours: number
-  modules: CourseModule[]
+  topics: string[]
+  published: boolean
+  status?: 'published' | 'coming-soon' | 'in-development'
+  certification?: {
+    name: string
+    authority: string
+  }
 }
 
-export type CourseModule = {
+export interface CourseChapter {
   slug: string
   title: string
-  description: string
-  lessons: Lesson[]
+  order: number
+  estimatedMinutes?: number
 }
 
-export type Lesson = {
-  slug: string
-  title: string
-  content: string
-  estimatedMinutes: number
+export interface CourseDetail extends CourseMetadata {
+  chapters: CourseChapter[]
+  prerequisites?: string[]
+  outcomes: string[]
+  author: string
+  createdAt: string
+  updatedAt: string
 }
-
-export type UserRole = 'admin' | 'user'
