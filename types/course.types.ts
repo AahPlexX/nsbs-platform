@@ -1,8 +1,24 @@
 export type Course = {
-  id: string
   slug: string
   title: string
   description: string
-  level: 'Graduate' | 'Postgraduate' | 'Professional'
-  topics: string[]
+  level: 'Graduate' | 'Professional' | 'Executive'
+  estimatedHours: number
+  modules: CourseModule[]
 }
+
+export type CourseModule = {
+  slug: string
+  title: string
+  description: string
+  lessons: Lesson[]
+}
+
+export type Lesson = {
+  slug: string
+  title: string
+  content: string
+  estimatedMinutes: number
+}
+
+export type UserRole = 'admin' | 'user'
