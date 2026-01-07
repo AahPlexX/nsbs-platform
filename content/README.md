@@ -35,24 +35,19 @@ mkdir -p content/courses/your-course-slug
   "slug": "your-course-slug",
   "title": "Your Course Title",
   "description": "Brief description of the course",
-  "level": "Graduate",
-  "estimatedHours": 40,
   "status": "published",
   "chapters": [
     {
       "slug": "chapter-01",
       "title": "Introduction",
-      "order": 1,
-      "estimatedMinutes": 30
+      "order": 1
     },
     {
       "slug": "chapter-02",
       "title": "Core Concepts",
-      "order": 2,
-      "estimatedMinutes": 45
+      "order": 2
     }
   ],
-  "prerequisites": [],
   "outcomes": [
     "Understand key concepts",
     "Apply principles to real situations",
@@ -128,7 +123,6 @@ Edit `content/catalog.json` to add your course:
       "slug": "your-course-slug",
       "title": "Your Course Title",
       "description": "Brief description",
-      "level": "Graduate",
       "status": "published",
       "featured": false
     }
@@ -166,8 +160,8 @@ Implement your own access logic:
 
 ### Markdown Formatting
 
-- Use heading levels 2-6 (`##` through `######`)
-- Don't use level 1 (`#`) - reserved for chapter title
+- Use heading tags 2-6 (`##` through `######`)
+- Don't use heading 1 (`#`) - reserved for chapter title
 - Keep paragraphs concise (2-3 sentences)
 - Use lists for multiple related points
 - Add code examples where relevant
@@ -182,7 +176,7 @@ Implement your own access logic:
 
 ### Chapter Length
 
-- Aim for 15-30 minutes reading time per chapter
+- Focus on clear, complete explanations
 - Break long topics into multiple chapters
 - Include summaries at chapter end
 
@@ -191,15 +185,6 @@ Implement your own access logic:
 - Use kebab-case for slugs (`business-research-methods`)
 - Keep titles under 60 characters
 - Write compelling descriptions (150-200 characters)
-- Accurately estimate reading time
-- List all prerequisites
-
-## Course Levels
-
-- **Undergraduate**: Introductory, foundational
-- **Graduate**: Advanced, specialized
-- **Professional**: Practical, industry-focused
-- **Executive**: Leadership, strategic
 
 ## Course Status
 
