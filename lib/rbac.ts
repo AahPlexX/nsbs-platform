@@ -11,7 +11,7 @@ export async function getUserRole(userId: string): Promise<UserRole> {
     .eq('id', userId)
     .single()
 
-  return (profile?.role as UserRole) ?? 'user'
+  return (profile?.role as UserRole) || 'user'
 }
 
 export async function isAdmin(userId: string): Promise<boolean> {
@@ -33,5 +33,7 @@ export async function requireAdmin() {
   if (!user) return null
 
   const admin = await isAdmin(user.id)
-  return admin ? user : null
+  if (!admin) return null
+
+  return user
 }
