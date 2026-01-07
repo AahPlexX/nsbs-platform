@@ -1,109 +1,130 @@
-# The National Society of Business Sciences (NSBS)
+# National Academy of Business Sciences (NSBS)
 
-Production website for NSBS using Next.js 15, Supabase auth with RBAC, and deployable to Koyeb.
+> Professional certification platform for business education
 
-## Tech Stack
+## 🎯 Overview
 
-- **Framework**: Next.js 15.1 (App Router)
-- **Language**: TypeScript 5.7
-- **Styling**: Tailwind CSS 4.0
-- **Authentication**: Supabase Auth
-- **Database**: Supabase (PostgreSQL) - Auth & user profiles only
-- **Package Manager**: PNPM 9.x
-- **Deployment**: Koyeb
+NSBS provides text-based professional certification courses with comprehensive study materials and rigorous exam-only assessment. Courses are designed for working professionals seeking industry-recognized credentials.
 
-## Prerequisites
+## 🏗️ Architecture
 
-- Node.js 20+
-- PNPM 9+
-- Supabase account
-- Koyeb account
+### Core Technologies
+- **Framework**: Next.js 16.1.1 (React 19.2.0)
+- **Language**: TypeScript 5.9.3
+- **Package Manager**: PNPM 9.15.0
+- **Node Version**: 20.13.0
+- **Styling**: Tailwind CSS 4.1.18
+- **Database**: Supabase (PostgreSQL)
+- **Payments**: Stripe
+- **Hosting**: Koyeb
 
-## Local Setup
+### Key Design Decisions
+- **Course Content**: Stored as MDX files in repository (NOT in database)
+- **User Data Only**: Supabase stores authentication and user-specific data
+- **RBAC**: Two roles - admin (eastman.luccas@gmail.com) and user (everyone else)
+- **No Admin UI**: Admins edit repository directly
 
-1. Clone repository:
+## 📚 Available Courses
+
+1. **Change Management Specialist (CMS)** - $299
+2. **Kaizen Theory & Practice Practitioner (KTP)** - $279  
+3. **Corporate Finance Specialist (CFS)** - $349
+
+## 🚀 Quick Start
+
+### Prerequisites
 ```bash
+# Install Node.js 20.13.0
+nvm install 20.13.0
+nvm use 20.13.0
+
+# Install PNPM 9.15.0
+npm install -g pnpm@9.15.0
+```
+
+### Installation
+```bash
+# Clone repository
 git clone https://github.com/AahPlexX/nsbs-platform.git
 cd nsbs-platform
-```
 
-2. Install dependencies:
-```bash
+# Install dependencies (exact versions from lockfile)
 pnpm install
-```
 
-3. Set up environment variables:
-```bash
+# Copy environment variables
 cp .env.example .env.local
-```
+# Edit .env.local with your Supabase and Stripe credentials
 
-Fill in your Supabase credentials in `.env.local`:
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
+# Run database migrations
+pnpm db:push
 
-4. Run development server:
-```bash
+# Seed course metadata
+pnpm db:seed
+
+# Start development server
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+### Development Commands
+```bash
+pnpm dev          # Start dev server
+pnpm build        # Build for production
+pnpm start        # Start production server
+pnpm lint         # Run ESLint
+pnpm type-check   # Run TypeScript compiler
+pnpm format       # Format code with Prettier
+```
 
-## Development
-
-- `pnpm dev` - Start development server
-- `pnpm build` - Build for production
-- `pnpm start` - Start production server
-- `pnpm lint` - Run ESLint
-- `pnpm format` - Format code with Prettier
-- `pnpm type-check` - Check TypeScript types
-
-## Deployment to Koyeb
-
-1. Connect your GitHub repository to Koyeb
-2. Configure build settings:
-   - **Build command**: `pnpm build`
-   - **Run command**: `pnpm start`
-   - **Port**: 3000
-3. Add environment variables in Koyeb dashboard:
-   - `NEXT_PUBLIC_SITE_URL`
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY`
-4. Deploy
-
-### Koyeb IPv6 Direct Connection
-
-Koyeb supports direct IPv6 connections to Supabase without additional configuration.
-
-## RBAC (Role-Based Access Control)
-
-- **user**: Standard user role (default)
-- **admin**: Administrator with free access to all course content
-
-Admin users are automatically granted access without payment.
-
-## Project Structure
+## 📂 Project Structure
 
 ```
 nsbs-platform/
-├── app/                    # Next.js App Router
-│   ├── (auth)/            # Authentication pages
-│   ├── (content)/         # Public content pages
-│   ├── dashboard/         # User dashboard
+├── app/                    # Next.js 13+ app directory
+│   ├── (auth)/            # Auth pages (login, signup)
+│   ├── (courses)/         # Course pages
 │   ├── api/               # API routes
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Homepage
+│   └── dashboard/         # User dashboard
 ├── components/            # React components
-├── lib/                   # Utilities and helpers
-│   ├── supabase/         # Supabase clients
-│   └── rbac.ts           # RBAC utilities
-├── content/              # Static course content (MDX/Markdown)
-├── types/                # TypeScript type definitions
-├── public/               # Static assets
-└── database/             # Database schema
+├── content/               # Course content (MDX files)
+│   ├── courses.json       # Course metadata
+│   └── courses/           # Individual course directories
+├── database/              # Database schema and seeds
+├── lib/                   # Utility functions
+├── types/                 # TypeScript type definitions
+└── public/                # Static assets
 ```
 
-## License
+## 🗄️ Database Schema
 
-Private - All rights reserved
+Minimal schema storing only user data:
+- `courses` - Course metadata (not content)
+- `course_purchases` - User purchases
+- `lesson_completions` - Chapter completion tracking
+- `exam_attempts` - Exam history
+- `certificates` - Issued certificates
+- `user_bookmarks` - User bookmarks
+
+## 🔐 Environment Variables
+
+```bash
+# Site
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+# Stripe
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+```
+
+## 📝 License
+
+UNLICENSED - Private/Proprietary
+
+## 👤 Author
+
+Luccas Eastman <eastman.luccas@gmail.com>
