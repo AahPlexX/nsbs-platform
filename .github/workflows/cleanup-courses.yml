@@ -1,38 +1,54 @@
-name: Cleanup Extra Courses
+name: Move Extra Courses to deleteMe Folder
 
 on:
   workflow_dispatch:
 
 jobs:
-  cleanup:
+  move-courses:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       
-      - name: Delete unwanted course directories
+      - name: Create deleteMe folder and move unwanted courses
         run: |
           cd data/courses
+          
+          # Create deleteMe directory
+          mkdir -p ../deleteMe
           
           # Keep only change-management-specialist-cms
           KEEP="change-management-specialist-cms"
           
+          echo "📦 Moving unwanted courses to data/deleteMe/"
+          echo ""
+          
           for dir in */; do
             dirname="${dir%/}"
             if [ "$dirname" != "$KEEP" ]; then
-              echo "Deleting: $dirname"
-              rm -rf "$dirname"
+              echo "Moving: $dirname → ../deleteMe/$dirname"
+              mv "$dirname" "../deleteMe/$dirname"
             else
-              echo "Keeping: $dirname"
+              echo "✅ Keeping: $dirname"
             fi
           done
           
-          echo "✅ Cleanup complete"
+          echo ""
+          echo "✅ Move complete!"
+          echo ""
+          echo "📂 Remaining in data/courses/:"
           ls -la
+          echo ""
+          echo "📂 Moved to data/deleteMe/:"
+          ls -la ../deleteMe/
       
       - name: Commit changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add -A
-          git commit -m "chore: remove 47 unwanted course directories, keep only change-management-specialist-cms"
+          git commit -m "chore: move 47 unwanted courses to data/deleteMe/ folder for review
+          
+          - Kept: change-management-specialist-cms
+          - Moved: 47 courses to data/deleteMe/
+          - Ready for manual deletion after review"
           git push
