@@ -4,10 +4,8 @@ export interface CourseMetadata {
   description: string
   topics: string[]
   published: boolean
-  status?: 'published' | 'coming-soon' | 'in-development'
   certification?: {
     name: string
-    authority: string
   }
 }
 

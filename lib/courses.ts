@@ -3,11 +3,6 @@ import type { CourseMetadata } from '@/types/course.types'
 /**
  * Production Course Catalog for NSBS Platform
  * 
- * STATUS DEFINITIONS:
- * - 'published': Course is complete with all lessons and assessments
- * - 'coming-soon': Course is planned and will be available soon
- * - 'in-development': Course content is actively being created
- * 
  * NOTE: Currently showing a limited catalog.
  * Full catalog of 50+ courses will be added as content is completed.
  */
@@ -27,10 +22,8 @@ export const courses: CourseMetadata[] = [
       'Strategic Decision Making',
     ],
     published: false,
-    status: 'in-development',
     certification: {
       name: 'Business Analytics Professional (BAP)',
-      authority: 'The National Society of Business Sciences',
     },
   },
   {
@@ -47,10 +40,8 @@ export const courses: CourseMetadata[] = [
       'Performance Metrics',
     ],
     published: false,
-    status: 'coming-soon',
     certification: {
       name: 'Strategic Business Planning Analyst (SBPA)',
-      authority: 'The National Society of Business Sciences',
     },
   },
   {
@@ -67,10 +58,8 @@ export const courses: CourseMetadata[] = [
       'Innovation Leadership',
     ],
     published: false,
-    status: 'coming-soon',
     certification: {
       name: 'Digital Transformation Leader (DTL)',
-      authority: 'The National Society of Business Sciences',
     },
   },
   {
@@ -87,10 +76,8 @@ export const courses: CourseMetadata[] = [
       'Delivery Management',
     ],
     published: false,
-    status: 'coming-soon',
     certification: {
       name: 'Agile Project Management Professional (APMP)',
-      authority: 'The National Society of Business Sciences',
     },
   },
   {
@@ -107,10 +94,8 @@ export const courses: CourseMetadata[] = [
       'Strategic Finance',
     ],
     published: false,
-    status: 'coming-soon',
     certification: {
       name: 'Financial Forecasting & Modeling Professional (FFMP)',
-      authority: 'The National Society of Business Sciences',
     },
   },
   {
@@ -127,10 +112,8 @@ export const courses: CourseMetadata[] = [
       'Success Measurement',
     ],
     published: false,
-    status: 'coming-soon',
     certification: {
       name: 'Change Management Specialist (CMS)',
-      authority: 'The National Society of Business Sciences',
     },
   },
 ]
@@ -145,10 +128,4 @@ export function getPublishedCourses(): CourseMetadata[] {
 
 export function getAllCourses(): CourseMetadata[] {
   return courses
-}
-
-export function getCoursesByStatus(
-  status: 'published' | 'coming-soon' | 'in-development'
-): CourseMetadata[] {
-  return courses.filter((course) => course.status === status)
 }
