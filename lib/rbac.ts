@@ -1,22 +1,17 @@
 import { createClient } from '@/lib/supabase/server'
-import type { UserRole } from '@/types/user.types'
 
-export async function getUserRole(
-  userId: string
-): Promise<UserRole | null> {
+export type UserRole = 'admin' | 'user'
+
+export async function getUserRole(userId: string): Promise<UserRole> {
   const supabase = await createClient()
 
-  const { data, error } = await supabase
+  const { data: profile } = await supabase
     .from('profiles')
     .select('role')
     .eq('id', userId)
     .single()
 
-  if (error || !data) {
-    return null
-  }
-
-  return data.role
+  return (profile?.role as UserRole) ?? 'user'
 }
 
 export async function isAdmin(userId: string): Promise<boolean> {
@@ -28,31 +23,15 @@ export async function requireAuth() {
   const supabase = await createClient()
   const {
     data: { user },
-    error,
   } = await supabase.auth.getUser()
 
-  if (error || !user) {
-    return { user: null, profile: null }
-  }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single()
-
-  return {
-    user,
-    profile,
-  }
+  return user
 }
 
 export async function requireAdmin() {
-  const { user, profile } = await requireAuth()
+  const user = await requireAuth()
+  if (!user) return null
 
-  if (!user || !profile || profile.role !== 'admin') {
-    throw new Error('Admin access required')
-  }
-
-  return { user, profile }
+  const admin = await isAdmin(user.id)
+  return admin ? user : null
 }
