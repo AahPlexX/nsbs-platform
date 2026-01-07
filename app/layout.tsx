@@ -13,13 +13,19 @@ export const metadata: Metadata = {
     default: 'The National Society of Business Sciences',
     template: '%s | NSBS',
   },
-  description: 'Professional development and certification for business professionals',
-  keywords: ['business', 'certification', 'professional development', 'NSBS'],
+  description:
+    'The National Society of Business Sciences - Advancing knowledge and excellence in business education and research.',
+  keywords: [
+    'business sciences',
+    'business education',
+    'professional development',
+    'business research',
+  ],
   authors: [{ name: 'The National Society of Business Sciences' }],
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://nsbs.org',
+    url: process.env.NEXT_PUBLIC_SITE_URL,
     siteName: 'The National Society of Business Sciences',
   },
 }
