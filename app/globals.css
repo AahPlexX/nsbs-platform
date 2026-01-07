@@ -1,175 +1,57 @@
-@import "tailwindcss";
-
-:root {
-  /* Updated to NSBS brand colors: Mint Sage, Mocha Mousse, Evergreen - no blue colors */
-  --background: oklch(0.98 0.01 120);
-  --foreground: oklch(0.15 0.02 140);
-  --card: oklch(0.99 0.005 120);
-  --card-foreground: oklch(0.15 0.02 140);
-  --popover: oklch(0.99 0.005 120);
-  --popover-foreground: oklch(0.15 0.02 140);
-
-  /* Primary: Evergreen */
-  --primary: oklch(0.25 0.08 140);
-  --primary-foreground: oklch(0.98 0.01 120);
-
-  /* Secondary: Mint Sage */
-  --secondary: oklch(0.85 0.04 130);
-  --secondary-foreground: oklch(0.15 0.02 140);
-
-  /* Accent: Mocha Mousse */
-  --accent: oklch(0.75 0.06 60);
-  --accent-foreground: oklch(0.15 0.02 140);
-
-  --muted: oklch(0.94 0.02 120);
-  --muted-foreground: oklch(0.45 0.02 140);
-  --destructive: oklch(0.55 0.2 25);
-  --destructive-foreground: oklch(0.98 0.01 120);
-  --border: oklch(0.88 0.02 120);
-  --input: oklch(0.88 0.02 120);
-  --ring: oklch(0.25 0.08 140);
-
-  /* Chart colors using NSBS palette */
-  --chart-1: oklch(0.25 0.08 140); /* Evergreen */
-  --chart-2: oklch(0.85 0.04 130); /* Mint Sage */
-  --chart-3: oklch(0.75 0.06 60); /* Mocha Mousse */
-  --chart-4: oklch(0.35 0.06 140); /* Dark Evergreen */
-  --chart-5: oklch(0.65 0.08 50); /* Warm Mocha */
-
-  --radius: 0.625rem;
-
-  /* Sidebar using NSBS colors */
-  --sidebar: oklch(0.96 0.01 120);
-  --sidebar-foreground: oklch(0.15 0.02 140);
-  --sidebar-primary: oklch(0.25 0.08 140);
-  --sidebar-primary-foreground: oklch(0.98 0.01 120);
-  --sidebar-accent: oklch(0.85 0.04 130);
-  --sidebar-accent-foreground: oklch(0.15 0.02 140);
-  --sidebar-border: oklch(0.88 0.02 120);
-  --sidebar-ring: oklch(0.25 0.08 140);
-}
-
-.dark {
-  /* Dark mode using NSBS colors with proper contrast */
-  --background: oklch(0.12 0.02 140);
-  --foreground: oklch(0.95 0.01 120);
-  --card: oklch(0.15 0.02 140);
-  --card-foreground: oklch(0.95 0.01 120);
-  --popover: oklch(0.15 0.02 140);
-  --popover-foreground: oklch(0.95 0.01 120);
-
-  /* Primary: Lighter Evergreen for dark mode */
-  --primary: oklch(0.65 0.08 130);
-  --primary-foreground: oklch(0.12 0.02 140);
-
-  /* Secondary: Darker Mint Sage */
-  --secondary: oklch(0.25 0.04 130);
-  --secondary-foreground: oklch(0.95 0.01 120);
-
-  /* Accent: Adjusted Mocha Mousse */
-  --accent: oklch(0.55 0.06 60);
-  --accent-foreground: oklch(0.95 0.01 120);
-
-  --muted: oklch(0.22 0.02 140);
-  --muted-foreground: oklch(0.65 0.02 130);
-  --destructive: oklch(0.65 0.2 25);
-  --destructive-foreground: oklch(0.95 0.01 120);
-  --border: oklch(0.25 0.02 140);
-  --input: oklch(0.25 0.02 140);
-  --ring: oklch(0.65 0.08 130);
-
-  /* Dark mode chart colors */
-  --chart-1: oklch(0.65 0.08 130); /* Light Evergreen */
-  --chart-2: oklch(0.75 0.04 130); /* Light Mint Sage */
-  --chart-3: oklch(0.65 0.06 60); /* Light Mocha Mousse */
-  --chart-4: oklch(0.45 0.06 140); /* Medium Evergreen */
-  --chart-5: oklch(0.55 0.08 50); /* Medium Mocha */
-
-  /* Dark sidebar */
-  --sidebar: oklch(0.18 0.02 140);
-  --sidebar-foreground: oklch(0.95 0.01 120);
-  --sidebar-primary: oklch(0.65 0.08 130);
-  --sidebar-primary-foreground: oklch(0.12 0.02 140);
-  --sidebar-accent: oklch(0.25 0.04 130);
-  --sidebar-accent-foreground: oklch(0.95 0.01 120);
-  --sidebar-border: oklch(0.25 0.02 140);
-  --sidebar-ring: oklch(0.65 0.08 130);
-}
-
-@theme {
-  /* NSBS Brand Colors */
-  --color-mocha-mousse: oklch(0.82 0.02 50);
-  --color-mint-sage: oklch(0.72 0.06 152);
-  --color-sage: oklch(0.66 0.04 130);
-  --color-evergreen: oklch(0.39 0.08 155);
-
-  /* Theme colors using NSBS palette */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+  :root {
+    --font-inter: 'Inter', sans-serif;
   }
+
+  html {
+    @apply scroll-smooth;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply font-sans;
   }
-  a {
-    @apply text-primary no-underline hover:underline;
+}
+
+@layer components {
+  .prose {
+    @apply max-w-none;
   }
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-bold text-foreground;
+
+  .prose h1 {
+    @apply text-4xl font-bold mb-6 mt-8;
   }
-  code {
-    @apply font-mono bg-muted text-muted-foreground px-1 rounded;
+
+  .prose h2 {
+    @apply text-3xl font-bold mb-4 mt-6;
   }
-  pre {
-    @apply bg-muted text-muted-foreground p-4 rounded overflow-x-auto;
+
+  .prose h3 {
+    @apply text-2xl font-semibold mb-3 mt-4;
   }
-  blockquote {
-    @apply border-l-4 border-primary pl-4 italic text-muted-foreground;
+
+  .prose p {
+    @apply mb-4 leading-7;
   }
-  hr {
-    @apply border-t border-border my-4;
+
+  .prose ul {
+    @apply list-disc pl-6 mb-4;
+  }
+
+  .prose ol {
+    @apply list-decimal pl-6 mb-4;
+  }
+
+  .prose li {
+    @apply mb-2;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
 }

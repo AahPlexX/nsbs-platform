@@ -1,44 +1,38 @@
-import { ThemeProvider } from "@/components/theme-provider"
-import "@/lib/polyfills"
-import type { Metadata } from "next"
-import { Inter, JetBrains_Mono } from "next/font/google"
-import type React from "react"
-import "./globals.css"
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
 
 const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-sans",
-})
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-mono",
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
-  title: "NSBS - National Society of Business Sciences",
-  description: "Professional certification courses and business education",
-  generator: "v0.app",
+  title: {
+    default: 'The National Society of Business Sciences',
+    template: '%s | NSBS',
+  },
+  description: 'Professional development and certification for business professionals',
+  keywords: ['business', 'certification', 'professional development', 'NSBS'],
+  authors: [{ name: 'The National Society of Business Sciences' }],
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://nsbs.org',
+    siteName: 'The National Society of Business Sciences',
+  },
 }
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+    <html lang="en" className={inter.variable}>
+      <body className="min-h-screen bg-white text-gray-900 antialiased">
+        {children}
       </body>
     </html>
   )
