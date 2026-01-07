@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "change-management-specialist",
+    "title": "Change Management Specialist (CMS)",
+    "description": "Master the art and science of organizational change management with proven frameworks, stakeholder engagement strategies, and implementation best practices.",
+    "price": 29900,
+    "certification": "Certified Change Management Specialist (CMS)",
+    "duration": "12 weeks",
+    "level": "intermediate",
+    "questionPoolSize": 180,
+    "examDurationMinutes": 120,
+    "passingScore": 80,
+    "maxAttempts": 3,
+    "cooldownDays": 7
+  },
+  {
+    "slug": "kaizen-theory-practitioner",
+    "title": "Kaizen Theory & Practice Practitioner (KTP)",
+    "description": "Learn continuous improvement methodologies, lean principles, and kaizen implementation strategies for operational excellence and sustainable growth.",
+    "price": 27900,
+    "certification": "Certified Kaizen Theory & Practice Practitioner (KTP)",
+    "duration": "10 weeks",
+    "level": "intermediate",
+    "questionPoolSize": 180,
+    "examDurationMinutes": 120,
+    "passingScore": 80,
+    "maxAttempts": 3,
+    "cooldownDays": 7
+  },
+  {
+    "slug": "corporate-finance-specialist",
+    "title": "Corporate Finance Specialist (CFS)",
+    "description": "Develop expertise in financial analysis, capital budgeting, valuation techniques, and strategic financial decision-making for modern corporations.",
+    "price": 34900,
+    "certification": "Certified Corporate Finance Specialist (CFS)",
+    "duration": "14 weeks",
+    "level": "advanced",
+    "questionPoolSize": 180,
+    "examDurationMinutes": 120,
+    "passingScore": 80,
+    "maxAttempts": 3,
+    "cooldownDays": 7
+  }
+]
