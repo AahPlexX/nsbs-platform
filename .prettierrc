@@ -1,59 +1,11 @@
 {
   "semi": false,
   "trailingComma": "es5",
-  "singleQuote": false,
-  "printWidth": 100,
+  "singleQuote": true,
+  "printWidth": 80,
   "tabWidth": 2,
   "useTabs": false,
-  "quoteProps": "as-needed",
-  "jsxSingleQuote": false,
-  "bracketSpacing": true,
-  "bracketSameLine": false,
   "arrowParens": "always",
   "endOfLine": "lf",
-  "embeddedLanguageFormatting": "auto",
-  "htmlWhitespaceSensitivity": "css",
-  "insertPragma": false,
-  "proseWrap": "preserve",
-  "requirePragma": false,
-  "vueIndentScriptAndStyle": false,
-  "overrides": [
-    {
-      "files": ["*.md", "*.mdx"],
-      "options": {
-        "printWidth": 80,
-        "proseWrap": "always",
-        "tabWidth": 2
-      }
-    },
-    {
-      "files": ["*.json", "*.jsonc"],
-      "options": {
-        "printWidth": 120,
-        "tabWidth": 2
-      }
-    },
-    {
-      "files": ["*.yaml", "*.yml"],
-      "options": {
-        "printWidth": 120,
-        "tabWidth": 2,
-        "singleQuote": false
-      }
-    },
-    {
-      "files": ["*.css", "*.scss", "*.less"],
-      "options": {
-        "printWidth": 120,
-        "singleQuote": false
-      }
-    },
-    {
-      "files": ["package.json"],
-      "options": {
-        "printWidth": 120,
-        "tabWidth": 2
-      }
-    }
-  ]
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
