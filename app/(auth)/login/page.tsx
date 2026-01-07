@@ -8,7 +8,7 @@ export const metadata = {
 export default function LoginPage() {
   return (
     <>
-      <h1 className="text-2xl font-bold text-center mb-6">
+      <h1 className="mb-6 text-center text-2xl font-bold">
         Login to Your Account
       </h1>
       <LoginForm />
@@ -16,6 +16,14 @@ export default function LoginPage() {
         Don't have an account?{' '}
         <Link href="/signup" className="text-primary-600 hover:underline">
           Sign up
+        </Link>
+      </p>
+      <p className="mt-2 text-center text-sm text-gray-600">
+        <Link
+          href="/reset-password"
+          className="text-primary-600 hover:underline"
+        >
+          Forgot password?
         </Link>
       </p>
     </>

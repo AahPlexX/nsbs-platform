@@ -51,8 +51,8 @@ export function SignupForm() {
   if (success) {
     return (
       <div className="rounded-lg bg-green-50 p-6 text-center">
-        <div className="text-4xl mb-4">✓</div>
-        <h3 className="text-lg font-semibold text-green-900 mb-2">
+        <div className="mb-4 text-4xl">✓</div>
+        <h3 className="mb-2 text-lg font-semibold text-green-900">
           Check Your Email
         </h3>
         <p className="text-sm text-green-700">
@@ -72,7 +72,7 @@ export function SignupForm() {
       )}
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium mb-2">
+        <label htmlFor="email" className="mb-2 block text-sm font-medium">
           Email
         </label>
         <input
@@ -87,7 +87,7 @@ export function SignupForm() {
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium mb-2">
+        <label htmlFor="password" className="mb-2 block text-sm font-medium">
           Password
         </label>
         <input
@@ -105,7 +105,7 @@ export function SignupForm() {
       <div>
         <label
           htmlFor="confirmPassword"
-          className="block text-sm font-medium mb-2"
+          className="mb-2 block text-sm font-medium"
         >
           Confirm Password
         </label>
@@ -123,7 +123,7 @@ export function SignupForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-lg bg-primary-600 px-4 py-2 text-white hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+        className="w-full rounded-lg bg-primary-600 px-4 py-2 text-white hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-gray-400"
       >
         {loading ? 'Creating account...' : 'Create Account'}
       </button>
